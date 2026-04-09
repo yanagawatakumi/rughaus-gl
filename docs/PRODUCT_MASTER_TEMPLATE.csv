@@ -1,0 +1,3 @@
+product_handle,product_title_ja,product_type,collections,price_jpy,compare_at_price_jpy,inventory_qty,inventory_policy,option1_name,option1_value,option2_name,option2_value,material,size_spec,origin,care_instructions,seo_title,seo_description,tags,status
+sample-rug-001,サンプルラグ 001,ラグ,"ラグ,新着",19800,0,20,deny,サイズ,140x200,カラー,アイボリー,"ウール 70% / コットン 30%",140x200cm,日本,"掃除機で日常ケア、汚れは中性洗剤で部分洗い",サンプルラグ001 | RUGHAUS,上質素材のサンプルラグ001。リビングに合う定番デザイン,"ラグ,ナチュラル,定番",draft
+sample-mat-001,サンプルマット 001,マット,"マット,人気",6800,0,35,deny,サイズ,50x80,カラー,グレー,ポリエステル100%,50x80cm,中国,"洗濯ネット使用で洗濯機可",サンプルマット001 | RUGHAUS,玄関やベッドサイドに使いやすいサンプルマット001,"マット,グレー,洗える",draft
