@@ -12,6 +12,7 @@
 - `TEST_MATRIX_PROPOSAL.md`: 実行用テストマトリクス提案
 - `PHASE1_BUILD_ORDER.md`: アプリ後回しで進める実装順（着手ガイド）
 - `ADMIN_SETUP_CHECKLIST.md`: 管理画面で実施する初期設定チェックリスト
+- `GITHUB_SHOPIFY_WORKFLOW.md`: GitHub連携と日次運用の手順
 
 ## 更新ルール（推奨）
 - 要件が変わったら、まず `PROJECT_FOUNDATION_JP.md` を更新する
