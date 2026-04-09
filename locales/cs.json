@@ -358,7 +358,23 @@
     "market_access": {
       "unavailable_title": "This page is not available in your market.",
       "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "browse_all_rugs": "Browse all rugs",
+    "pdp": {
+      "sample_cta": "Request a sample",
+      "consultation_cta": "Book a consultation",
+      "accordion": {
+        "materials": "Materials",
+        "care": "Care",
+        "size_guide": "Size guide",
+        "shipping_returns": "Shipping & returns"
+      },
+      "defaults": {
+        "materials": "Detailed materials information is available on request.",
+        "care": "Care instructions are available on request.",
+        "size_guide": "Please contact us for a detailed size guide.",
+        "shipping_returns": "Custom rugs are made to order. Shipping details and return policy are provided before purchase."
+      }
+    }
     }
   }
 }
