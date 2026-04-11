@@ -24,9 +24,44 @@ const initSection = (section) => {
   };
 
   const rafSyncHeight = () => window.requestAnimationFrame(syncHeight);
+  const burstSyncHeight = (duration = 500) => {
+    const start = performance.now();
+
+    const tick = () => {
+      syncHeight();
+      if (performance.now() - start < duration) {
+        window.requestAnimationFrame(tick);
+      }
+    };
+
+    window.requestAnimationFrame(tick);
+  };
 
   const resizeObserver = new ResizeObserver(rafSyncHeight);
   resizeObserver.observe(detailsContent);
+
+  // Recalculate while accordion content is opening/closing.
+  section.addEventListener(
+    'toggle',
+    (event) => {
+      if (!(event.target instanceof HTMLDetailsElement)) return;
+      burstSyncHeight();
+    },
+    true
+  );
+
+  // Some browsers animate details content without reliable resize callbacks.
+  section.addEventListener(
+    'transitionend',
+    (event) => {
+      const target = /** @type {HTMLElement | null} */ (event.target instanceof HTMLElement ? event.target : null);
+      if (!target) return;
+      if (target.classList.contains('details-content') || target.closest('accordion-custom')) {
+        burstSyncHeight(250);
+      }
+    },
+    true
+  );
 
   const onViewportChange = () => rafSyncHeight();
   window.addEventListener('resize', onViewportChange);
