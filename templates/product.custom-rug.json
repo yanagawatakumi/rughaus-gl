@@ -267,7 +267,7 @@
                     "text_materials": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>{{ closest.product.metafields.custom.pdp_materials.value }}</p>",
+                        "text": "<p>Detailed materials information is available on request.</p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -307,7 +307,7 @@
                     "text_care": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>{{ closest.product.metafields.custom.pdp_care.value }}</p>",
+                        "text": "<p>Care instructions are available on request.</p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -347,7 +347,7 @@
                     "text_size_guide": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>{{ closest.product.metafields.custom.pdp_size_guide.value }}</p>",
+                        "text": "<p>Please contact us for a detailed size guide.</p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -387,7 +387,7 @@
                     "text_shipping_returns": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>{{ closest.product.metafields.custom.pdp_shipping_returns.value }}</p>",
+                        "text": "<p>Custom rugs are made to order. Shipping details and return policy are provided before purchase.</p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
