@@ -1,6 +1,6 @@
 # Admin Setup Checklist (Before App Integration)
 
-最終更新日: 2026-04-09
+最終更新日: 2026-04-11
 対象: 新規Shopifyストア（Horizon）
 
 ## 1. Markets / Languages
@@ -55,3 +55,15 @@
 ## 7. 確認
 - 非許可国で対象商品/コレクションURLを開くと利用不可メッセージが表示される
 - 許可国では通常表示される
+
+## 8. PDP詳細文言メタフィールド（必須）
+- Product metafield definitions（namespace: `custom`）:
+  - `pdp_materials` (`multi_line_text_field`)
+  - `pdp_care` (`multi_line_text_field`)
+  - `pdp_size_guide` (`multi_line_text_field`)
+  - `pdp_shipping_returns` (`multi_line_text_field`)
+- 目的:
+  - Custom/Stock PDPのAccordion 4項目を商品ごとに管理する
+- 注意:
+  - GitHub統合テーマの制約により、未定義の動的ソース参照は同期エラーになる
+  - 上記定義完了後に、テーマ側で動的連動を再有効化する
