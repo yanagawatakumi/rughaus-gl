@@ -310,6 +310,17 @@
     }
   }
 
+  @media screen and (min-width: 750px) {
+    /*
+      Use bottom-sticky behavior on desktop PDP so both columns scroll first,
+      then the shorter side can remain pinned while the longer side continues.
+    */
+    .product-information .product-details.sticky-content--desktop {
+      top: auto;
+      bottom: 0;
+    }
+  }
+
   /* If the header is sticky, make product details content stick underneath the header */
   body:has(#header-group #header-component[data-sticky-state='active']) .product-details.sticky-content--desktop {
     --sticky-header-offset: var(--header-height);
