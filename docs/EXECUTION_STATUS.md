@@ -33,7 +33,7 @@
 ### FR-06 / FR-10 商品ページ必須表示
 - `IN_PROGRESS` Phase 1 PDP骨格
   - `DONE` 左ギャラリー固定、PC画像1列化
-  - `DONE` PCスクロール挙動を調整（右カラムのsticky基準を`top`→`bottom`へ変更）
+  - `DONE` PCスクロール挙動を調整（右カラム高さを基準に「限界到達で固定」する挙動へ更新）
   - `DONE` CTA（Sample/Consultation）追加
   - `DONE` Accordion 4項目追加
   - `DONE` 下部レコメンド除外
@@ -51,7 +51,7 @@
 - `DONE` GitHub統合テーマ同期エラーを解消
   - JSON内の動的ソース制約へ対応
 - `DONE` PDP画像をPCで縦1列表示に変更
-- `DONE` PDPのPCスクロール挙動を調整（右カラム固定の開始タイミングを改善）
+- `DONE` PDPのPCスクロール挙動を再調整（右カラム高さ計測JS + sticky位置計算）
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）
