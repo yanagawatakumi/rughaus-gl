@@ -313,24 +313,13 @@
   @media screen and (min-width: 750px) {
     /*
       Desktop PDP sticky behavior:
-      - Scrolling down: pin near lower edge with a bottom breathing space
-      - Scrolling up: pin below header so upper content becomes visible again
+      Sticky top position is controlled by JS via --pdp-sticky-top.
+      It interpolates smoothly between top and bottom limits to avoid jumpy snaps.
     */
     .product-information .product-details.sticky-content--desktop {
       --pdp-sticky-bottom-gap: 80px;
-      top: var(--sticky-header-offset, 0px);
+      top: var(--pdp-sticky-top, var(--sticky-header-offset, 0px));
       bottom: auto;
-    }
-
-    .product-information .product-details.sticky-content--desktop[data-sticky-mode='bottom'] {
-      top: min(
-        var(--sticky-header-offset, 0px),
-        calc(100vh - var(--pdp-details-height, 0px) - var(--pdp-sticky-bottom-gap, 80px))
-      );
-    }
-
-    .product-information .product-details.sticky-content--desktop[data-sticky-mode='top'] {
-      top: var(--sticky-header-offset, 0px);
     }
   }
 

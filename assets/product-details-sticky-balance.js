@@ -1,12 +1,20 @@
 const DESKTOP_MEDIA_QUERY = window.matchMedia('(min-width: 750px)');
-const STICKY_MODE_TOP = 'top';
-const STICKY_MODE_BOTTOM = 'bottom';
-const DIRECTION_CHANGE_THRESHOLD = 2;
+const MIN_SCROLL_DELTA = 1;
 
 /**
- * Keeps PDP details sticky behavior balanced:
- * - Short content stays pinned below header
- * - Tall content scrolls first, then pins when lower edge is reached
+ * @param {string} value
+ * @param {number} fallback
+ * @returns {number}
+ */
+const parsePx = (value, fallback = 0) => {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+/**
+ * Keeps PDP details sticky behavior smooth and symmetric:
+ * - Scrolling down gradually shifts the sticky anchor toward bottom limit
+ * - Scrolling up gradually shifts it back toward top limit
  * @param {HTMLElement} section
  */
 const initSection = (section) => {
@@ -15,30 +23,79 @@ const initSection = (section) => {
 
   const detailsContent = details.querySelector('.group-block') ?? details;
   let lastScrollY = window.scrollY;
+  let currentTop = null;
 
-  const setStickyMode = (mode) => {
-    if (details.dataset.stickyMode !== mode) {
-      details.dataset.stickyMode = mode;
-    }
+  /** @type {{detailsHeight: number, topLimit: number, bottomLimit: number, hasTravel: boolean}} */
+  let stickyState = {
+    detailsHeight: 0,
+    topLimit: 0,
+    bottomLimit: 0,
+    hasTravel: false,
   };
 
-  const syncHeight = () => {
+  const applyTop = () => {
+    if (currentTop === null) return;
+    details.style.setProperty('--pdp-sticky-top', `${currentTop}px`);
+  };
+
+  const updateStickyState = () => {
+    const detailsHeight = Math.ceil(detailsContent.getBoundingClientRect().height);
+    if (detailsHeight > 0) {
+      details.style.setProperty('--pdp-details-height', `${detailsHeight}px`);
+    }
+
+    const styles = getComputedStyle(details);
+    const topLimit = parsePx(styles.getPropertyValue('--sticky-header-offset'), 0);
+    const bottomGap = parsePx(styles.getPropertyValue('--pdp-sticky-bottom-gap'), 80);
+    const bottomLimit = window.innerHeight - detailsHeight - bottomGap;
+    const hasTravel = detailsHeight + topLimit + bottomGap > window.innerHeight;
+
+    stickyState = {
+      detailsHeight,
+      topLimit,
+      bottomLimit,
+      hasTravel,
+    };
+  };
+
+  const clampTop = (value) => {
+    return Math.min(stickyState.topLimit, Math.max(stickyState.bottomLimit, value));
+  };
+
+  const syncLayout = (resetTop = false) => {
     if (!DESKTOP_MEDIA_QUERY.matches) {
       details.style.removeProperty('--pdp-details-height');
+      details.style.removeProperty('--pdp-sticky-top');
+      currentTop = null;
+      lastScrollY = window.scrollY;
       return;
     }
 
-    const nextHeight = Math.ceil(detailsContent.getBoundingClientRect().height);
-    if (!nextHeight) return;
-    details.style.setProperty('--pdp-details-height', `${nextHeight}px`);
+    updateStickyState();
+    if (stickyState.detailsHeight <= 0) return;
+
+    if (!stickyState.hasTravel) {
+      currentTop = stickyState.topLimit;
+      applyTop();
+      lastScrollY = window.scrollY;
+      return;
+    }
+
+    if (resetTop || currentTop === null) {
+      currentTop = stickyState.topLimit;
+    }
+
+    currentTop = clampTop(currentTop);
+    applyTop();
+    lastScrollY = window.scrollY;
   };
 
-  const rafSyncHeight = () => window.requestAnimationFrame(syncHeight);
-  const burstSyncHeight = (duration = 500) => {
+  const rafSyncLayout = () => window.requestAnimationFrame(() => syncLayout());
+  const burstSyncLayout = (duration = 500) => {
     const start = performance.now();
 
     const tick = () => {
-      syncHeight();
+      syncLayout();
       if (performance.now() - start < duration) {
         window.requestAnimationFrame(tick);
       }
@@ -47,68 +104,71 @@ const initSection = (section) => {
     window.requestAnimationFrame(tick);
   };
 
-  const resizeObserver = new ResizeObserver(rafSyncHeight);
-  resizeObserver.observe(detailsContent);
-
-  // Recalculate while accordion content is opening/closing.
-  section.addEventListener(
-    'toggle',
-    (event) => {
-      if (!(event.target instanceof HTMLDetailsElement)) return;
-      burstSyncHeight();
-    },
-    true
-  );
-
-  // Some browsers animate details content without reliable resize callbacks.
-  section.addEventListener(
-    'transitionend',
-    (event) => {
-      const target = /** @type {HTMLElement | null} */ (event.target instanceof HTMLElement ? event.target : null);
-      if (!target) return;
-      if (target.classList.contains('details-content') || target.closest('accordion-custom')) {
-        burstSyncHeight(250);
-      }
-    },
-    true
-  );
-
-  const onViewportChange = () => {
-    if (!DESKTOP_MEDIA_QUERY.matches) {
-      setStickyMode(STICKY_MODE_TOP);
-    }
-    lastScrollY = window.scrollY;
-    rafSyncHeight();
-  };
-
   const onScroll = () => {
     if (!DESKTOP_MEDIA_QUERY.matches) return;
 
     const currentScrollY = window.scrollY;
     const delta = currentScrollY - lastScrollY;
-
-    if (Math.abs(delta) < DIRECTION_CHANGE_THRESHOLD) {
+    if (Math.abs(delta) < MIN_SCROLL_DELTA) {
       lastScrollY = currentScrollY;
       return;
     }
 
-    if (delta > 0) {
-      setStickyMode(STICKY_MODE_BOTTOM);
-    } else {
-      setStickyMode(STICKY_MODE_TOP);
+    // Keep header offset in sync when header sticky state changes while scrolling.
+    const styles = getComputedStyle(details);
+    const bottomGap = parsePx(styles.getPropertyValue('--pdp-sticky-bottom-gap'), 80);
+    stickyState.topLimit = parsePx(styles.getPropertyValue('--sticky-header-offset'), stickyState.topLimit);
+    stickyState.bottomLimit = window.innerHeight - stickyState.detailsHeight - bottomGap;
+    stickyState.hasTravel = stickyState.detailsHeight + stickyState.topLimit + bottomGap > window.innerHeight;
+
+    if (!stickyState.hasTravel) {
+      currentTop = stickyState.topLimit;
+      applyTop();
+      lastScrollY = currentScrollY;
+      return;
     }
 
+    if (currentTop === null) {
+      currentTop = stickyState.topLimit;
+    }
+
+    // Downward scroll moves toward bottom limit, upward toward top limit.
+    currentTop = clampTop(currentTop - delta);
+    applyTop();
     lastScrollY = currentScrollY;
   };
 
-  setStickyMode(STICKY_MODE_TOP);
+  const resizeObserver = new ResizeObserver(rafSyncLayout);
+  resizeObserver.observe(detailsContent);
+
+  section.addEventListener(
+    'toggle',
+    (event) => {
+      if (!(event.target instanceof HTMLDetailsElement)) return;
+      burstSyncLayout();
+    },
+    true
+  );
+
+  section.addEventListener(
+    'transitionend',
+    (event) => {
+      const target = event.target instanceof HTMLElement ? event.target : null;
+      if (!target) return;
+      if (target.classList.contains('details-content') || target.closest('accordion-custom')) {
+        burstSyncLayout(250);
+      }
+    },
+    true
+  );
+
+  const onViewportChange = () => syncLayout(true);
   window.addEventListener('resize', onViewportChange);
   DESKTOP_MEDIA_QUERY.addEventListener('change', onViewportChange);
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Delay once for lazy-loaded media/fonts that can shift the details height
-  window.setTimeout(rafSyncHeight, 300);
-  rafSyncHeight();
+  window.setTimeout(() => syncLayout(true), 300);
+  syncLayout(true);
 
   details.dataset.stickyBalanceInitialized = 'true';
 };
@@ -129,7 +189,7 @@ if (document.readyState === 'loading') {
 }
 
 document.addEventListener('shopify:section:load', (event) => {
-  const target = /** @type {ParentNode | null} */ (event.target);
+  const target = event.target instanceof HTMLElement ? event.target : null;
   if (!target) return;
   initStickyBalance(target);
 });
