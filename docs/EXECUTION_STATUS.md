@@ -66,6 +66,9 @@
   - `custom.pdp_size_guide` (multi_line_text_field)
   - `custom.pdp_shipping_returns` (multi_line_text_field)
 - `TODO` Shopify Payments有効化（通貨最終検証に必要）
+- `TODO` ページテンプレート割当
+  - Aboutページ: `page.about`
+  - Tradeページ: `page.trade`
 
 ## 6. 次アクション（担当別）
 1. Assistant
