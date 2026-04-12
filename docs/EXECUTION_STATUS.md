@@ -22,6 +22,7 @@
   - `collection.*` / `product.*` / `page.*` の専用テンプレート作成済み
 - `DONE` ヘッダー導線（メニュー構成）
 - `DONE` 国別直リンクガード（利用不可メッセージ表示）
+- `DONE` About / TradeをNK寄せの専用ページセクションへ更新（Phase 1骨格）
 
 ### FR-01 / FR-02 多言語・多通貨
 - `IN_PROGRESS` Markets / 言語設定

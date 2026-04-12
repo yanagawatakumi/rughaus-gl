@@ -6,53 +6,22 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
-      "type": "main-page",
-      "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "Title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "page-content": {
-          "type": "page-content",
-          "settings": {},
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "heading",
-        "page-content"
-      ],
+      "type": "page-about-nk",
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "color_scheme": "",
-        "padding-block-start": 40,
-        "padding-block-end": 80
+        "color_scheme": "scheme-1",
+        "eyebrow": "About Rughaus",
+        "heading": "From our home to yours",
+        "lead": "<p>Rughaus is built for design professionals seeking high-quality rugs with thoughtful materials, dependable support, and custom flexibility for real projects.</p>",
+        "code_title": "Code of conduct",
+        "code_text": "<p>We partner with trusted workshops and prioritize transparent sourcing, respectful labor practices, and long-term product quality.</p>",
+        "cert_title": "GoodWeave certified",
+        "cert_text": "<p>Our partner network is selected to support responsible craftsmanship and traceable production standards.</p>",
+        "padding-block-start": 48,
+        "padding-block-end": 72
       }
     }
   },
