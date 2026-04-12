@@ -1,4 +1,7 @@
 const DESKTOP_MEDIA_QUERY = window.matchMedia('(min-width: 750px)');
+const STICKY_MODE_TOP = 'top';
+const STICKY_MODE_BOTTOM = 'bottom';
+const DIRECTION_CHANGE_THRESHOLD = 2;
 
 /**
  * Keeps PDP details sticky behavior balanced:
@@ -11,6 +14,13 @@ const initSection = (section) => {
   if (!details || details.dataset.stickyBalanceInitialized === 'true') return;
 
   const detailsContent = details.querySelector('.group-block') ?? details;
+  let lastScrollY = window.scrollY;
+
+  const setStickyMode = (mode) => {
+    if (details.dataset.stickyMode !== mode) {
+      details.dataset.stickyMode = mode;
+    }
+  };
 
   const syncHeight = () => {
     if (!DESKTOP_MEDIA_QUERY.matches) {
@@ -63,9 +73,38 @@ const initSection = (section) => {
     true
   );
 
-  const onViewportChange = () => rafSyncHeight();
+  const onViewportChange = () => {
+    if (!DESKTOP_MEDIA_QUERY.matches) {
+      setStickyMode(STICKY_MODE_TOP);
+    }
+    lastScrollY = window.scrollY;
+    rafSyncHeight();
+  };
+
+  const onScroll = () => {
+    if (!DESKTOP_MEDIA_QUERY.matches) return;
+
+    const currentScrollY = window.scrollY;
+    const delta = currentScrollY - lastScrollY;
+
+    if (Math.abs(delta) < DIRECTION_CHANGE_THRESHOLD) {
+      lastScrollY = currentScrollY;
+      return;
+    }
+
+    if (delta > 0) {
+      setStickyMode(STICKY_MODE_BOTTOM);
+    } else {
+      setStickyMode(STICKY_MODE_TOP);
+    }
+
+    lastScrollY = currentScrollY;
+  };
+
+  setStickyMode(STICKY_MODE_TOP);
   window.addEventListener('resize', onViewportChange);
   DESKTOP_MEDIA_QUERY.addEventListener('change', onViewportChange);
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   // Delay once for lazy-loaded media/fonts that can shift the details height
   window.setTimeout(rafSyncHeight, 300);
