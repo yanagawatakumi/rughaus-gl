@@ -1,32 +1,4 @@
 
-{% liquid
-  assign market_access_denied = false
-  assign raw_allowed_country_codes = collection.metafields.custom.available_country_codes.value
-  if raw_allowed_country_codes == blank
-    assign raw_allowed_country_codes = collection.metafields.custom.available_country_codes
-  endif
-  if raw_allowed_country_codes == blank
-    assign raw_allowed_country_codes = collection.metafields.rughaus.available_country_codes.value
-  endif
-  if raw_allowed_country_codes == blank
-    assign raw_allowed_country_codes = collection.metafields.rughaus.available_country_codes
-  endif
-
-  if raw_allowed_country_codes != blank
-    assign allowed_country_codes = raw_allowed_country_codes | upcase | replace: ' ', '' | split: ','
-    assign current_country_code = localization.country.iso_code | upcase
-    assign market_access_denied = true
-
-    for allowed_country_code in allowed_country_codes
-      if allowed_country_code == current_country_code
-        assign market_access_denied = false
-        break
-      endif
-    endfor
-  endif
-%}
-
-
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
@@ -50,76 +22,58 @@
 {% endjavascript %}
 
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
-{% if market_access_denied %}
-  {% liquid
-    assign fallback_collection = collections['all-rugs']
-    assign browse_url = fallback_collection.url | default: routes.root_url
-  %}
-  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-  <section
-    class="section color-{{ section.settings.color_scheme }}"
-    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
-  >
-    <div class="page-width section-content-wrapper spacing-style">
-      <h2>{{ 'rughaus.market_access.unavailable_title' | t }}</h2>
-      <p>{{ 'rughaus.market_access.unavailable_body' | t }}</p>
-      <a href="{{ browse_url }}" class="button">{{ 'rughaus.market_access.browse_all_rugs' | t }}</a>
-    </div>
-  </section>
-{% else %}
-  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-  <results-list
-    class="section product-grid-container color-{{ section.settings.color_scheme }}"
-    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
-    section-id="{{ section.id }}"
-    infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
-  >
-    {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<results-list
+  class="section product-grid-container color-{{ section.settings.color_scheme }}"
+  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+  section-id="{{ section.id }}"
+  infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+>
+  {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
-    <div
-      class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
-    >
-      {% content_for 'block',
-        type: 'filters',
-        id: 'filters',
-        results: collection,
-        results_size: collection.products_count
+  <div
+    class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
+  >
+    {% content_for 'block',
+      type: 'filters',
+      id: 'filters',
+      results: collection,
+      results_size: collection.products_count
+    %}
+
+    {% assign products_per_page = 24 %}
+
+    {% if section.settings.enable_infinite_scroll == false %}
+      {% assign products_per_page = section.settings.products_per_page %}
+    {% endif %}
+
+    {% paginate collection.products by products_per_page %}
+      {% capture children %}
+        {% for product in collection.products %}
+          <li
+            id="{{ section.id }}-{{ product.id }}"
+            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+            data-page="{{ paginate.current_page }}"
+            data-product-id="{{ product.id }}"
+            ref="cards[]"
+          >
+            {% # theme-check-disable %}
+            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+            {% # theme-check-enable %}
+          </li>
+        {% endfor %}
+      {% endcapture %}
+
+      {% render 'product-grid',
+        section: section,
+        children: children,
+        products: collection.products,
+        paginate: paginate,
+        enable_infinite_scroll: section.settings.enable_infinite_scroll
       %}
-
-      {% assign products_per_page = 24 %}
-
-      {% if section.settings.enable_infinite_scroll == false %}
-        {% assign products_per_page = section.settings.products_per_page %}
-      {% endif %}
-
-      {% paginate collection.products by products_per_page %}
-        {% capture children %}
-          {% for product in collection.products %}
-            <li
-              id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-              data-page="{{ paginate.current_page }}"
-              data-product-id="{{ product.id }}"
-              ref="cards[]"
-            >
-              {% # theme-check-disable %}
-              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-              {% # theme-check-enable %}
-            </li>
-          {% endfor %}
-        {% endcapture %}
-
-        {% render 'product-grid',
-          section: section,
-          children: children,
-          products: collection.products,
-          paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
-        %}
-      {% endpaginate %}
-    </div>
-  </results-list>
-{% endif %}
+    {% endpaginate %}
+  </div>
+</results-list>
 
 {% schema %}
 {

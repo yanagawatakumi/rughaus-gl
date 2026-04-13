@@ -1,6 +1,6 @@
 # Admin Setup Checklist (Before App Integration)
 
-最終更新日: 2026-04-11
+最終更新日: 2026-04-13
 対象: 新規Shopifyストア（Horizon）
 
 ## 1. Markets / Languages
@@ -42,21 +42,12 @@
   - Trade -> `/pages/trade`
   - Support & FAQ -> `/pages/support-faq`
 
-## 6. 市場アクセスガード用メタフィールド
-- Collection metafield（どちらか）:
-  - `custom.available_country_codes` (single line text)
-  - `rughaus.available_country_codes` (single line text)
-- Product metafield（どちらか）:
-  - `custom.available_country_codes` (single line text)
-  - `rughaus.available_country_codes` (single line text)
-- 値例:
-  - `US,HK,IT`
+## 6. Markets/Catalog公開制御の確認
+- 商品/コレクションの公開可否はMarkets/Catalogのみで管理する
+- テーマ側で判定するための `available_country_codes` メタフィールドは作成しない
+- 非公開対象へのアクセス挙動はShopify標準挙動で確認する
 
-## 7. 確認
-- 非許可国で対象商品/コレクションURLを開くと利用不可メッセージが表示される
-- 許可国では通常表示される
-
-## 8. PDP詳細文言メタフィールド（必須）
+## 7. PDP詳細文言メタフィールド（必須）
 - Product metafield definitions（namespace: `custom`）:
   - `pdp_materials` (`multi_line_text_field`)
   - `pdp_care` (`multi_line_text_field`)
@@ -65,5 +56,5 @@
 - 目的:
   - Custom/Stock PDPのAccordion 4項目を商品ごとに管理する
 - 注意:
-  - GitHub統合テーマの制約により、未定義の動的ソース参照は同期エラーになる
-  - 上記定義完了後に、テーマ側で動的連動を再有効化する
+  - GitHub統合テーマの制約により、JSON動的ソース依存は使わない
+  - 上記定義後は、Liquid実装で `custom.pdp_*` の動的連動が有効になる

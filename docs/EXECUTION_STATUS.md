@@ -7,7 +7,8 @@
 ## 1. 現在の要約
 - GitHub連携フローでテーマ反映を運用中
 - Phase 1のPDP骨格（Nordic寄せ）は実装済み
-- GitHub統合テーマのJSONバリデーション制約により、PDP詳細文言は一時的に静的文言で運用中
+- Markets/Catalogを公開制御の正本に統一し、テーマ側の独自市場ガードを撤廃
+- PDP詳細文言はLiquid実装で `custom.pdp_*` 連動 + フォールバック表示に移行済み
 
 ## 2. ステータス凡例
 - `DONE`: 完了
@@ -15,13 +16,13 @@
 - `BLOCKED`: 依存待ち
 - `TODO`: 未着手
 
-## 3. タスク状況（2026-04-11時点）
+## 3. タスク状況（2026-04-13時点）
 
 ### FR-09 / IA・基盤
 - `DONE` IAテンプレート分離
   - `collection.*` / `product.*` / `page.*` の専用テンプレート作成済み
 - `DONE` ヘッダー導線（メニュー構成）
-- `DONE` 国別直リンクガード（利用不可メッセージ表示）
+- `DONE` Markets/Catalog正本運用へ移行（テーマ側の国別直リンクガードを削除）
 - `DONE` About / TradeをNK寄せの専用ページセクションへ更新（Phase 1骨格）
 
 ### FR-01 / FR-02 多言語・多通貨
@@ -39,9 +40,8 @@
   - `DONE` Accordion 4項目追加
   - `DONE` 下部レコメンド除外
   - `DONE` Custom/Stock共通テンプレート運用
-- `BLOCKED` メタフィールド連動再導入
-  - 現在は静的文言で同期安定化
-  - 依存: 管理画面でPDP用メタフィールド定義
+  - `DONE` `custom.pdp_*` をLiquidで参照する動的連動を再導入（JSON動的ソース依存なし）
+  - `IN_PROGRESS` 管理画面でメタフィールド定義後の実データ投入
 
 ### FR-11 計測
 - `TODO` 最小イベント計測実装
@@ -60,6 +60,9 @@
 - `DONE` Sample/Consultation CTAをAdd to cart直下へ移動
 - `DONE` About/Trade専用セクションのschema修正（range上限値）により同期エラーを解消
 - `DONE` Aboutページで`page.about`テンプレート反映を実確認
+- `DONE` `sections/main-collection.liquid` / `sections/product-information.liquid` から独自市場ガードを削除
+- `DONE` `blocks/_accordion-row.liquid` にPDPメタフィールド連動ロジックを追加
+- `DONE` `rughaus.pdp.*` 翻訳キー参照の構造を全ロケールで正規化
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）
@@ -73,7 +76,6 @@
 
 ## 6. 次アクション（担当別）
 1. Assistant
-- メタフィールド定義完了後、JSON依存を避けたLiquid実装でPDP詳細文言の動的連動を再導入
 - FR-11の最小計測を実装
 
 2. User

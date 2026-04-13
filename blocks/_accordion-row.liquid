@@ -1,5 +1,50 @@
 
 {% assign block_settings = block.settings %}
+{% liquid
+  assign pdp_row_content = blank
+
+  if request.page_type == 'product' and closest.product != blank
+    assign heading_value = block_settings.heading | strip
+    assign materials_heading = 'rughaus.pdp.accordion.materials' | t
+    assign care_heading = 'rughaus.pdp.accordion.care' | t
+    assign size_guide_heading = 'rughaus.pdp.accordion.size_guide' | t
+    assign shipping_returns_heading = 'rughaus.pdp.accordion.shipping_returns' | t
+
+    if heading_value == 't:rughaus.pdp.accordion.materials' or heading_value == materials_heading
+      assign pdp_row_content = closest.product.metafields.custom.pdp_materials.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_materials
+      endif
+      if pdp_row_content == blank
+        assign pdp_row_content = 'rughaus.pdp.defaults.materials' | t
+      endif
+    elsif heading_value == 't:rughaus.pdp.accordion.care' or heading_value == care_heading
+      assign pdp_row_content = closest.product.metafields.custom.pdp_care.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_care
+      endif
+      if pdp_row_content == blank
+        assign pdp_row_content = 'rughaus.pdp.defaults.care' | t
+      endif
+    elsif heading_value == 't:rughaus.pdp.accordion.size_guide' or heading_value == size_guide_heading
+      assign pdp_row_content = closest.product.metafields.custom.pdp_size_guide.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_size_guide
+      endif
+      if pdp_row_content == blank
+        assign pdp_row_content = 'rughaus.pdp.defaults.size_guide' | t
+      endif
+    elsif heading_value == 't:rughaus.pdp.accordion.shipping_returns' or heading_value == shipping_returns_heading
+      assign pdp_row_content = closest.product.metafields.custom.pdp_shipping_returns.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_shipping_returns
+      endif
+      if pdp_row_content == blank
+        assign pdp_row_content = 'rughaus.pdp.defaults.shipping_returns' | t
+      endif
+    endif
+  endif
+%}
 
 {% capture accordion_row_children %}
   <details
@@ -27,7 +72,11 @@
     </summary>
 
     <div class="details-content">
-      {% content_for 'blocks' %}
+      {% if pdp_row_content != blank %}
+        <div class="rte">{{ pdp_row_content | escape | newline_to_br }}</div>
+      {% else %}
+        {% content_for 'blocks' %}
+      {% endif %}
     </div>
   </details>
 {% endcapture %}
