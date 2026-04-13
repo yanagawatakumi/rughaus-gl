@@ -1,6 +1,6 @@
 # 実行ステータス（常時更新）
 
-最終更新日: 2026-04-11  
+最終更新日: 2026-04-13  
 対象ブランチ: `develop`  
 運用ルール: 進捗に変化があったら本ファイルを更新する
 
@@ -58,6 +58,8 @@
 - `DONE` 方向反転時のジャンプを抑制（sticky位置を連続補間する方式へ更新）
 - `DONE` 管理画面の商品説明をPDP右カラムへ追加（アコーディオン直上）
 - `DONE` Sample/Consultation CTAをAdd to cart直下へ移動
+- `DONE` About/Trade専用セクションのschema修正（range上限値）により同期エラーを解消
+- `DONE` Aboutページで`page.about`テンプレート反映を実確認
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）
@@ -66,8 +68,7 @@
   - `custom.pdp_size_guide` (multi_line_text_field)
   - `custom.pdp_shipping_returns` (multi_line_text_field)
 - `TODO` Shopify Payments有効化（通貨最終検証に必要）
-- `TODO` ページテンプレート割当
-  - Aboutページ: `page.about`
+- `TODO` Tradeページのテンプレート割当確認
   - Tradeページ: `page.trade`
 
 ## 6. 次アクション（担当別）
