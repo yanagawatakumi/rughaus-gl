@@ -9,6 +9,7 @@
 - Phase 1のPDP骨格（Nordic寄せ）は実装済み
 - Markets/Catalogを公開制御の正本に統一し、テーマ側の独自市場ガードを撤廃
 - PDP詳細文言はLiquid実装で `custom.pdp_*` 連動 + フォールバック表示に移行済み
+- 別Shopifyストアへの接続・再セットアップフェーズに移行
 
 ## 2. ステータス凡例
 - `DONE`: 完了
@@ -17,6 +18,17 @@
 - `TODO`: 未着手
 
 ## 3. タスク状況（2026-04-13時点）
+
+### New Store 再セットアップ
+- `IN_PROGRESS` 別ストア再構築
+- `TODO` GitHubテーマ接続（`develop`）確認
+- `TODO` 新ストア基準通貨USDの確認
+- `TODO` Markets/Languages再設定（US/HK/IT + EN/DE/FR/IT/ES/ZH-TW/KO）
+- `TODO` Collections/Pages/Productsのテンプレート再割当
+- `TODO` Main menu再設定
+- `TODO` Product metafield定義（`custom.pdp_*` 4項目）
+- `TODO` Markets/Catalog公開設定の再構成
+- `BLOCKED` Shopify Payments有効化待ち（多通貨最終検証）
 
 ### FR-09 / IA・基盤
 - `DONE` IAテンプレート分離
@@ -67,6 +79,8 @@
 - `DONE` バリアント切替体感を改善（レスポンスキャッシュ + hover/focus先読み + ギャラリー切替アニメーション）
 
 ## 5. 依存タスク（ユーザー側）
+- `TODO` 新ストア管理画面の再セットアップ実行
+  - 手順書: `NEW_STORE_SETUP_PLAYBOOK.md`
 - `TODO` Productメタフィールド定義（必須）
   - `custom.pdp_materials` (multi_line_text_field)
   - `custom.pdp_care` (multi_line_text_field)
@@ -79,7 +93,8 @@
 ## 6. 次アクション（担当別）
 1. Assistant
 - FR-11の最小計測を実装
+- 新ストアセットアップの確認観点を随時レビュー
 
 2. User
-- 管理画面でPDPメタフィールド4種を作成
-- Shopify Payments有効化可否をクライアントと調整
+- `NEW_STORE_SETUP_PLAYBOOK.md` の手順 1 -> 8 を順次実行
+- 実行結果（完了/詰まり）を共有

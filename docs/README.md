@@ -12,6 +12,7 @@
 - `TEST_MATRIX_PROPOSAL.md`: 実行用テストマトリクス提案
 - `PHASE1_BUILD_ORDER.md`: アプリ後回しで進める実装順（着手ガイド）
 - `ADMIN_SETUP_CHECKLIST.md`: 管理画面で実施する初期設定チェックリスト
+- `NEW_STORE_SETUP_PLAYBOOK.md`: 別ストア接続時の再セットアップ手順（実行順）
 - `GITHUB_SHOPIFY_WORKFLOW.md`: GitHub連携と日次運用の手順
 - `EXECUTION_STATUS.md`: 実装進捗、残タスク、依存関係の最新状態
 

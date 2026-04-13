@@ -3,6 +3,9 @@
 最終更新日: 2026-04-13
 対象: 新規Shopifyストア（Horizon）
 
+補足:
+- 別ストア移行時は、実行順を `NEW_STORE_SETUP_PLAYBOOK.md` に従う
+
 ## 1. Markets / Languages
 - Marketsで `United States / Hong Kong SAR / Italy` を有効化
 - 通貨を確認（USD / HKD / EUR）
