@@ -9,8 +9,23 @@
  */
 {
   "sections": {
-    "home_nk_main": {
-      "type": "home-nk",
+    "home_nk_hero": {
+      "type": "home-nk-hero",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "hero_eyebrow": "RUGHAUS GL",
+        "hero_heading": "Architectural rugs for custom interiors",
+        "hero_lead": "<p>Build your specification in stock or custom dimensions, with concise support for trade projects.</p>",
+        "primary_label": "Shop all rugs",
+        "primary_link": "shopify://collections/all-rugs",
+        "secondary_label": "Custom rugs",
+        "secondary_link": "shopify://collections/custom-rugs",
+        "padding-block-start": 32,
+        "padding-block-end": 24
+      }
+    },
+    "home_nk_categories": {
+      "type": "home-nk-categories",
       "blocks": {
         "category_custom": {
           "type": "category_card",
@@ -38,7 +53,49 @@
             "link_label": "Browse all",
             "link": "shopify://collections/all-rugs"
           }
-        },
+        }
+      },
+      "block_order": [
+        "category_custom",
+        "category_stock",
+        "category_all"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 32
+      }
+    },
+    "home_nk_trending": {
+      "type": "home-nk-trending",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "featured_source": "collection",
+        "featured_heading": "TRENDING RUGS",
+        "featured_collection": "all-rugs",
+        "featured_limit": 4,
+        "featured_link_label": "SHOP NOW ->",
+        "featured_link": "shopify://collections/all-rugs",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "home_nk_story": {
+      "type": "home-nk-story",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "story_eyebrow": "About",
+        "story_heading": "Crafted for spaces that evolve",
+        "story_text": "<p>Our rug program combines custom sizing, practical lead times, and material options selected for design-led projects.</p>",
+        "story_link_label": "Learn more",
+        "story_link": "shopify://pages/about",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "home_nk_support": {
+      "type": "home-nk-support",
+      "blocks": {
         "support_trade": {
           "type": "support_link",
           "settings": {
@@ -65,39 +122,23 @@
         }
       },
       "block_order": [
-        "category_custom",
-        "category_stock",
-        "category_all",
         "support_trade",
         "support_faq",
         "support_about"
       ],
       "settings": {
         "color_scheme": "scheme-1",
-        "hero_eyebrow": "RUGHAUS GL",
-        "hero_heading": "Architectural rugs for custom interiors",
-        "hero_lead": "<p>Build your specification in stock or custom dimensions, with concise support for trade projects.</p>",
-        "primary_label": "Shop all rugs",
-        "primary_link": "shopify://collections/all-rugs",
-        "secondary_label": "Custom rugs",
-        "secondary_link": "shopify://collections/custom-rugs",
-        "featured_heading": "TRENDING RUGS",
-        "featured_collection": "all-rugs",
-        "featured_limit": 4,
-        "featured_link_label": "SHOP NOW ->",
-        "featured_link": "shopify://collections/all-rugs",
-        "story_eyebrow": "About",
-        "story_heading": "Crafted for spaces that evolve",
-        "story_text": "<p>Our rug program combines custom sizing, practical lead times, and material options selected for design-led projects.</p>",
-        "story_link_label": "Learn more",
-        "story_link": "shopify://pages/about",
         "support_heading": "Support & FAQ",
-        "padding-block-start": 32,
+        "padding-block-start": 0,
         "padding-block-end": 64
       }
     }
   },
   "order": [
-    "home_nk_main"
+    "home_nk_hero",
+    "home_nk_categories",
+    "home_nk_trending",
+    "home_nk_story",
+    "home_nk_support"
   ]
 }

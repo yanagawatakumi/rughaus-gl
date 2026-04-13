@@ -116,6 +116,7 @@
 - 保守性: セクション/スニペット単位で責務分離
 - 可読性: 変更理由をコードコメントとドキュメントに記録
 - 安全性: 本番反映前のステージング確認を必須化
+- 編集運用性: 非エンジニア運用を前提に、管理画面（Theme Editor）から更新が必要な領域はセクション/ブロック/設定で編集可能に実装する
 
 ## 9. 実装仕様（確定）
 - D-01: 言語構成
@@ -189,6 +190,12 @@
 - D-21: 計測設計（一般初期値）
   - GA4を基準に計測し、広告媒体はUTMで流入を識別する
   - 最低限イベント: page_view, collection_view, product_view, size_input, add_to_cart, begin_checkout, purchase, trade_form_submit
+- D-22: Topページの実装方針（Theme Editor優先）
+  - Topページの主要領域は、ハードコード優先ではなくセクション/ブロックで編集可能に設計する
+  - 特に運用変更が多い領域（例: TRENDING RUGS、カテゴリ導線、サポート導線）はブロック駆動を必須とする
+  - 開発者のみが編集可能な実装（固定Liquid配列・固定カード）は、運用要件がない場合の最小範囲に限定する
+  - `home-nk` のような複合セクションは分割し、`Hero / Categories / Trending / Story / Support` を独立セクションとして管理する
+  - Topテンプレートは左カラムのセクション並び替えでレイアウト順を変更できる構成を標準とする
 
 ## 10. 実装前の残確認（最小）
 - なし（2026-04-13時点で確定済み）
@@ -216,3 +223,5 @@
 - 2026-04-13: PDP詳細文言は `custom.pdp_*` をLiquidで参照する実装へ更新（JSON動的ソース依存なし）
 - 2026-04-13: Codex 開発環境へ Shopify AI Toolkit（MCP + skills）を反映
 - 2026-04-13: `shopify store` 実行時は恒久ドメイン `xfxfwd-8p.myshopify.com` を利用する運用に確定
+- 2026-04-13: TopページはTheme Editor優先（セクション/ブロック駆動）へ方針強化し、TRENDING RUGSを手動ブロック運用可能に更新
+- 2026-04-13: Topページを5セクション（Hero/Categories/Trending/Story/Support）へ分割し、Theme Editor左カラムで並び替え可能な構成へ移行

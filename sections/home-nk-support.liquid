@@ -1,0 +1,185 @@
+{% liquid
+  assign support_blocks = section.blocks | where: 'type', 'support_link'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--page-width color-{{ section.settings.color_scheme }} home-nk-support-section spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  {% if support_blocks.size > 0 %}
+    <div class="home-nk__support" aria-label="Support links">
+      <div class="home-nk__section-head">
+        {% if section.settings.support_heading != blank %}
+          <h2 class="home-nk__section-title">{{ section.settings.support_heading }}</h2>
+        {% endif %}
+      </div>
+
+      <div class="home-nk__support-grid">
+        {% for block in support_blocks %}
+          <a class="home-nk__support-link" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+            <span class="home-nk__support-label">{{ block.settings.label }}</span>
+            {% if block.settings.description != blank %}
+              <span class="home-nk__support-description">{{ block.settings.description }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .home-nk-support-section {
+    display: grid;
+  }
+
+  .home-nk__support {
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .home-nk__section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .home-nk__section-title {
+    margin: 0;
+    font-size: clamp(1.45rem, 3vw, 2.5rem);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+
+  .home-nk__support-grid {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .home-nk__support-link {
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+    padding: 0.9rem 0;
+    text-decoration: none;
+    color: inherit;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .home-nk__support-label {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    overflow-wrap: anywhere;
+  }
+
+  .home-nk__support-description {
+    font-size: 0.92rem;
+    opacity: 0.8;
+    overflow-wrap: anywhere;
+  }
+
+  @media screen and (min-width: 750px) {
+    .home-nk__support-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .home-nk__support-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "NK Support",
+  "class": "section-wrapper",
+  "blocks": [
+    {
+      "type": "support_link",
+      "name": "Support link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Support topic"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Short explanation for this destination."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "support_heading",
+      "label": "Support heading",
+      "default": "Support & FAQ"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "NK Support",
+      "blocks": [
+        {
+          "type": "support_link"
+        },
+        {
+          "type": "support_link"
+        },
+        {
+          "type": "support_link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

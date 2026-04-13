@@ -51,10 +51,19 @@
 - `DONE` About / TradeをNK寄せの専用ページセクションへ更新（Phase 1骨格）
 - `IN_PROGRESS` TopページをNK寄せ構成へ移行
   - `DONE` `sections/home-nk.liquid` を追加
+  - `DONE` Topページを5分割セクションへ再構築
+    - `sections/home-nk-hero.liquid`
+    - `sections/home-nk-categories.liquid`
+    - `sections/home-nk-trending.liquid`
+    - `sections/home-nk-story.liquid`
+    - `sections/home-nk-support.liquid`
+  - `DONE` `templates/index.json` を分割セクション構成へ更新（左カラム並び替え対応）
   - `DONE` `templates/index.json` を `home-nk` 中心構成へ更新
   - `DONE` 日本サイト由来の暫定画像を `assets/home-nk-*` として反映（未設定時フォールバック）
   - `DONE` Top基本レイアウトを左右余白ベースへ調整（About系と同じ考え方）
   - `DONE` Topテキスト崩れ対策を追加（`overflow-wrap` / `min-width: 0`）
+  - `DONE` TRENDING RUGS をカルーセル化（横ドラッグ + ループ + 次カードのチラ見せ）
+  - `DONE` TRENDING RUGS をTheme Editor運用可能に改修（Collection自動 / Manual blocks 切替）
   - `TODO` 管理画面で最終画像差し替えとトーン調整
 
 ### FR-01 / FR-02 多言語・多通貨
@@ -105,6 +114,9 @@
 - `DONE` TopページのNK寄せセクションを新規実装（Hero/Categories/Featured/Story/Support）
 - `DONE` Topページの画像フォールバックを日本サイト由来アセットへ更新
 - `DONE` Topページの左右余白と文字折り返し挙動を改善
+- `DONE` Top TRENDING RUGS をグリッドからカルーセルへ移行（`snippets/slideshow` 再利用）
+- `DONE` Top TRENDING RUGS をブロック駆動へ更新（`featured_product` ブロックで手動運用可）
+- `DONE` Topページの主要領域を独立セクション化し、Theme Editor左カラムでセクション順変更可能に更新
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）
