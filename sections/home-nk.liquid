@@ -43,7 +43,7 @@
             | image_tag:
               loading: 'eager',
               widths: '800, 1200, 1600, 2000, 2200',
-              sizes: '(min-width: 990px) 52vw, 100vw',
+              sizes: '(min-width: 990px) 48vw, 100vw',
               class: 'home-nk__hero-image'
           }}
         {% else %}
@@ -66,7 +66,7 @@
             | image_tag:
               loading: 'lazy',
               widths: '500, 800, 1100, 1400, 1600',
-              sizes: '(min-width: 990px) 26vw, 100vw',
+              sizes: '(min-width: 990px) 22vw, 100vw',
               class: 'home-nk__hero-image'
           }}
         {% else %}
@@ -96,7 +96,7 @@
                   | image_tag:
                     loading: 'lazy',
                     widths: '400, 600, 900, 1200, 1400',
-                    sizes: '(min-width: 990px) 30vw, 100vw',
+                    sizes: '(min-width: 990px) 27vw, (min-width: 750px) 32vw, 100vw',
                     class: 'home-nk__category-image'
                 }}
               {% else %}
@@ -164,7 +164,7 @@
                     | image_tag:
                       loading: 'lazy',
                       widths: '400, 600, 900, 1200, 1400',
-                      sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+                      sizes: '(min-width: 990px) 22vw, (min-width: 750px) 30vw, 48vw',
                       class: 'home-nk__product-image'
                   }}
                 {% else %}
@@ -214,7 +214,7 @@
           | image_tag:
             loading: 'lazy',
             widths: '700, 1000, 1300, 1600, 1800',
-            sizes: '(min-width: 990px) 50vw, 100vw',
+            sizes: '(min-width: 990px) 44vw, 100vw',
             class: 'home-nk__story-image'
         }}
       {% else %}
@@ -275,8 +275,15 @@
     gap: clamp(2rem, 4vw, 4rem) 0;
   }
 
+  .home-nk__hero,
+  .home-nk__categories,
+  .home-nk__featured,
+  .home-nk__story,
+  .home-nk__support {
+    grid-column: 2;
+  }
+
   .home-nk__hero {
-    grid-column: 1 / -1;
     display: grid;
     gap: clamp(1.5rem, 2.5vw, 2rem);
   }
@@ -297,11 +304,12 @@
 
   .home-nk__heading {
     margin: 0;
-    font-size: clamp(2.1rem, 6vw, 6rem);
+    font-size: clamp(2rem, 5vw, 5rem);
     line-height: 0.9;
     letter-spacing: -0.03em;
     text-transform: uppercase;
     max-width: 16ch;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__lead {
@@ -319,6 +327,7 @@
   .home-nk__hero-media-grid {
     display: grid;
     gap: 0.75rem;
+    min-width: 0;
   }
 
   .home-nk__hero-media {
@@ -347,13 +356,13 @@
   }
 
   .home-nk__categories {
-    grid-column: 1 / -1;
     display: grid;
     gap: 0.75rem;
   }
 
   .home-nk__category {
     margin: 0;
+    min-width: 0;
   }
 
   .home-nk__category-link {
@@ -364,6 +373,7 @@
     border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
     padding: 0.6rem;
     transition: border-color 180ms ease;
+    min-width: 0;
   }
 
   .home-nk__category-link:hover {
@@ -395,12 +405,14 @@
     font-size: clamp(1.05rem, 1.8vw, 1.35rem);
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__category-text {
     font-size: 0.95rem;
     line-height: 1.45;
     opacity: 0.84;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__category-cta {
@@ -411,7 +423,6 @@
 
   .home-nk__featured,
   .home-nk__support {
-    grid-column: 1 / -1;
     display: grid;
     gap: 1rem;
   }
@@ -429,6 +440,7 @@
     font-size: clamp(1.45rem, 3vw, 2.5rem);
     text-transform: uppercase;
     letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__text-link {
@@ -447,6 +459,7 @@
   .home-nk__product-card {
     display: grid;
     gap: 0.45rem;
+    min-width: 0;
   }
 
   .home-nk__product-link {
@@ -454,6 +467,7 @@
     gap: 0.45rem;
     color: inherit;
     text-decoration: none;
+    min-width: 0;
   }
 
   .home-nk__product-media {
@@ -472,6 +486,7 @@
   .home-nk__product-title {
     margin: 0;
     font-size: 0.98rem;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__product-price {
@@ -481,7 +496,6 @@
   }
 
   .home-nk__story {
-    grid-column: 1 / -1;
     display: grid;
     gap: 1rem;
     border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
@@ -505,10 +519,12 @@
     display: grid;
     gap: 0.9rem;
     align-content: start;
+    min-width: 0;
   }
 
   .home-nk__story-text {
     max-width: 54ch;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__support-grid {
@@ -529,11 +545,13 @@
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    overflow-wrap: anywhere;
   }
 
   .home-nk__support-description {
     font-size: 0.92rem;
     opacity: 0.8;
+    overflow-wrap: anywhere;
   }
 
   @media screen and (min-width: 750px) {

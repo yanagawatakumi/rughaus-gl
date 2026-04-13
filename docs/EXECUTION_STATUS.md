@@ -53,6 +53,8 @@
   - `DONE` `sections/home-nk.liquid` を追加
   - `DONE` `templates/index.json` を `home-nk` 中心構成へ更新
   - `DONE` 日本サイト由来の暫定画像を `assets/home-nk-*` として反映（未設定時フォールバック）
+  - `DONE` Top基本レイアウトを左右余白ベースへ調整（About系と同じ考え方）
+  - `DONE` Topテキスト崩れ対策を追加（`overflow-wrap` / `min-width: 0`）
   - `TODO` 管理画面で最終画像差し替えとトーン調整
 
 ### FR-01 / FR-02 多言語・多通貨
@@ -102,6 +104,7 @@
 - `DONE` バリアント切替体感を改善（レスポンスキャッシュ + hover/focus先読み + ギャラリー切替アニメーション）
 - `DONE` TopページのNK寄せセクションを新規実装（Hero/Categories/Featured/Story/Support）
 - `DONE` Topページの画像フォールバックを日本サイト由来アセットへ更新
+- `DONE` Topページの左右余白と文字折り返し挙動を改善
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）
