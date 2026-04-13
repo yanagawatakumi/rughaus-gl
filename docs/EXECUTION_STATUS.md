@@ -63,6 +63,7 @@
 - `DONE` `sections/main-collection.liquid` / `sections/product-information.liquid` から独自市場ガードを削除
 - `DONE` `blocks/_accordion-row.liquid` にPDPメタフィールド連動ロジックを追加
 - `DONE` `rughaus.pdp.*` 翻訳キー参照の構造を全ロケールで正規化
+- `DONE` PDPメディア表示をバリアントグループ連動へ更新（代表画像を起点に後続画像を同グループ表示）
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）

@@ -103,20 +103,55 @@
 
   assign sorted_media = '' | split: ','
   if selected_variant_media
-    assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
-
-    for media in selected_product.media
-      if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
-        continue
-      endif
-
-      if media.id != selected_variant_media.id
-        assign found_media = selected_product.media | where: 'id', media.id
-        assign sorted_media = sorted_media | concat: found_media
+    assign marker_media = '' | split: ','
+    for variant in selected_product.variants
+      if variant.featured_media
+        assign marker_item = selected_product.media | where: 'id', variant.featured_media.id
+        assign marker_media = marker_media | concat: marker_item
       endif
     endfor
-  else
-    assign sorted_media = selected_product.media
+    assign marker_media_ids = marker_media | map: 'id' | uniq
+
+    if marker_media_ids contains selected_variant_media.id
+      assign first_marker_id = blank
+      for media in selected_product.media
+        if marker_media_ids contains media.id
+          assign first_marker_id = media.id
+          break
+        endif
+      endfor
+
+      assign current_marker_id = first_marker_id
+      for media in selected_product.media
+        if marker_media_ids contains media.id
+          assign current_marker_id = media.id
+        endif
+
+        if current_marker_id == selected_variant_media.id
+          assign found_media = selected_product.media | where: 'id', media.id
+          assign sorted_media = sorted_media | concat: found_media
+        endif
+      endfor
+    endif
+  endif
+
+  if sorted_media.size == 0
+    if selected_variant_media
+      assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
+
+      for media in selected_product.media
+        if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
+          continue
+        endif
+
+        if media.id != selected_variant_media.id
+          assign found_media = selected_product.media | where: 'id', media.id
+          assign sorted_media = sorted_media | concat: found_media
+        endif
+      endfor
+    else
+      assign sorted_media = selected_product.media
+    endif
   endif
   assign has_image_drop = sorted_media | has: 'media_type', 'image'
 
