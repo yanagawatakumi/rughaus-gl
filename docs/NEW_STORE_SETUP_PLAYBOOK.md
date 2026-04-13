@@ -37,6 +37,13 @@ shopify store execute --store xfxfwd-8p.myshopify.com --query "query { shop { na
 2. `Settings > Checkout` の必須項目を初期設定
 3. `Online Store > Preferences` でパスワード保護状態を確認
 
+失敗時の分岐（重要）:
+- `Store currency` が変更できない場合は、以下を確認する
+  - 自分が `Store owner` もしくは通貨変更可能な権限を持つか
+  - すでに注文が発生していないか（販売開始後は基準通貨変更不可）
+  - Shopify Payments設定の途中状態でロックされていないか
+- 解決できない場合は、`Store owner` に実施依頼する
+
 完了条件:
 - 基準通貨がUSDになっている
 

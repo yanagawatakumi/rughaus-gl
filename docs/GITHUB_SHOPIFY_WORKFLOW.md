@@ -21,6 +21,12 @@ git push -u origin main
 git push -u origin develop
 ```
 
+補足:
+- 既存クローンで `remote origin already exists` が出る場合は、次を使う
+```bash
+git remote set-url origin <GITHUB_REPO_URL>
+```
+
 ## 3. Shopify管理画面でGitHub連携
 1. `Online Store > Themes > Add theme > Connect from GitHub`
 2. リポジトリを選択

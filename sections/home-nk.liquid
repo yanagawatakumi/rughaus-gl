@@ -1,0 +1,856 @@
+{% liquid
+  assign category_blocks = section.blocks | where: 'type', 'category_card'
+  assign support_blocks = section.blocks | where: 'type', 'support_link'
+  assign featured_collection = section.settings.featured_collection
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--page-width color-{{ section.settings.color_scheme }} home-nk spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <header class="home-nk__hero">
+    <div class="home-nk__hero-content">
+      {% if section.settings.hero_eyebrow != blank %}
+        <p class="home-nk__eyebrow">{{ section.settings.hero_eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.hero_heading != blank %}
+        <h1 class="home-nk__heading">{{ section.settings.hero_heading }}</h1>
+      {% endif %}
+
+      {% if section.settings.hero_lead != blank %}
+        <div class="home-nk__lead rte">{{ section.settings.hero_lead }}</div>
+      {% endif %}
+
+      <div class="home-nk__hero-actions">
+        {% if section.settings.primary_label != blank and section.settings.primary_link != blank %}
+          <a class="button" href="{{ section.settings.primary_link }}">{{ section.settings.primary_label }}</a>
+        {% endif %}
+
+        {% if section.settings.secondary_label != blank and section.settings.secondary_link != blank %}
+          <a class="button button-secondary" href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label }}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="home-nk__hero-media-grid">
+      <div class="home-nk__hero-media home-nk__hero-media--primary">
+        {% if section.settings.hero_image != blank %}
+          {{
+            section.settings.hero_image
+            | image_url: width: 2200
+            | image_tag:
+              loading: 'eager',
+              widths: '800, 1200, 1600, 2000, 2200',
+              sizes: '(min-width: 990px) 52vw, 100vw',
+              class: 'home-nk__hero-image'
+          }}
+        {% else %}
+          <img
+            src="{{ 'home-nk-hero-primary.jpg' | asset_url }}"
+            alt="Rughaus hero image"
+            class="home-nk__hero-image"
+            loading="eager"
+            width="1512"
+            height="1008"
+          >
+        {% endif %}
+      </div>
+
+      <div class="home-nk__hero-media home-nk__hero-media--secondary">
+        {% if section.settings.hero_image_secondary != blank %}
+          {{
+            section.settings.hero_image_secondary
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              widths: '500, 800, 1100, 1400, 1600',
+              sizes: '(min-width: 990px) 26vw, 100vw',
+              class: 'home-nk__hero-image'
+          }}
+        {% else %}
+          <img
+            src="{{ 'home-nk-hero-secondary.jpg' | asset_url }}"
+            alt="Rughaus secondary hero image"
+            class="home-nk__hero-image"
+            loading="lazy"
+            width="1200"
+            height="1200"
+          >
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  {% if category_blocks.size > 0 %}
+    <section class="home-nk__categories" aria-label="Primary categories">
+      {% for block in category_blocks %}
+        <article class="home-nk__category" {{ block.shopify_attributes }}>
+          <a class="home-nk__category-link" href="{{ block.settings.link | default: '#' }}">
+            <div class="home-nk__category-media">
+              {% if block.settings.image != blank %}
+                {{
+                  block.settings.image
+                  | image_url: width: 1400
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 900, 1200, 1400',
+                    sizes: '(min-width: 990px) 30vw, 100vw',
+                    class: 'home-nk__category-image'
+                }}
+              {% else %}
+                {% liquid
+                  assign category_fallback_asset = 'home-nk-category-all.jpg'
+                  if block.settings.link contains 'custom-rugs'
+                    assign category_fallback_asset = 'home-nk-category-custom.jpg'
+                  elsif block.settings.link contains 'stock-rugs'
+                    assign category_fallback_asset = 'home-nk-category-stock.jpg'
+                  endif
+                %}
+                <img
+                  src="{{ category_fallback_asset | asset_url }}"
+                  alt="Rug category image"
+                  class="home-nk__category-image"
+                  loading="lazy"
+                  width="1080"
+                  height="1080"
+                >
+              {% endif %}
+            </div>
+
+            <div class="home-nk__category-body">
+              {% if block.settings.heading != blank %}
+                <h2 class="home-nk__category-title">{{ block.settings.heading }}</h2>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <div class="home-nk__category-text rte">{{ block.settings.text }}</div>
+              {% endif %}
+
+              {% if block.settings.link_label != blank %}
+                <span class="home-nk__category-cta">
+                  {{ block.settings.link_label }}
+                </span>
+              {% endif %}
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  <section class="home-nk__featured" aria-label="Featured rugs">
+    <div class="home-nk__section-head">
+      {% if section.settings.featured_heading != blank %}
+        <h2 class="home-nk__section-title">{{ section.settings.featured_heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.featured_link_label != blank and section.settings.featured_link != blank %}
+        <a class="home-nk__text-link" href="{{ section.settings.featured_link }}">{{ section.settings.featured_link_label }}</a>
+      {% endif %}
+    </div>
+
+    <div class="home-nk__product-grid">
+      {% if featured_collection != blank and featured_collection.products_count > 0 %}
+        {% for product in featured_collection.products limit: section.settings.featured_limit %}
+          <article class="home-nk__product-card">
+            <a class="home-nk__product-link" href="{{ product.url }}">
+              <div class="home-nk__product-media">
+                {% if product.featured_media != blank %}
+                  {{
+                    product.featured_media
+                    | image_url: width: 1400
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '400, 600, 900, 1200, 1400',
+                      sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+                      class: 'home-nk__product-image'
+                  }}
+                {% else %}
+                  <img
+                    src="{{ 'home-nk-category-all.jpg' | asset_url }}"
+                    alt="Sample rug image"
+                    class="home-nk__product-image"
+                    loading="lazy"
+                    width="1080"
+                    height="1080"
+                  >
+                {% endif %}
+              </div>
+
+              <h3 class="home-nk__product-title">{{ product.title }}</h3>
+              <p class="home-nk__product-price">{{ product.price | money }}</p>
+            </a>
+          </article>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..4) limit: section.settings.featured_limit %}
+          <article class="home-nk__product-card home-nk__product-card--placeholder">
+            <div class="home-nk__product-media">
+              <img
+                src="{{ 'home-nk-category-all.jpg' | asset_url }}"
+                alt="Sample rug image {{ i }}"
+                class="home-nk__product-image"
+                loading="lazy"
+                width="1080"
+                height="1080"
+              >
+            </div>
+            <h3 class="home-nk__product-title">Sample Rug {{ i }}</h3>
+            <p class="home-nk__product-price">{{ 25000 | money }}</p>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="home-nk__story" aria-label="Brand story">
+    <div class="home-nk__story-media">
+      {% if section.settings.story_image != blank %}
+        {{
+          section.settings.story_image
+          | image_url: width: 1800
+          | image_tag:
+            loading: 'lazy',
+            widths: '700, 1000, 1300, 1600, 1800',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            class: 'home-nk__story-image'
+        }}
+      {% else %}
+        <img
+          src="{{ 'home-nk-story.jpg' | asset_url }}"
+          alt="Rughaus story image"
+          class="home-nk__story-image"
+          loading="lazy"
+          width="1200"
+          height="1200"
+        >
+      {% endif %}
+    </div>
+
+    <div class="home-nk__story-content">
+      {% if section.settings.story_eyebrow != blank %}
+        <p class="home-nk__eyebrow">{{ section.settings.story_eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.story_heading != blank %}
+        <h2 class="home-nk__section-title">{{ section.settings.story_heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.story_text != blank %}
+        <div class="home-nk__story-text rte">{{ section.settings.story_text }}</div>
+      {% endif %}
+
+      {% if section.settings.story_link_label != blank and section.settings.story_link != blank %}
+        <a class="button button-secondary" href="{{ section.settings.story_link }}">{{ section.settings.story_link_label }}</a>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if support_blocks.size > 0 %}
+    <section class="home-nk__support" aria-label="Support links">
+      <div class="home-nk__section-head">
+        {% if section.settings.support_heading != blank %}
+          <h2 class="home-nk__section-title">{{ section.settings.support_heading }}</h2>
+        {% endif %}
+      </div>
+
+      <div class="home-nk__support-grid">
+        {% for block in support_blocks %}
+          <a class="home-nk__support-link" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+            <span class="home-nk__support-label">{{ block.settings.label }}</span>
+            {% if block.settings.description != blank %}
+              <span class="home-nk__support-description">{{ block.settings.description }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .home-nk {
+    gap: clamp(2rem, 4vw, 4rem) 0;
+  }
+
+  .home-nk__hero {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .home-nk__hero-content {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .home-nk__eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.72;
+  }
+
+  .home-nk__heading {
+    margin: 0;
+    font-size: clamp(2.1rem, 6vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    max-width: 16ch;
+  }
+
+  .home-nk__lead {
+    max-width: 56ch;
+    font-size: clamp(1rem, 1.7vw, 1.25rem);
+    line-height: 1.55;
+  }
+
+  .home-nk__hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .home-nk__hero-media-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .home-nk__hero-media {
+    min-height: 20rem;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+    overflow: hidden;
+  }
+
+  .home-nk__hero-media--secondary {
+    min-height: 14rem;
+  }
+
+  .home-nk__hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .home-nk__hero-image--placeholder,
+  .home-nk__category-image--placeholder,
+  .home-nk__product-image--placeholder,
+  .home-nk__story-image--placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  .home-nk__categories {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .home-nk__category {
+    margin: 0;
+  }
+
+  .home-nk__category-link {
+    display: grid;
+    gap: 1rem;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+    padding: 0.6rem;
+    transition: border-color 180ms ease;
+  }
+
+  .home-nk__category-link:hover {
+    border-color: rgb(var(--color-foreground-rgb) / 0.5);
+  }
+
+  .home-nk__category-media {
+    aspect-ratio: 4 / 5;
+    background: rgb(var(--color-foreground-rgb) / 0.05);
+    overflow: hidden;
+  }
+
+  .home-nk__category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .home-nk__category-body {
+    display: grid;
+    gap: 0.5rem;
+    padding-inline: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .home-nk__category-title {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .home-nk__category-text {
+    font-size: 0.95rem;
+    line-height: 1.45;
+    opacity: 0.84;
+  }
+
+  .home-nk__category-cta {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .home-nk__featured,
+  .home-nk__support {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .home-nk__section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .home-nk__section-title {
+    margin: 0;
+    font-size: clamp(1.45rem, 3vw, 2.5rem);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  .home-nk__text-link {
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .home-nk__product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0.75rem;
+  }
+
+  .home-nk__product-card {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .home-nk__product-link {
+    display: grid;
+    gap: 0.45rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-nk__product-media {
+    aspect-ratio: 4 / 5;
+    background: rgb(var(--color-foreground-rgb) / 0.05);
+    overflow: hidden;
+  }
+
+  .home-nk__product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .home-nk__product-title {
+    margin: 0;
+    font-size: 0.98rem;
+  }
+
+  .home-nk__product-price {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.84;
+  }
+
+  .home-nk__story {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 1rem;
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .home-nk__story-media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: rgb(var(--color-foreground-rgb) / 0.05);
+  }
+
+  .home-nk__story-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .home-nk__story-content {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+  }
+
+  .home-nk__story-text {
+    max-width: 54ch;
+  }
+
+  .home-nk__support-grid {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .home-nk__support-link {
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+    padding: 0.9rem 0;
+    text-decoration: none;
+    color: inherit;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .home-nk__support-label {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .home-nk__support-description {
+    font-size: 0.92rem;
+    opacity: 0.8;
+  }
+
+  @media screen and (min-width: 750px) {
+    .home-nk__categories {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .home-nk__product-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem 0.8rem;
+    }
+
+    .home-nk__support-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .home-nk__hero {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: end;
+      gap: 1.5rem;
+    }
+
+    .home-nk__hero-media-grid {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: 0.8rem;
+    }
+
+    .home-nk__hero-media--primary {
+      min-height: 40rem;
+    }
+
+    .home-nk__hero-media--secondary {
+      min-height: 24rem;
+      margin-top: auto;
+    }
+
+    .home-nk__product-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .home-nk__story {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 1.5rem;
+    }
+
+    .home-nk__story-media {
+      aspect-ratio: 5 / 4;
+    }
+
+    .home-nk__support-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "NK Home Page",
+  "class": "section-wrapper",
+  "blocks": [
+    {
+      "type": "category_card",
+      "name": "Category card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Collection"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Short collection summary.</p>"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Explore"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "support_link",
+      "name": "Support link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Support topic"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Short explanation for this destination."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Eyebrow",
+      "default": "RUGHAUS GL"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "hero_heading",
+      "label": "Heading",
+      "default": "Architectural rugs for custom interiors"
+    },
+    {
+      "type": "richtext",
+      "id": "hero_lead",
+      "label": "Lead text",
+      "default": "<p>Build your specification in stock or custom dimensions, with concise support for trade projects.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Primary hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_secondary",
+      "label": "Secondary hero image"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop all rugs"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Custom rugs"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Featured products"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "featured_heading",
+      "label": "Featured heading",
+      "default": "Featured rugs"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "range",
+      "id": "featured_limit",
+      "label": "Products to show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "featured_link_label",
+      "label": "Featured link label",
+      "default": "View all"
+    },
+    {
+      "type": "url",
+      "id": "featured_link",
+      "label": "Featured link"
+    },
+    {
+      "type": "header",
+      "content": "Story"
+    },
+    {
+      "type": "text",
+      "id": "story_eyebrow",
+      "label": "Story eyebrow",
+      "default": "About"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "story_heading",
+      "label": "Story heading",
+      "default": "Crafted for spaces that evolve"
+    },
+    {
+      "type": "richtext",
+      "id": "story_text",
+      "label": "Story text",
+      "default": "<p>Our rug program combines custom sizing, practical lead times, and material options selected for design-led projects.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image",
+      "label": "Story image"
+    },
+    {
+      "type": "text",
+      "id": "story_link_label",
+      "label": "Story button label",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "story_link",
+      "label": "Story button link"
+    },
+    {
+      "type": "header",
+      "content": "Support"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "support_heading",
+      "label": "Support heading",
+      "default": "Support & FAQ"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "NK Home Page",
+      "blocks": [
+        {
+          "type": "category_card"
+        },
+        {
+          "type": "category_card"
+        },
+        {
+          "type": "category_card"
+        },
+        {
+          "type": "support_link"
+        },
+        {
+          "type": "support_link"
+        },
+        {
+          "type": "support_link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
