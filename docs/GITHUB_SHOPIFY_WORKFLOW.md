@@ -1,7 +1,12 @@
 # GitHub + Shopify 連携ワークフロー
 
-最終更新日: 2026-04-09
+最終更新日: 2026-04-13
 対象: `rughaus-jp-horizon` テーマ
+
+## 0. 事前前提（Codex + Shopify CLI）
+- `shopify version` が `3.93.2` 以上であること（`shopify store` 利用のため）
+- Codex 側で Shopify Dev MCP / Shopify skills が有効化済みであること
+- 詳細手順は `CODEX_SHOPIFY_AI_TOOLKIT_RUNBOOK.md` を参照
 
 ## 1. ブランチ運用
 - `main`: 本番テーマ用
@@ -37,13 +42,21 @@ git push -u origin feature/<task-name>
 
 ## 5. ローカルプレビュー（任意）
 ```bash
-shopify theme dev --store <your-store>.myshopify.com
+shopify theme dev --store rughaus-gl.myshopify.com
 ```
 
-## 6. CLI権限エラー時の対処
+## 6. ストア実行系（任意）
+```bash
+shopify store auth --store xfxfwd-8p.myshopify.com --scopes read_products,read_inventory,write_products,write_inventory
+shopify store execute --store xfxfwd-8p.myshopify.com --query "query { shop { name primaryDomain { url } } }"
+```
+
+## 7. CLI権限エラー時の対処
 - 先にブラウザでShopify Adminにログインしておく
 - ストアの恒久ドメイン（`*.myshopify.com`）を使う
 - アカウント権限を確認（テーマ編集可能）
+- `OAuth callback store does not match the requested store` が出たら、エラーに表示された恒久ドメインで `shopify store auth` を再実行する
+- `Port <number> is already in use` が出たら、`lsof` で占有プロセスを確認して停止する
 
-## 7. 同期ズレ時
+## 8. 同期ズレ時
 - Shopifyテーマカードの `Actions > Reset to last commit` を実行

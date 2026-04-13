@@ -10,6 +10,7 @@
 - Markets/Catalogを公開制御の正本に統一し、テーマ側の独自市場ガードを撤廃
 - PDP詳細文言はLiquid実装で `custom.pdp_*` 連動 + フォールバック表示に移行済み
 - 別Shopifyストアへの接続・再セットアップフェーズに移行
+- Codex 開発環境へ Shopify AI Toolkit（MCP + skills + CLI更新）を反映済み
 
 ## 2. ステータス凡例
 - `DONE`: 完了
@@ -29,6 +30,16 @@
 - `TODO` Product metafield定義（`custom.pdp_*` 4項目）
 - `TODO` Markets/Catalog公開設定の再構成
 - `BLOCKED` Shopify Payments有効化待ち（多通貨最終検証）
+
+### Dev環境（Codex + Shopify AI Toolkit）
+- `DONE` Codex の `~/.codex/config.toml` に Shopify Dev MCP 設定を追加
+- `DONE` Shopify AI Toolkit skills 導入（theme/app/storefront系）
+- `DONE` Shopify CLI `3.93.2` へ更新（`shopify store auth/execute` 利用可）
+- `DONE` ストア認証と疎通確認
+  - `shopify store auth --store xfxfwd-8p.myshopify.com`
+  - `shopify store execute` による `shop` / `products` 取得確認
+- `DONE` `shopify theme check --path . --output json` 実行（結果 `[]`）
+- `TODO` Storefront MCP 導入検討（AI接客/Storefront Agent 拡張）
 
 ### FR-09 / IA・基盤
 - `DONE` IAテンプレート分離
@@ -60,6 +71,11 @@
   - `page_view`, `collection_view`, `product_view`, `add_to_cart`, `begin_checkout`
 
 ## 4. 直近の対応履歴（抜粋）
+- `DONE` Codex開発環境に Shopify AI Toolkit を反映（MCP + skills）
+- `DONE` `shopify store auth/execute` の実行基盤を整備（CLI更新 + 認証）
+- `DONE` ストア実行時の恒久ドメイン運用ルールを確立
+  - `store` 系は `xfxfwd-8p.myshopify.com` を使用
+  - 表示/テーマ側は `rughaus-gl.myshopify.com` を使用
 - `DONE` GitHub + Shopify連携運用を確立
 - `DONE` GitHub統合テーマ同期エラーを解消
   - JSON内の動的ソース制約へ対応
@@ -94,6 +110,7 @@
 1. Assistant
 - FR-11の最小計測を実装
 - 新ストアセットアップの確認観点を随時レビュー
+- `CODEX_SHOPIFY_AI_TOOLKIT_RUNBOOK.md` の運用更新を継続
 
 2. User
 - `NEW_STORE_SETUP_PLAYBOOK.md` の手順 1 -> 8 を順次実行

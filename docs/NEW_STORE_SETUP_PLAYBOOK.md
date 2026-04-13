@@ -9,6 +9,18 @@
 - 初回販売前で、通貨・決済設定の変更が可能な状態であること
 - 接続先リポジトリ: `yanagawatakumi/rughaus-gl`
 - 接続ブランチ: `develop`（検証用）
+- ストアドメイン運用:
+  - テーマ/画面確認: `rughaus-gl.myshopify.com`
+  - `shopify store auth/execute`: `xfxfwd-8p.myshopify.com`（恒久ドメイン）
+
+## 0-1. CLIストア認証（任意だが推奨）
+```bash
+shopify store auth --store xfxfwd-8p.myshopify.com --scopes read_products,read_inventory,write_products,write_inventory
+shopify store execute --store xfxfwd-8p.myshopify.com --query "query { shop { name primaryDomain { url } } }"
+```
+
+補足:
+- `OAuth callback store does not match the requested store` が出た場合は、表示された恒久ドメインで再実行する
 
 ## 1. GitHubテーマ接続
 1. `Online Store > Themes > Add theme > Connect from GitHub`

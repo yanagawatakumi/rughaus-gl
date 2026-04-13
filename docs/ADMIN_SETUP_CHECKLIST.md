@@ -5,6 +5,21 @@
 
 補足:
 - 別ストア移行時は、実行順を `NEW_STORE_SETUP_PLAYBOOK.md` に従う
+- Codex + Shopify AI Toolkit の運用手順は `CODEX_SHOPIFY_AI_TOOLKIT_RUNBOOK.md` を参照
+
+## 0. 開発環境チェック（先に実施）
+- `shopify version` が `3.93.2` 以上であること
+- Codex 側で Shopify Dev MCP / Shopify skills が有効化済みであること
+- ドメイン運用を分離すること
+  - テーマ表示/プレビュー: `rughaus-gl.myshopify.com`
+  - `shopify store` 実行: `xfxfwd-8p.myshopify.com`
+
+推奨コマンド:
+```bash
+shopify store auth --store xfxfwd-8p.myshopify.com --scopes read_products,read_inventory,write_products,write_inventory
+shopify store execute --store xfxfwd-8p.myshopify.com --query "query { shop { name primaryDomain { url } } }"
+shopify theme check --path . --fail-level error --output json
+```
 
 ## 1. Markets / Languages
 - Marketsで `United States / Hong Kong SAR / Italy` を有効化

@@ -1,6 +1,6 @@
-# RUGHAUS JP Horizon - 開発基盤ドキュメント（要件確定 v0.4）
+# RUGHAUS JP Horizon - 開発基盤ドキュメント（要件確定 v0.5）
 
-最終更新日: 2026-04-09
+最終更新日: 2026-04-13
 対象テーマ: Shopify（標準状態 / 未カスタマイズ）
 
 ## 1. プロジェクト概要
@@ -13,6 +13,14 @@
 - フェーズ2（本構築）: PoC成果を別Shopifyストアに移行し、海外向けサイトとして独立運用
 - 直近目標: フェーズ1で実課金まで見据えた技術検証を完了する
 - 現行ストアプラン: Shopify Advanced（Plusではない）
+
+## 2.1 開発環境前提（2026-04-13）
+- Codex 開発環境に Shopify AI Toolkit（MCP + skills）を導入済みであること
+- Shopify CLI は `3.93.2` 以上を前提とする（`shopify store auth/execute` を利用）
+- ドメイン運用を分離すること
+  - テーマ表示/プレビュー: `rughaus-gl.myshopify.com`
+  - `shopify store` 実行: `xfxfwd-8p.myshopify.com`（恒久ドメイン）
+- 日次運用手順の正本は `CODEX_SHOPIFY_AI_TOOLKIT_RUNBOOK.md` とする
 
 ## 3. PoC対象市場（確定）
 - 重点対象国: アメリカ、香港、イタリア
@@ -74,6 +82,7 @@
   - 納期遅延時は他商品と同様対応
 
 ## 6. 運用方針（確定）
+- 開発基盤: Codex + Shopify AI Toolkit（MCP + skills）を標準環境として運用する
 - 国別表示制御: Shopify Markets + カタログ運用を第一候補
 - 国別表示制御の優先順位: まずコレクション単位を成立させる（商品単位は次点）
 - 翻訳運用: テーマ内固定文言、動的文言、アプリ表示文言を含め翻訳漏れゼロを必須化
@@ -182,7 +191,7 @@
   - 最低限イベント: page_view, collection_view, product_view, size_input, add_to_cart, begin_checkout, purchase, trade_form_submit
 
 ## 10. 実装前の残確認（最小）
-- なし（2026-04-09時点で確定済み）
+- なし（2026-04-13時点で確定済み）
 
 ## 11. 決定ログ
 - 2026-04-06: 開発基盤ドキュメント初版作成
@@ -205,3 +214,5 @@
 - 2026-04-11: PDP詳細文言のメタフィールド連動再導入は、管理画面で `custom.pdp_*` 定義完了後に実施する方針を追記
 - 2026-04-13: 公開制御をMarkets/Catalog正本へ統一し、テーマ側の独自市場ガードを廃止
 - 2026-04-13: PDP詳細文言は `custom.pdp_*` をLiquidで参照する実装へ更新（JSON動的ソース依存なし）
+- 2026-04-13: Codex 開発環境へ Shopify AI Toolkit（MCP + skills）を反映
+- 2026-04-13: `shopify store` 実行時は恒久ドメイン `xfxfwd-8p.myshopify.com` を利用する運用に確定
