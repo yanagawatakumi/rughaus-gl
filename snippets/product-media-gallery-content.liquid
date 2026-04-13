@@ -354,6 +354,15 @@
     {{ view_transition_styles_cover }}
   {% endif %}
 
+  media-gallery {
+    transition: opacity 0.18s ease;
+  }
+
+  media-gallery[variant-switching] {
+    opacity: 0.58;
+    pointer-events: none;
+  }
+
   :root { --gallery-media-border-radius: {{ block_settings.media_radius }}px; }
 {% endstyle %}
 

@@ -1,5 +1,5 @@
 import { Component } from '@theme/component';
-import { ThemeEvents, VariantUpdateEvent, ZoomMediaSelectedEvent } from '@theme/events';
+import { ThemeEvents, VariantSelectedEvent, VariantUpdateEvent, ZoomMediaSelectedEvent } from '@theme/events';
 
 /**
  * A custom element that renders a media gallery.
@@ -18,6 +18,7 @@ export class MediaGallery extends Component {
     const { signal } = this.#controller;
     const target = this.closest('.shopify-section, dialog');
 
+    target?.addEventListener(ThemeEvents.variantSelected, this.#handleVariantSelected, { signal });
     target?.addEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate, { signal });
     this.refs.zoomDialogComponent?.addEventListener(ThemeEvents.zoomMediaSelected, this.#handleZoomMediaSelected, {
       signal,
@@ -33,6 +34,14 @@ export class MediaGallery extends Component {
   }
 
   /**
+   * Handles a variant selected event by applying a lightweight loading state.
+   * @param {VariantSelectedEvent} _event
+   */
+  #handleVariantSelected = (_event) => {
+    this.setAttribute('variant-switching', '');
+  };
+
+  /**
    * Handles a variant update event by replacing the current media gallery with a new one.
    *
    * @param {VariantUpdateEvent} event - The variant update event.
@@ -45,6 +54,7 @@ export class MediaGallery extends Component {
 
     if (!newMediaGallery) return;
 
+    newMediaGallery.removeAttribute('variant-switching');
     this.replaceWith(newMediaGallery);
   };
 
