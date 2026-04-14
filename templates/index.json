@@ -178,6 +178,7 @@
         "category_stock",
         "category_all"
       ],
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
