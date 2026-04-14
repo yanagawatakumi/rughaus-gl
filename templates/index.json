@@ -116,7 +116,7 @@
       "name": "t:names.layered_slideshow",
       "settings": {
         "section_width": "full-width",
-        "height": "small",
+        "height": "medium",
         "corner_radius": 0,
         "border_width": 0,
         "drop_shadow": false,
