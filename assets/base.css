@@ -1437,9 +1437,24 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   display: none;
 }
 
-.link {
+.link,
+.text-link,
+a[class*='__text-link'],
+a[class*='__benefit-link'] {
   display: inline-block;
   text-align: center;
+  text-decoration-line: underline;
+  text-decoration-color: currentcolor;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.125em;
+}
+
+.link:hover,
+.text-link:hover,
+a[class*='__text-link']:hover,
+a[class*='__benefit-link']:hover {
+  color: var(--color-primary-hover);
+  text-decoration-color: currentcolor;
 }
 
 shopify-accelerated-checkout,

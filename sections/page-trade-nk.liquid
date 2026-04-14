@@ -58,7 +58,7 @@
           {% endif %}
           {% if block.settings.link_label != blank and block.settings.link != blank %}
             <a
-              class="trade-nk__benefit-link"
+              class="trade-nk__benefit-link text-link"
               href="{{ block.settings.link }}"
             >
               {{ block.settings.link_label }}
@@ -187,7 +187,6 @@
   }
 
   .trade-nk__benefit-link {
-    text-decoration: none;
     font-size: 0.9rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;

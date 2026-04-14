@@ -26,7 +26,9 @@
       {% endif %}
 
       {% if section.settings.link_label != blank and featured_product_url != blank %}
-        <a class="home-nk-featured-product__link" href="{{ featured_product_url }}">{{ section.settings.link_label }}</a>
+        <a class="home-nk-featured-product__link text-link" href="{{ featured_product_url }}">
+          {{ section.settings.link_label }}
+        </a>
       {% endif %}
     </div>
 

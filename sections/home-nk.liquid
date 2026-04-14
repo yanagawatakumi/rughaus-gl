@@ -157,7 +157,9 @@
       {% endif %}
 
       {% if section.settings.featured_link_label != blank and section.settings.featured_link != blank %}
-        <a class="home-nk__text-link" href="{{ section.settings.featured_link }}">{{ section.settings.featured_link_label }}</a>
+        <a class="home-nk__text-link text-link" href="{{ section.settings.featured_link }}">
+          {{ section.settings.featured_link_label }}
+        </a>
       {% endif %}
     </div>
 
@@ -564,7 +566,6 @@
     font-size: 0.82rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    text-decoration: none;
   }
 
   .home-nk__product-carousel {
