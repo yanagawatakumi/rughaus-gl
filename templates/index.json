@@ -113,6 +113,7 @@
       "block_order": [
         "layered_slide_itiUm4"
       ],
+      "disabled": true,
       "name": "t:names.layered_slideshow",
       "settings": {
         "section_width": "full-width",
