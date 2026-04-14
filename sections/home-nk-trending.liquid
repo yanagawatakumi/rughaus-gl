@@ -1,15 +1,6 @@
 {% liquid
   assign featured_collection = section.settings.featured_collection
   assign featured_product_blocks = section.blocks | where: 'type', 'featured_product'
-  assign featured_slide_count = section.settings.featured_limit
-
-  if section.settings.featured_source == 'manual'
-    if featured_product_blocks.size > 0
-      assign featured_slide_count = featured_product_blocks.size | at_most: section.settings.featured_limit
-    endif
-  elsif featured_collection != blank and featured_collection.products_count > 0
-    assign featured_slide_count = featured_collection.products_count | at_most: section.settings.featured_limit
-  endif
 %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -28,7 +19,7 @@
       {% endif %}
     </div>
 
-    {% capture featured_slides %}
+    {% capture featured_cards %}
       {% if section.settings.featured_source == 'manual' %}
         {% if featured_product_blocks.size > 0 %}
           {% for block in featured_product_blocks limit: section.settings.featured_limit %}
@@ -52,7 +43,7 @@
                 endif
               endif
             %}
-            {% capture slide %}
+            <div class="home-nk__product-slide">
               <article class="home-nk__product-card">
                 <a class="home-nk__product-link" href="{{ product_link | default: '#' }}">
                   <div class="home-nk__product-media">
@@ -63,7 +54,7 @@
                         | image_tag:
                           loading: 'lazy',
                           widths: '400, 600, 900, 1200, 1400',
-                          sizes: '(min-width: 990px) 22vw, (min-width: 750px) 30vw, 70vw',
+                          sizes: '(min-width: 1200px) 16vw, (min-width: 990px) 18vw, (min-width: 750px) 28vw, 62vw',
                           class: 'home-nk__product-image'
                       }}
                     {% else %}
@@ -90,17 +81,11 @@
                   {% endunless %}
                 </a>
               </article>
-            {% endcapture %}
-            {% render 'slideshow-slide',
-              children: slide,
-              index: forloop.index0,
-              class: 'home-nk__product-slide',
-              attributes: block.shopify_attributes
-            %}
+            </div>
           {% endfor %}
         {% else %}
           {% for i in (1..4) limit: section.settings.featured_limit %}
-            {% capture slide %}
+            <div class="home-nk__product-slide">
               <article class="home-nk__product-card home-nk__product-card--placeholder">
                 <div class="home-nk__product-media">
                   <img
@@ -115,13 +100,12 @@
                 <h3 class="home-nk__product-title">Sample Rug {{ i }}</h3>
                 <p class="home-nk__product-price">{{ 25000 | money }}</p>
               </article>
-            {% endcapture %}
-            {% render 'slideshow-slide', children: slide, index: forloop.index0, class: 'home-nk__product-slide' %}
+            </div>
           {% endfor %}
         {% endif %}
       {% elsif featured_collection != blank and featured_collection.products_count > 0 %}
         {% for product in featured_collection.products limit: section.settings.featured_limit %}
-          {% capture slide %}
+          <div class="home-nk__product-slide">
             <article class="home-nk__product-card">
               <a class="home-nk__product-link" href="{{ product.url }}">
                 <div class="home-nk__product-media">
@@ -132,7 +116,7 @@
                       | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 900, 1200, 1400',
-                        sizes: '(min-width: 990px) 22vw, (min-width: 750px) 30vw, 70vw',
+                        sizes: '(min-width: 1200px) 16vw, (min-width: 990px) 18vw, (min-width: 750px) 28vw, 62vw',
                         class: 'home-nk__product-image'
                     }}
                   {% else %}
@@ -151,12 +135,11 @@
                 <p class="home-nk__product-price">{{ product.price | money }}</p>
               </a>
             </article>
-          {% endcapture %}
-          {% render 'slideshow-slide', children: slide, index: forloop.index0, class: 'home-nk__product-slide' %}
+            </div>
         {% endfor %}
       {% else %}
         {% for i in (1..4) limit: section.settings.featured_limit %}
-          {% capture slide %}
+          <div class="home-nk__product-slide">
             <article class="home-nk__product-card home-nk__product-card--placeholder">
               <div class="home-nk__product-media">
                 <img
@@ -171,23 +154,22 @@
               <h3 class="home-nk__product-title">Sample Rug {{ i }}</h3>
               <p class="home-nk__product-price">{{ 25000 | money }}</p>
             </article>
-          {% endcapture %}
-          {% render 'slideshow-slide', children: slide, index: forloop.index0, class: 'home-nk__product-slide' %}
+            </div>
         {% endfor %}
       {% endif %}
     {% endcapture %}
 
-    {% render 'slideshow',
-      ref: 'homeNkTrending',
-      class: 'home-nk__product-carousel',
-      slides: featured_slides,
-      slide_count: featured_slide_count,
-      infinite: true,
-      auto_hide_controls: true,
-      initial_slide: 0
-    %}
+    <div class="home-nk__product-loop" data-home-nk-loop>
+      <div class="home-nk__product-track" data-home-nk-track>
+        <div class="home-nk__product-group" data-home-nk-group="prev" aria-hidden="true">{{ featured_cards }}</div>
+        <div class="home-nk__product-group" data-home-nk-group="main">{{ featured_cards }}</div>
+        <div class="home-nk__product-group" data-home-nk-group="next" aria-hidden="true">{{ featured_cards }}</div>
+      </div>
+    </div>
   </div>
 </section>
+
+<script src="{{ 'home-nk-trending-loop.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
 {% stylesheet %}
   .home-nk-trending-section {
@@ -223,31 +205,53 @@
     text-decoration: none;
   }
 
-  .home-nk__product-carousel {
+  .home-nk__product-loop {
     --slideshow-gap: 0.75rem;
-    --home-nk-slide-width: min(76vw, 22rem);
+    --home-nk-slide-width: 62vw;
 
     width: 100%;
     display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    touch-action: pan-y;
   }
 
-  .home-nk__product-carousel slideshow-slides {
+  .home-nk__product-loop::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-nk__product-loop.is-dragging {
+    cursor: grabbing;
+  }
+
+  .home-nk__product-track {
+    display: flex;
+    min-width: max-content;
+    gap: var(--slideshow-gap);
+  }
+
+  .home-nk__product-group {
+    display: flex;
     gap: var(--slideshow-gap);
     padding-block: 0.25rem;
-    margin-inline-end: calc(-1 * var(--util-page-margin-offset));
-    padding-inline-end: var(--util-page-margin-offset);
+    flex: 0 0 auto;
   }
 
   .home-nk__product-slide {
-    width: var(--home-nk-slide-width);
-    flex: 0 0 auto;
-    scroll-snap-align: start;
+    width: var(--home-nk-slide-width-px, var(--home-nk-slide-width));
+    min-width: var(--home-nk-slide-width-px, var(--home-nk-slide-width));
+    max-width: var(--home-nk-slide-width-px, var(--home-nk-slide-width));
+    flex: 0 0 var(--home-nk-slide-width-px, var(--home-nk-slide-width));
   }
 
   .home-nk__product-card {
     display: grid;
     gap: 0.45rem;
     min-width: 0;
+    width: 100%;
   }
 
   .home-nk__product-link {
@@ -256,10 +260,12 @@
     color: inherit;
     text-decoration: none;
     min-width: 0;
+    width: 100%;
   }
 
   .home-nk__product-media {
     aspect-ratio: 4 / 5;
+    width: 100%;
     background: rgb(var(--color-foreground-rgb) / 0.05);
     overflow: hidden;
   }
@@ -284,16 +290,16 @@
   }
 
   @media screen and (min-width: 750px) {
-    .home-nk__product-carousel {
+    .home-nk__product-loop {
       --slideshow-gap: 0.9rem;
-      --home-nk-slide-width: clamp(15rem, 34vw, 24rem);
+      --home-nk-slide-width: 28vw;
     }
   }
 
   @media screen and (min-width: 990px) {
-    .home-nk__product-carousel {
+    .home-nk__product-loop {
       --slideshow-gap: 1rem;
-      --home-nk-slide-width: clamp(14rem, 24vw, 20rem);
+      --home-nk-slide-width: 17.5vw;
     }
   }
 {% endstylesheet %}
@@ -375,9 +381,9 @@
       "id": "featured_limit",
       "label": "Products to show",
       "min": 2,
-      "max": 12,
+      "max": 20,
       "step": 1,
-      "default": 4
+      "default": 20
     },
     {
       "type": "text",

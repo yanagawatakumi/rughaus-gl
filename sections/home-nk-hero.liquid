@@ -29,7 +29,18 @@
     </div>
 
     <div class="home-nk__hero-media home-nk__hero-media--primary">
-      {% if section.settings.hero_image != blank %}
+      {% if section.settings.hero_video != blank %}
+        {{
+          section.settings.hero_video
+          | video_tag:
+            poster: nil,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            class: 'home-nk__hero-video'
+        }}
+      {% elsif section.settings.hero_image != blank %}
         {{
           section.settings.hero_image
           | image_url: width: 2600
@@ -114,6 +125,13 @@
     display: block;
   }
 
+  .home-nk__hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
   @media screen and (min-width: 990px) {
     .home-nk__hero {
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
@@ -161,6 +179,12 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Primary hero image"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Primary hero video",
+      "info": "If set, video is shown instead of primary image."
     },
     {
       "type": "text",

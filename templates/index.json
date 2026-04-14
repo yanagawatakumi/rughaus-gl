@@ -192,7 +192,7 @@
         "featured_source": "collection",
         "featured_heading": "TRENDING RUGS",
         "featured_collection": "all-rugs",
-        "featured_limit": 4,
+        "featured_limit": 20,
         "featured_link_label": "SHOP NOW ->",
         "featured_link": "shopify://collections/all-rugs",
         "padding-block-start": 0,
