@@ -16,9 +16,17 @@
     class="home-nk-featured-product home-nk-featured-product--{{ section.settings.desktop_layout }}"
     aria-label="Featured rug"
   >
+    {% if section.settings.heading != blank %}
+      <div class="home-nk-featured-product__heading-mobile-wrap">
+        <div class="home-nk-featured-product__heading rte">{{ section.settings.heading }}</div>
+      </div>
+    {% endif %}
+
     <div class="home-nk-featured-product__content">
       {% if section.settings.heading != blank %}
-        <div class="home-nk-featured-product__heading rte">{{ section.settings.heading }}</div>
+        <div class="home-nk-featured-product__heading home-nk-featured-product__heading--desktop rte">
+          {{ section.settings.heading }}
+        </div>
       {% endif %}
 
       {% if section.settings.description != blank %}
@@ -119,9 +127,15 @@
   }
 
   .home-nk-featured-product__content {
+    order: 4;
     display: grid;
     gap: 1rem;
     align-content: start;
+    min-width: 0;
+  }
+
+  .home-nk-featured-product__heading-mobile-wrap {
+    order: 1;
     min-width: 0;
   }
 
@@ -140,6 +154,10 @@
   .home-nk-featured-product__heading p {
     margin: 0;
     font: inherit;
+  }
+
+  .home-nk-featured-product__heading--desktop {
+    display: none;
   }
 
   .home-nk-featured-product__description {
@@ -165,6 +183,7 @@
   }
 
   .home-nk-featured-product__primary-media {
+    order: 2;
     aspect-ratio: 4 / 5;
   }
 
@@ -185,6 +204,10 @@
     gap: 0.7rem;
     color: inherit;
     text-decoration: none;
+  }
+
+  .home-nk-featured-product__card {
+    order: 3;
   }
 
   .home-nk-featured-product__card-body {
@@ -211,6 +234,20 @@
     .home-nk-featured-product {
       grid-template-columns: minmax(0, 2.9fr) minmax(0, 4.5fr) minmax(0, 4.5fr);
       gap: 0.8rem;
+    }
+
+    .home-nk-featured-product__heading-mobile-wrap {
+      display: none;
+    }
+
+    .home-nk-featured-product__heading--desktop {
+      display: block;
+    }
+
+    .home-nk-featured-product__content,
+    .home-nk-featured-product__card,
+    .home-nk-featured-product__primary-media {
+      order: initial;
     }
 
     .home-nk-featured-product--reversed {

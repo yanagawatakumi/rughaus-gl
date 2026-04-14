@@ -76,6 +76,7 @@
   }
 
   .home-nk__hero-content {
+    order: 2;
     display: grid;
     gap: 1rem;
     align-content: start;
@@ -113,6 +114,7 @@
   }
 
   .home-nk__hero-media {
+    order: 1;
     min-height: 20rem;
     background: rgb(var(--color-foreground-rgb) / 0.06);
     overflow: hidden;
@@ -137,6 +139,11 @@
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       align-items: end;
       gap: 1.5rem;
+    }
+
+    .home-nk__hero-content,
+    .home-nk__hero-media {
+      order: initial;
     }
 
     .home-nk__hero-media--primary {
