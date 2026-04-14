@@ -199,20 +199,6 @@
         "padding-block-end": 40
       }
     },
-    "home_nk_featured_product": {
-      "type": "home-nk-featured-product",
-      "settings": {
-        "color_scheme": "scheme-1",
-        "heading": "<p>NOW, AND<br/>FOREVER<br/>A CLASSIC</p>",
-        "description": "<p>The Grand collection embodies elevated minimalism, designed to bring a hotel-like feel to your home.</p>",
-        "link_label": "SHOP NOW ->",
-        "fallback_link": "shopify://collections/all-rugs",
-        "price_prefix": "From",
-        "placeholder_product_title": "Featured rug",
-        "padding-block-start": 0,
-        "padding-block-end": 40
-      }
-    },
     "home_nk_story": {
       "type": "home-nk-story",
       "settings": {
@@ -220,7 +206,7 @@
         "story_eyebrow": "About",
         "story_heading": "”Tailored to every home, to your needs”",
         "story_text": "<p>Designed around your space and lifestyle.<br/>Choose from designs, sizes, and colors that fit your space.</p>",
-        "story_image": "shopify://shop_images/GL_about01.jpg",
+        "story_image": "shopify://shop_images/sample2.jpg",
         "story_link_label": "Learn more",
         "story_link": "shopify://pages/about",
         "padding-block-start": 0,
@@ -273,7 +259,6 @@
     "home_nk_hero",
     "home_nk_categories",
     "home_nk_trending",
-    "home_nk_featured_product",
     "home_nk_story",
     "home_nk_support"
   ]
