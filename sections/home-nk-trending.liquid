@@ -30,6 +30,7 @@
               assign product_link = block.settings.link
               assign card_title = block.settings.title
               assign card_image = block.settings.image
+              assign card_image_hover = blank
 
               if product != blank
                 if product_link == blank
@@ -42,6 +43,10 @@
 
                 if card_image == blank and product.featured_media != blank
                   assign card_image = product.featured_media
+                endif
+
+                if product.media.size > 1
+                  assign card_image_hover = product.media[1].preview_image
                 endif
               endif
             %}
@@ -57,13 +62,24 @@
                           loading: 'lazy',
                           widths: '400, 600, 900, 1200, 1400',
                           sizes: '(min-width: 1200px) 16vw, (min-width: 990px) 18vw, (min-width: 750px) 28vw, 62vw',
-                          class: 'home-nk__product-image'
+                          class: 'home-nk__product-image home-nk__product-image--primary'
                       }}
+                      {% if card_image_hover != blank %}
+                        {{
+                          card_image_hover
+                          | image_url: width: 1400
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '400, 600, 900, 1200, 1400',
+                            sizes: '(min-width: 1200px) 16vw, (min-width: 990px) 18vw, (min-width: 750px) 28vw, 62vw',
+                            class: 'home-nk__product-image home-nk__product-image--secondary'
+                        }}
+                      {% endif %}
                     {% else %}
                       <img
                         src="{{ 'home-nk-category-all.jpg' | asset_url }}"
                         alt="Sample rug image"
-                        class="home-nk__product-image"
+                        class="home-nk__product-image home-nk__product-image--primary"
                         loading="lazy"
                         width="1080"
                         height="1080"
@@ -107,6 +123,12 @@
         {% endif %}
       {% elsif featured_collection != blank and featured_collection.products_count > 0 %}
         {% for product in featured_collection.products limit: section.settings.featured_limit %}
+          {% liquid
+            assign product_hover_image = blank
+            if product.media.size > 1
+              assign product_hover_image = product.media[1].preview_image
+            endif
+          %}
           <div class="home-nk__product-slide">
             <article class="home-nk__product-card">
               <a class="home-nk__product-link" href="{{ product.url }}">
@@ -119,13 +141,24 @@
                         loading: 'lazy',
                         widths: '400, 600, 900, 1200, 1400',
                         sizes: '(min-width: 1200px) 16vw, (min-width: 990px) 18vw, (min-width: 750px) 28vw, 62vw',
-                        class: 'home-nk__product-image'
+                        class: 'home-nk__product-image home-nk__product-image--primary'
                     }}
+                    {% if product_hover_image != blank %}
+                      {{
+                        product_hover_image
+                        | image_url: width: 1400
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '400, 600, 900, 1200, 1400',
+                          sizes: '(min-width: 1200px) 16vw, (min-width: 990px) 18vw, (min-width: 750px) 28vw, 62vw',
+                          class: 'home-nk__product-image home-nk__product-image--secondary'
+                      }}
+                    {% endif %}
                   {% else %}
                     <img
                       src="{{ 'home-nk-category-all.jpg' | asset_url }}"
                       alt="Sample rug image"
-                      class="home-nk__product-image"
+                      class="home-nk__product-image home-nk__product-image--primary"
                       loading="lazy"
                       width="1080"
                       height="1080"
@@ -267,6 +300,7 @@
   .home-nk__product-media {
     aspect-ratio: 4 / 5;
     width: 100%;
+    position: relative;
     background: rgb(var(--color-foreground-rgb) / 0.05);
     overflow: hidden;
   }
@@ -276,6 +310,14 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .home-nk__product-image--secondary {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
   }
 
   .home-nk__product-title {
@@ -301,6 +343,13 @@
     .home-nk__product-loop {
       --slideshow-gap: 1rem;
       --home-nk-slide-width: 17.5vw;
+    }
+  }
+
+  @media screen and (min-width: 990px) and (hover: hover) and (pointer: fine) {
+    .home-nk__product-link:hover .home-nk__product-image--secondary,
+    .home-nk__product-link:focus-visible .home-nk__product-image--secondary {
+      opacity: 1;
     }
   }
 {% endstylesheet %}
