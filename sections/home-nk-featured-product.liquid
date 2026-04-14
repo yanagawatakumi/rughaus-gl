@@ -12,7 +12,10 @@
   class="section section--page-width color-{{ section.settings.color_scheme }} home-nk-featured-product-section spacing-style"
   style="{% render 'spacing-style', settings: section.settings %}"
 >
-  <div class="home-nk-featured-product" aria-label="Featured rug">
+  <div
+    class="home-nk-featured-product home-nk-featured-product--{{ section.settings.desktop_layout }}"
+    aria-label="Featured rug"
+  >
     <div class="home-nk-featured-product__content">
       {% if section.settings.heading != blank %}
         <div class="home-nk-featured-product__heading rte">{{ section.settings.heading }}</div>
@@ -207,6 +210,18 @@
       grid-template-columns: minmax(0, 2.9fr) minmax(0, 4.5fr) minmax(0, 4.5fr);
       gap: 0.8rem;
     }
+
+    .home-nk-featured-product--reversed .home-nk-featured-product__content {
+      order: 3;
+    }
+
+    .home-nk-featured-product--reversed .home-nk-featured-product__primary-media {
+      order: 2;
+    }
+
+    .home-nk-featured-product--reversed .home-nk-featured-product__card {
+      order: 1;
+    }
   }
 {% endstylesheet %}
 
@@ -220,6 +235,22 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Text / Lifestyle image / Product image"
+        },
+        {
+          "value": "reversed",
+          "label": "Product image / Lifestyle image / Text"
+        }
+      ],
+      "default": "standard"
     },
     {
       "type": "richtext",
