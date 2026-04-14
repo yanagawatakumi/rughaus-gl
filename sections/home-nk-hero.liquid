@@ -28,52 +28,27 @@
       </div>
     </div>
 
-    <div class="home-nk__hero-media-grid">
-      <div class="home-nk__hero-media home-nk__hero-media--primary">
-        {% if section.settings.hero_image != blank %}
-          {{
-            section.settings.hero_image
-            | image_url: width: 2200
-            | image_tag:
-              loading: 'eager',
-              widths: '800, 1200, 1600, 2000, 2200',
-              sizes: '(min-width: 990px) 48vw, 100vw',
-              class: 'home-nk__hero-image'
-          }}
-        {% else %}
-          <img
-            src="{{ 'home-nk-hero-primary.jpg' | asset_url }}"
-            alt="Rughaus hero image"
-            class="home-nk__hero-image"
-            loading="eager"
-            width="1512"
-            height="1008"
-          >
-        {% endif %}
-      </div>
-
-      <div class="home-nk__hero-media home-nk__hero-media--secondary">
-        {% if section.settings.hero_image_secondary != blank %}
-          {{
-            section.settings.hero_image_secondary
-            | image_url: width: 1600
-            | image_tag:
-              loading: 'lazy',
-              widths: '500, 800, 1100, 1400, 1600',
-              sizes: '(min-width: 990px) 22vw, 100vw',
-              class: 'home-nk__hero-image'
-          }}
-        {% else %}
-          <img
-            src="{{ 'home-nk-hero-secondary.jpg' | asset_url }}"
-            alt="Rughaus secondary hero image"
-            class="home-nk__hero-image"
-            loading="lazy"
-            width="1200"
-            height="1200"
-          >
-        {% endif %}
-      </div>
+    <div class="home-nk__hero-media home-nk__hero-media--primary">
+      {% if section.settings.hero_image != blank %}
+        {{
+          section.settings.hero_image
+          | image_url: width: 2600
+          | image_tag:
+            loading: 'eager',
+            widths: '800, 1200, 1600, 2000, 2400, 2600',
+            sizes: '(min-width: 990px) 58vw, 100vw',
+            class: 'home-nk__hero-image'
+        }}
+      {% else %}
+        <img
+          src="{{ 'home-nk-hero-primary.jpg' | asset_url }}"
+          alt="Rughaus hero image"
+          class="home-nk__hero-image"
+          loading="eager"
+          width="1512"
+          height="1008"
+        >
+      {% endif %}
     </div>
   </header>
 </section>
@@ -126,20 +101,10 @@
     gap: 0.75rem;
   }
 
-  .home-nk__hero-media-grid {
-    display: grid;
-    gap: 0.75rem;
-    min-width: 0;
-  }
-
   .home-nk__hero-media {
     min-height: 20rem;
     background: rgb(var(--color-foreground-rgb) / 0.06);
     overflow: hidden;
-  }
-
-  .home-nk__hero-media--secondary {
-    min-height: 14rem;
   }
 
   .home-nk__hero-image {
@@ -156,19 +121,9 @@
       gap: 1.5rem;
     }
 
-    .home-nk__hero-media-grid {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-      align-items: stretch;
-      gap: 0.8rem;
-    }
-
     .home-nk__hero-media--primary {
       min-height: 40rem;
-    }
-
-    .home-nk__hero-media--secondary {
-      min-height: 24rem;
-      margin-top: auto;
+      height: 100%;
     }
   }
 {% endstylesheet %}
@@ -206,11 +161,6 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Primary hero image"
-    },
-    {
-      "type": "image_picker",
-      "id": "hero_image_secondary",
-      "label": "Secondary hero image"
     },
     {
       "type": "text",
