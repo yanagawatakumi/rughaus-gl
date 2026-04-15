@@ -23,7 +23,7 @@
             "vertical_alignment": "center",
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-end",
             "gap": 12,
             "inherit_color_scheme": true,
             "color_scheme": "",
@@ -32,7 +32,7 @@
             "overlay_style": "solid",
             "gradient_direction": "to top",
             "padding-block-start": 32,
-            "padding-block-end": 32,
+            "padding-block-end": 45,
             "padding-inline-start": 32,
             "padding-inline-end": 32
           },
@@ -90,6 +90,7 @@
             },
             "button_cmnFqJ": {
               "type": "button",
+              "disabled": true,
               "settings": {
                 "label": "Shop now",
                 "link": "shopify://collections/all",
