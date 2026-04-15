@@ -9,121 +9,26 @@
  */
 {
   "sections": {
-    "layered_slideshow_PrwFjV": {
-      "type": "layered-slideshow",
-      "blocks": {
-        "layered_slide_itiUm4": {
-          "type": "_layered-slide",
-          "settings": {
-            "media_type_1": "video",
-            "video_1": "shopify://files/videos/slide_yokonaga_2.mp4",
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-end",
-            "gap": 12,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "padding-block-start": 32,
-            "padding-block-end": 45,
-            "padding-inline-start": 32,
-            "padding-inline-end": 32
-          },
-          "blocks": {
-            "text_rEV8c4": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<p>Live with Mood and Style</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h2",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_UqmHYe": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Contemporary rugs with a Japanese sensibility bring colors and warmth to homes.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "button_cmnFqJ": {
-              "type": "button",
-              "disabled": true,
-              "settings": {
-                "label": "Shop now",
-                "link": "shopify://collections/all",
-                "open_in_new_tab": false,
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_rEV8c4",
-            "text_UqmHYe",
-            "button_cmnFqJ"
-          ]
-        }
-      },
-      "block_order": [
-        "layered_slide_itiUm4"
-      ],
-      "name": "t:names.layered_slideshow",
+    "top_video_hero_Lj8mQa": {
+      "type": "top-video-hero",
+      "name": "Top Video Hero",
       "settings": {
+        "color_scheme": "scheme-1",
         "section_width": "full-width",
-        "height": "small",
-        "corner_radius": 0,
-        "border_width": 0,
-        "drop_shadow": false,
-        "color_scheme": "scheme-6",
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "heading": "Live with Mood and Style",
+        "text": "<p>Contemporary rugs with a Japanese sensibility bring colors and warmth to homes.</p>",
+        "link_label": "Shop now",
+        "link": "shopify://collections/all-rugs",
+        "video": "shopify://files/videos/slide_kari.mp4",
+        "overlay_opacity": 28,
+        "content_horizontal": "left",
+        "content_vertical": "bottom",
+        "content_max_width": 34,
+        "content_max_width_mobile": 30,
+        "media_height_desktop": 420,
+        "media_height_mobile": 300,
+        "padding-block-start": 0,
+        "padding-block-end": 32
       }
     },
     "home_nk_hero": {
@@ -143,9 +48,51 @@
         "padding-block-end": 30
       }
     },
+    "home_nk_categories": {
+      "type": "home-nk-categories",
+      "blocks": {
+        "category_custom": {
+          "type": "category_card",
+          "settings": {
+            "heading": "Custom order rugs",
+            "text": "<p>Specify ratio and dimensions for project-based custom pieces.</p>",
+            "link_label": "Explore custom",
+            "link": "shopify://collections/custom-rugs"
+          }
+        },
+        "category_stock": {
+          "type": "category_card",
+          "settings": {
+            "heading": "In-stock rugs",
+            "text": "<p>Ready-to-ship rugs for fast delivery timelines.</p>",
+            "link_label": "Explore stock",
+            "link": "shopify://collections/stock-rugs"
+          }
+        },
+        "category_all": {
+          "type": "category_card",
+          "settings": {
+            "heading": "All rugs",
+            "text": "<p>Browse the full assortment across custom and stock formats.</p>",
+            "link_label": "Browse all",
+            "link": "shopify://collections/all-rugs"
+          }
+        }
+      },
+      "block_order": [
+        "category_custom",
+        "category_stock",
+        "category_all"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 32
+      }
+    },
     "home_nk_trending": {
       "type": "home-nk-trending",
-      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "featured_source": "collection",
@@ -162,19 +109,16 @@
       "type": "home-nk-centered-gallery",
       "name": "NK Centered Gallery",
       "settings": {
-        "section_width": "page-width",
-        "autoplay": true,
-        "autoplay_speed": 85,
         "heading": "Custom Rugs, made easy",
         "subheading": "Measure to order in your favorite pattern and color",
         "link_label": "Shop",
-        "link": "shopify://collections/all-rugs",
+        "link": "shopify://collections/custom-rugs",
         "background_color": "#eeece7",
         "text_color": "#212121",
         "featured_source": "collection",
         "featured_collection": "all-rugs",
         "featured_limit": 20,
-        "padding-block-start": 40,
+        "padding-block-start": 0,
         "padding-block-end": 40
       }
     },
@@ -199,7 +143,6 @@
     },
     "home_nk_story": {
       "type": "home-nk-story",
-      "custom_css": [],
       "settings": {
         "color_scheme": "scheme-1",
         "story_eyebrow": "About",
@@ -254,8 +197,9 @@
     }
   },
   "order": [
-    "layered_slideshow_PrwFjV",
+    "top_video_hero_Lj8mQa",
     "home_nk_hero",
+    "home_nk_categories",
     "home_nk_trending",
     "home_nk_centered_gallery_tM4d76",
     "home_nk_featured_product_ibq4wT",

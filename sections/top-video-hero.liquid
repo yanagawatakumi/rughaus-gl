@@ -1,0 +1,369 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} top-video-hero-section spacing-style"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --top-video-hero-height-desktop: {{ section.settings.media_height_desktop }}px;
+    --top-video-hero-height-mobile: {{ section.settings.media_height_mobile }}px;
+    --top-video-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --top-video-hero-content-max-width: {{ section.settings.content_max_width }}ch;
+    --top-video-hero-content-max-width-mobile: {{ section.settings.content_max_width_mobile }}ch;
+  "
+>
+  <div class="top-video-hero">
+    <div class="top-video-hero__media">
+      {% if section.settings.video != blank %}
+        {{
+          section.settings.video
+          | video_tag:
+            autoplay: true,
+            loop: true,
+            muted: true,
+            controls: false,
+            playsinline: true,
+            class: 'top-video-hero__video'
+        }}
+      {% elsif section.settings.image != blank %}
+        {{
+          section.settings.image
+          | image_url: width: 3200
+          | image_tag:
+            loading: 'eager',
+            widths: '900, 1200, 1600, 2000, 2400, 2800, 3200',
+            sizes: '100vw',
+            class: 'top-video-hero__image'
+        }}
+      {% else %}
+        <img
+          src="{{ 'home-nk-hero-primary.jpg' | asset_url }}"
+          alt="Hero image"
+          class="top-video-hero__image"
+          loading="eager"
+          width="1512"
+          height="1008"
+        >
+      {% endif %}
+    </div>
+
+    <div class="top-video-hero__overlay" aria-hidden="true"></div>
+
+    <div
+      class="top-video-hero__content top-video-hero__content--x-{{ section.settings.content_horizontal }} top-video-hero__content--y-{{ section.settings.content_vertical }}"
+    >
+      {% if section.settings.heading != blank %}
+        <h1 class="top-video-hero__heading">{{ section.settings.heading }}</h1>
+      {% endif %}
+
+      {% if section.settings.text != blank %}
+        <div class="top-video-hero__text rte">{{ section.settings.text }}</div>
+      {% endif %}
+
+      {% if section.settings.link_label != blank and section.settings.link != blank %}
+        <a class="top-video-hero__link text-link" href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .top-video-hero-section {
+    display: grid;
+  }
+
+  .top-video-hero {
+    position: relative;
+    width: 100%;
+    min-height: var(--top-video-hero-height-mobile);
+    overflow: hidden;
+  }
+
+  .top-video-hero__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(var(--color-foreground-rgb) / 0.05);
+  }
+
+  .top-video-hero__video,
+  .top-video-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .top-video-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.03) 0%,
+      rgb(0 0 0 / var(--top-video-hero-overlay-opacity)) 100%
+    );
+  }
+
+  .top-video-hero__content {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: grid;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: min(100%, calc(var(--top-video-hero-content-max-width-mobile) * 1ch));
+    padding: 1.25rem;
+    color: #fff;
+  }
+
+  .top-video-hero__content--x-left {
+    justify-content: start;
+    text-align: left;
+  }
+
+  .top-video-hero__content--x-center {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .top-video-hero__content--x-right {
+    justify-content: end;
+    text-align: right;
+  }
+
+  .top-video-hero__content--y-top {
+    align-content: start;
+  }
+
+  .top-video-hero__content--y-middle {
+    align-content: center;
+  }
+
+  .top-video-hero__content--y-bottom {
+    align-content: end;
+  }
+
+  .top-video-hero__heading {
+    margin: 0;
+    font-size: clamp(2rem, 4.8vw, 4.25rem);
+    line-height: 0.93;
+    letter-spacing: -0.03em;
+    text-transform: none;
+    max-width: 16ch;
+  }
+
+  .top-video-hero__text {
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    line-height: 1.55;
+    max-width: 48ch;
+  }
+
+  .top-video-hero__link {
+    width: fit-content;
+    font-size: 1rem;
+    font-weight: var(--font-body--weight-medium);
+    color: #fff;
+  }
+
+  @media screen and (min-width: 750px) {
+    .top-video-hero__content {
+      padding: 1.6rem 1.8rem;
+      max-width: min(100%, calc(var(--top-video-hero-content-max-width) * 1ch));
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .top-video-hero {
+      min-height: var(--top-video-hero-height-desktop);
+    }
+
+    .top-video-hero__content {
+      padding: 1.9rem 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Top Video Hero",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Live with Mood and Style"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Contemporary rugs with a Japanese sensibility bring colors and warmth to homes.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Video is autoplay, muted, and looped."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal",
+      "label": "Content horizontal position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical",
+      "label": "Content vertical position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Desktop content width",
+      "min": 18,
+      "max": 56,
+      "step": 1,
+      "unit": "ch",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "content_max_width_mobile",
+      "label": "Mobile content width",
+      "min": 16,
+      "max": 42,
+      "step": 1,
+      "unit": "ch",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "media_height_desktop",
+      "label": "Desktop media min height",
+      "min": 320,
+      "max": 900,
+      "step": 10,
+      "unit": "px",
+      "default": 420
+    },
+    {
+      "type": "range",
+      "id": "media_height_mobile",
+      "label": "Mobile media min height",
+      "min": 220,
+      "max": 640,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Video Hero"
+    }
+  ]
+}
+{% endschema %}
