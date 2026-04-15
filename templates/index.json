@@ -199,6 +199,7 @@
     },
     "home_nk_story": {
       "type": "home-nk-story",
+      "custom_css": [],
       "settings": {
         "color_scheme": "scheme-1",
         "story_eyebrow": "About",
