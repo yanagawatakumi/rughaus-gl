@@ -93,6 +93,7 @@
     },
     "home_nk_trending": {
       "type": "home-nk-trending",
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "featured_source": "collection",
@@ -109,6 +110,9 @@
       "type": "home-nk-centered-gallery",
       "name": "NK Centered Gallery",
       "settings": {
+        "section_width": "page-width",
+        "autoplay": true,
+        "autoplay_speed": 85,
         "heading": "Custom Rugs, made easy",
         "subheading": "Measure to order in your favorite pattern and color",
         "link_label": "Shop",
@@ -118,7 +122,7 @@
         "featured_source": "collection",
         "featured_collection": "all-rugs",
         "featured_limit": 20,
-        "padding-block-start": 0,
+        "padding-block-start": 40,
         "padding-block-end": 40
       }
     },
