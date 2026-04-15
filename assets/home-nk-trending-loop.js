@@ -26,6 +26,19 @@ function setupLoop(loopElement) {
   let dragStartScroll = 0;
   let activePointerId = null;
   let suppressClick = false;
+  let autoplayFrame = null;
+  let autoplayLastTs = 0;
+
+  const parsePositiveNumber = (value, fallback) => {
+    const numeric = Number.parseFloat(value ?? '');
+    return Number.isFinite(numeric) && numeric > 0 ? numeric : fallback;
+  };
+
+  const visibleCardsDesktop = parsePositiveNumber(loopElement.dataset.homeNkVisibleDesktop, 5.6);
+  const visibleCardsTablet = parsePositiveNumber(loopElement.dataset.homeNkVisibleTablet, 3.4);
+  const visibleCardsMobile = parsePositiveNumber(loopElement.dataset.homeNkVisibleMobile, 1.6);
+  const autoplayEnabled = ['1', 'true', 'yes', 'on'].includes((loopElement.dataset.homeNkAutoplay || '').toLowerCase());
+  const autoplaySpeed = parsePositiveNumber(loopElement.dataset.homeNkAutoplaySpeed, 0);
 
   /** @type {{mainStart: number, nextStart: number, span: number} | null} */
   let metrics = null;
@@ -45,10 +58,10 @@ function setupLoop(loopElement) {
       if (containerWidth > 0) {
         const visibleCards =
           window.matchMedia('(min-width: 990px)').matches
-            ? 5.6
+            ? visibleCardsDesktop
             : window.matchMedia('(min-width: 750px)').matches
-              ? 3.4
-              : 1.6;
+              ? visibleCardsTablet
+              : visibleCardsMobile;
         const widthPx = (containerWidth - gapPx * (visibleCards - 1)) / visibleCards;
         if (widthPx > 0) {
           loopElement.style.setProperty('--home-nk-slide-width-px', `${widthPx}px`);
@@ -156,6 +169,22 @@ function setupLoop(loopElement) {
     }
   };
 
+  const shouldAutoplay = () =>
+    autoplayEnabled && autoplaySpeed > 0 && !isPointerDown && !isDragging && !loopElement.matches(':hover');
+
+  const autoplayTick = (timestamp) => {
+    if (autoplayLastTs === 0) autoplayLastTs = timestamp;
+    const elapsedSeconds = Math.min((timestamp - autoplayLastTs) / 1000, 0.05);
+    autoplayLastTs = timestamp;
+
+    if (shouldAutoplay()) {
+      loopElement.scrollLeft += autoplaySpeed * elapsedSeconds;
+      normalizeScroll();
+    }
+
+    autoplayFrame = window.requestAnimationFrame(autoplayTick);
+  };
+
   const onScroll = () => normalizeScroll();
   const onResize = () => measure(true);
   const onLoad = () => measure(true);
@@ -180,6 +209,10 @@ function setupLoop(loopElement) {
   resizeObserver.observe(loopElement);
   resizeObserver.observe(mainGroup);
 
+  if (autoplayEnabled && autoplaySpeed > 0) {
+    autoplayFrame = window.requestAnimationFrame(autoplayTick);
+  }
+
   const teardown = () => {
     loopElement.removeEventListener('scroll', onScroll);
     loopElement.removeEventListener('pointerdown', onPointerDown);
@@ -191,6 +224,9 @@ function setupLoop(loopElement) {
     window.removeEventListener('resize', onResize);
     window.removeEventListener('load', onLoad);
     resizeObserver.disconnect();
+    if (autoplayFrame !== null) {
+      window.cancelAnimationFrame(autoplayFrame);
+    }
     loopElement.classList.remove('is-dragging');
   };
 
