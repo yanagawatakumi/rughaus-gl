@@ -16,7 +16,7 @@
           "type": "_layered-slide",
           "settings": {
             "media_type_1": "video",
-            "video_1": "shopify://files/videos/slide_kari.mp4",
+            "video_1": "shopify://files/videos/slide_yokonaga.mp4",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
