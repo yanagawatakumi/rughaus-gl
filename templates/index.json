@@ -142,51 +142,9 @@
         "padding-block-end": 30
       }
     },
-    "home_nk_categories": {
-      "type": "home-nk-categories",
-      "blocks": {
-        "category_custom": {
-          "type": "category_card",
-          "settings": {
-            "heading": "Custom order rugs",
-            "text": "<p>Specify ratio and dimensions for project-based custom pieces.</p>",
-            "link_label": "Explore custom",
-            "link": "shopify://collections/custom-rugs"
-          }
-        },
-        "category_stock": {
-          "type": "category_card",
-          "settings": {
-            "heading": "In-stock rugs",
-            "text": "<p>Ready-to-ship rugs for fast delivery timelines.</p>",
-            "link_label": "Explore stock",
-            "link": "shopify://collections/stock-rugs"
-          }
-        },
-        "category_all": {
-          "type": "category_card",
-          "settings": {
-            "heading": "All rugs",
-            "text": "<p>Browse the full assortment across custom and stock formats.</p>",
-            "link_label": "Browse all",
-            "link": "shopify://collections/all-rugs"
-          }
-        }
-      },
-      "block_order": [
-        "category_custom",
-        "category_stock",
-        "category_all"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "scheme-1",
-        "padding-block-start": 0,
-        "padding-block-end": 32
-      }
-    },
     "home_nk_trending": {
       "type": "home-nk-trending",
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "featured_source": "collection",
@@ -203,16 +161,19 @@
       "type": "home-nk-centered-gallery",
       "name": "NK Centered Gallery",
       "settings": {
+        "section_width": "page-width",
+        "autoplay": true,
+        "autoplay_speed": 85,
         "heading": "Custom Rugs, made easy",
         "subheading": "Measure to order in your favorite pattern and color",
         "link_label": "Shop",
-        "link": "shopify://collections/custom-rugs",
+        "link": "shopify://collections/all-rugs",
         "background_color": "#eeece7",
         "text_color": "#212121",
         "featured_source": "collection",
         "featured_collection": "all-rugs",
         "featured_limit": 20,
-        "padding-block-start": 0,
+        "padding-block-start": 40,
         "padding-block-end": 40
       }
     },
@@ -293,7 +254,6 @@
   "order": [
     "layered_slideshow_PrwFjV",
     "home_nk_hero",
-    "home_nk_categories",
     "home_nk_trending",
     "home_nk_centered_gallery_tM4d76",
     "home_nk_featured_product_ibq4wT",
