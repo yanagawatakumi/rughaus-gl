@@ -9,11 +9,28 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "page-trade-nk",
+    "trade_hero_Ht8mKr": {
+      "type": "page-content-hero",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "content_alignment": "left",
+        "eyebrow": "Trade",
+        "heading": "Welcome to Rughaus Trade",
+        "text": "<p>Architects, interior designers, and procurement teams can apply for dedicated pricing, project support, and custom production guidance.</p>",
+        "primary_label": "Apply here",
+        "primary_link": "/pages/trade",
+        "secondary_label": "Contact us",
+        "secondary_link": "/pages/support-faq",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
+    "trade_benefits_Ap2dVx": {
+      "type": "page-card-grid",
       "blocks": {
         "benefit_1": {
-          "type": "benefit",
+          "type": "card",
           "settings": {
             "heading": "Designer & trade discounts",
             "text": "<p>Approved members receive pricing support designed for project-based purchasing.</p>",
@@ -22,7 +39,7 @@
           }
         },
         "benefit_2": {
-          "type": "benefit",
+          "type": "card",
           "settings": {
             "heading": "Designer & trade projects",
             "text": "<p>From custom sizing to logistics planning, we support residential and hospitality rollouts.</p>",
@@ -31,82 +48,130 @@
           }
         },
         "benefit_3": {
-          "type": "benefit",
+          "type": "card",
           "settings": {
             "heading": "Dedicated account managers",
             "text": "<p>Work directly with a specialist for timelines, samples, and order coordination.</p>",
             "link_label": "Get support",
             "link": "/pages/support-faq"
           }
-        },
+        }
+      },
+      "block_order": ["benefit_1", "benefit_2", "benefit_3"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "heading": "",
+        "columns_desktop": "3",
+        "card_style": "default",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "trade_projects_Ds7qWn": {
+      "type": "page-image-grid",
+      "blocks": {
         "project_1": {
-          "type": "project",
+          "type": "image",
           "settings": {
-            "caption": "Project showcase image 1"
+            "image": "",
+            "caption": "Project showcase image 1",
+            "link": ""
           }
         },
         "project_2": {
-          "type": "project",
+          "type": "image",
           "settings": {
-            "caption": "Project showcase image 2"
+            "image": "",
+            "caption": "Project showcase image 2",
+            "link": ""
           }
         },
         "project_3": {
-          "type": "project",
+          "type": "image",
           "settings": {
-            "caption": "Project showcase image 3"
-          }
-        },
-        "quote_1": {
-          "type": "quote",
-          "settings": {
-            "quote": "<p>\"The custom rug looked incredible in the final install. Great support from start to finish.\"</p>",
-            "author": "Design studio"
-          }
-        },
-        "quote_2": {
-          "type": "quote",
-          "settings": {
-            "quote": "<p>\"Reliable communication, fast sampling, and strong quality. We keep specifying Rughaus.\"</p>",
-            "author": "Interior designer"
-          }
-        },
-        "quote_3": {
-          "type": "quote",
-          "settings": {
-            "quote": "<p>\"A practical trade partner for both standard and custom rugs across multiple projects.\"</p>",
-            "author": "Procurement team"
+            "image": "",
+            "caption": "Project showcase image 3",
+            "link": ""
           }
         }
       },
-      "block_order": [
-        "benefit_1",
-        "benefit_2",
-        "benefit_3",
-        "project_1",
-        "project_2",
-        "project_3",
-        "quote_1",
-        "quote_2",
-        "quote_3"
-      ],
+      "block_order": ["project_1", "project_2", "project_3"],
       "settings": {
         "color_scheme": "scheme-1",
-        "eyebrow": "Trade",
-        "heading": "Welcome to Rughaus Trade",
-        "lead": "<p>Architects, interior designers, and procurement teams can apply for dedicated pricing, project support, and custom production guidance.</p>",
-        "apply_label": "Apply here",
-        "apply_link": "/pages/trade",
-        "contact_label": "Contact us",
-        "contact_link": "/pages/support-faq",
-        "footer_heading": "Dedicated account managers",
-        "footer_text": "<p>Need help with your application or an active project? Contact our team and we will get back to you within 24 hours.</p>",
-        "padding-block-start": 48,
+        "section_width": "full-width",
+        "heading": "",
+        "columns_desktop": "3",
+        "aspect_ratio": "portrait",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "trade_quotes_Js4xCu": {
+      "type": "page-card-grid",
+      "blocks": {
+        "quote_1": {
+          "type": "card",
+          "settings": {
+            "heading": "Design studio",
+            "text": "<p>\"The custom rug looked incredible in the final install. Great support from start to finish.\"</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "quote_2": {
+          "type": "card",
+          "settings": {
+            "heading": "Interior designer",
+            "text": "<p>\"Reliable communication, fast sampling, and strong quality. We keep specifying Rughaus.\"</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "quote_3": {
+          "type": "card",
+          "settings": {
+            "heading": "Procurement team",
+            "text": "<p>\"A practical trade partner for both standard and custom rugs across multiple projects.\"</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["quote_1", "quote_2", "quote_3"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "heading": "",
+        "columns_desktop": "3",
+        "card_style": "quote",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "trade_footer_Uf6nPl": {
+      "type": "page-content-hero",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "content_alignment": "left",
+        "eyebrow": "",
+        "heading": "Dedicated account managers",
+        "text": "<p>Need help with your application or an active project? Contact our team and we will get back to you within 24 hours.</p>",
+        "primary_label": "",
+        "primary_link": "",
+        "secondary_label": "",
+        "secondary_link": "",
+        "padding-block-start": 0,
         "padding-block-end": 72
       }
     }
   },
   "order": [
-    "main"
+    "trade_hero_Ht8mKr",
+    "trade_benefits_Ap2dVx",
+    "trade_projects_Ds7qWn",
+    "trade_quotes_Js4xCu",
+    "trade_footer_Uf6nPl"
   ]
 }

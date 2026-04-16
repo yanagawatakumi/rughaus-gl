@@ -196,6 +196,11 @@
   - 開発者のみが編集可能な実装（固定Liquid配列・固定カード）は、運用要件がない場合の最小範囲に限定する
   - `home-nk` のような複合セクションは分割し、`Hero / Categories / Trending / Story / Support` を独立セクションとして管理する
   - Topテンプレートは左カラムのセクション並び替えでレイアウト順を変更できる構成を標準とする
+- D-23: 全ページ共通の実装方針（Theme Editor優先）
+  - Topページに限らず、About / Trade / Support / Collection / Product を含む全ページで、基本はセクション/ブロック分割で構築する
+  - 1ページ1セクションのモノリシック実装は原則禁止とし、例外は仕様上分割不能な最小範囲のみ許可する
+  - テンプレート（`templates/*.json`）は、Theme Editor左カラムでセクションの追加・削除・並び替えが可能な構成を標準とする
+  - 将来運用で更新が想定される文言・画像・リンクは、settingsまたはblocksへ必ず露出する
 
 ## 10. 実装前の残確認（最小）
 - なし（2026-04-13時点で確定済み）
@@ -225,3 +230,4 @@
 - 2026-04-13: `shopify store` 実行時は恒久ドメイン `xfxfwd-8p.myshopify.com` を利用する運用に確定
 - 2026-04-13: TopページはTheme Editor優先（セクション/ブロック駆動）へ方針強化し、TRENDING RUGSを手動ブロック運用可能に更新
 - 2026-04-13: Topページを5セクション（Hero/Categories/Trending/Story/Support）へ分割し、Theme Editor左カラムで並び替え可能な構成へ移行
+- 2026-04-16: Theme Editor優先のセクション/ブロック分割方針をTop限定から全ページへ拡張（D-23）

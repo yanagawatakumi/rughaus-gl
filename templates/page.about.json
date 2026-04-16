@@ -9,25 +9,87 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "page-about-nk",
+    "about_hero_Yu31aN": {
+      "type": "page-content-hero",
       "settings": {
         "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "content_alignment": "left",
         "eyebrow": "About Rughaus",
         "heading": "<strong>Live with Mood and Style</strong>",
-        "lead": "<p>Add a rug and a touch of color to a clean, minimal space.<br/>It brings a quiet richness and warmth.<br/><br/>Style shapes who you are.<br/>Mood emerges — softening the mind, letting you be yourself.<br/><br/>RUGHAUS begins with the rug,creating spaces where style and mood meet.</p>",
-        "image_1": "shopify://shop_images/sample2.jpg",
-        "image_2": "shopify://shop_images/Eno.jpg",
-        "code_title": "<strong>Japanese Design and Craftsmanship</strong>",
-        "code_text": "<p>Original rugs designed by RUGHAUS—<br/>crafted to suit a variety of spaces,<br/>each piece brings a renewed sense of mood.<br/>A truly one-of-a-kind design.</p>",
-        "cert_title": "<strong>Custom-Made, Accessible and Fast</strong>",
-        "cert_text": "<p>Tailored like kimono—each piece made to fit the individual.Custom-made, yet accessible and delivered in a short time.</p>",
+        "text": "<p>Add a rug and a touch of color to a clean, minimal space.<br/>It brings a quiet richness and warmth.<br/><br/>Style shapes who you are.<br/>Mood emerges — softening the mind, letting you be yourself.<br/><br/>RUGHAUS begins with the rug,creating spaces where style and mood meet.</p>",
+        "primary_label": "",
+        "primary_link": "",
+        "secondary_label": "",
+        "secondary_link": "",
         "padding-block-start": 15,
+        "padding-block-end": 30
+      }
+    },
+    "about_images_Lk9eQd": {
+      "type": "page-image-grid",
+      "blocks": {
+        "image_1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/sample2.jpg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "image_2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Eno.jpg",
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["image_1", "image_2"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "full-width",
+        "heading": "",
+        "columns_desktop": "2",
+        "aspect_ratio": "portrait",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "about_cards_Qp3sLt": {
+      "type": "page-card-grid",
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "heading": "<strong>Japanese Design and Craftsmanship</strong>",
+            "text": "<p>Original rugs designed by RUGHAUS—<br/>crafted to suit a variety of spaces,<br/>each piece brings a renewed sense of mood.<br/>A truly one-of-a-kind design.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "heading": "<strong>Custom-Made, Accessible and Fast</strong>",
+            "text": "<p>Tailored like kimono—each piece made to fit the individual.Custom-made, yet accessible and delivered in a short time.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["card_1", "card_2"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "heading": "",
+        "columns_desktop": "2",
+        "card_style": "default",
+        "padding-block-start": 0,
         "padding-block-end": 30
       }
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["about_hero_Yu31aN", "about_images_Lk9eQd", "about_cards_Qp3sLt"]
 }

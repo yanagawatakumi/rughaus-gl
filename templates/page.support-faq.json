@@ -6,57 +6,86 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "main": {
+    "support_hero_Cr5zNy": {
+      "type": "page-content-hero",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "content_alignment": "left",
+        "eyebrow": "Support",
+        "heading": "Support & FAQ",
+        "text": "<p>Shipping, lead times, return policy, and custom order guidance.</p>",
+        "primary_label": "",
+        "primary_link": "",
+        "secondary_label": "",
+        "secondary_link": "",
+        "padding-block-start": 40,
+        "padding-block-end": 12
+      }
+    },
+    "support_content_Rk3dLj": {
       "type": "main-page",
       "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "Title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
         "page-content": {
           "type": "page-content",
           "settings": {},
           "blocks": {}
         }
       },
-      "block_order": [
-        "heading",
-        "page-content"
-      ],
+      "block_order": ["page-content"],
       "settings": {
         "content_direction": "column",
-        "gap": 32,
+        "gap": 20,
         "color_scheme": "",
-        "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-start": 0,
+        "padding-block-end": 48
+      }
+    },
+    "support_links_Tw7mQp": {
+      "type": "page-card-grid",
+      "blocks": {
+        "link_1": {
+          "type": "card",
+          "settings": {
+            "heading": "Trade",
+            "text": "<p>Apply for trade support and dedicated account services.</p>",
+            "link_label": "Go to trade",
+            "link": "/pages/trade"
+          }
+        },
+        "link_2": {
+          "type": "card",
+          "settings": {
+            "heading": "About",
+            "text": "<p>Learn about materials, sourcing, and product standards.</p>",
+            "link_label": "Read about us",
+            "link": "/pages/about"
+          }
+        },
+        "link_3": {
+          "type": "card",
+          "settings": {
+            "heading": "All rugs",
+            "text": "<p>Browse all available collections and products.</p>",
+            "link_label": "Browse rugs",
+            "link": "/collections/all-rugs"
+          }
+        }
+      },
+      "block_order": ["link_1", "link_2", "link_3"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "heading": "",
+        "columns_desktop": "3",
+        "card_style": "default",
+        "padding-block-start": 0,
+        "padding-block-end": 64
       }
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["support_hero_Cr5zNy", "support_content_Rk3dLj", "support_links_Tw7mQp"]
 }
