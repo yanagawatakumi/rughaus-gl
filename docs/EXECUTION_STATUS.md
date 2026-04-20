@@ -1,6 +1,6 @@
 # 実行ステータス（常時更新）
 
-最終更新日: 2026-04-16  
+最終更新日: 2026-04-20  
 対象ブランチ: `develop`  
 運用ルール: 進捗に変化があったら本ファイルを更新する
 
@@ -10,7 +10,7 @@
 - TopページのNK寄せ骨格セクションを実装済み（`sections/home-nk.liquid`）
 - ページ実装方針を「全ページでセクション/ブロック分割（Theme Editor優先）」へ統一
 - Markets/Catalogを公開制御の正本に統一し、テーマ側の独自市場ガードを撤廃
-- PDP詳細文言はLiquid実装で `custom.pdp_*` 連動 + フォールバック表示に移行済み
+- PDP詳細文言はLiquid実装で `custom.pdp_*` 連動へ移行（Descriptionは商品説明）
 - 別Shopifyストアへの接続・再セットアップフェーズに移行
 - Codex 開発環境へ Shopify AI Toolkit（MCP + skills + CLI更新）を反映済み
 
@@ -29,7 +29,7 @@
 - `DONE` Markets/Languages再設定（US/HK/IT + EN/DE/FR/IT/ES/ZH-TW/KO）
 - `DONE` Collections/Pages/Productsのテンプレート再割当
 - `DONE` Main menu再設定
-- `TODO` Product metafield定義（`custom.pdp_*` 4項目）
+- `DONE` Product metafield定義（`custom.pdp_*` 5項目 / Descriptionは `product.description`）
 - `IN_PROGRESS` Markets/Catalog公開設定の再構成
 - `BLOCKED` Shopify Payments有効化待ち（多通貨最終検証）
 - `NOTE` 2026-04-13 ユーザー完了報告ベース。最終スモークテストは未完了。
@@ -38,9 +38,10 @@
 - `DONE` Codex の `~/.codex/config.toml` に Shopify Dev MCP 設定を追加
 - `DONE` Shopify AI Toolkit skills 導入（theme/app/storefront系）
 - `DONE` Shopify CLI `3.93.2` へ更新（`shopify store auth/execute` 利用可）
-- `DONE` ストア認証と疎通確認
+- `DONE` ストア認証と疎通確認（旧ストア）
   - `shopify store auth --store xfxfwd-8p.myshopify.com`
   - `shopify store execute` による `shop` / `products` 取得確認
+  - `TODO` 現行ストア `vaw1vk-xn.myshopify.com` の `store auth` 再実行
 - `DONE` `shopify theme check --path . --output json` 実行（結果 `[]`）
 - `TODO` Storefront MCP 導入検討（AI接客/Storefront Agent 拡張）
 
@@ -79,10 +80,17 @@
   - `DONE` 左ギャラリー固定、PC画像1列化
   - `DONE` PCスクロール挙動を調整（右カラム高さを基準に「限界到達で固定」する挙動へ更新）
   - `DONE` CTA（Sample/Consultation）追加
-  - `DONE` Accordion 4項目追加
+  - `DONE` Accordion 6項目へ更新
   - `DONE` 下部レコメンド除外
   - `DONE` Custom/Stock共通テンプレート運用
-  - `DONE` `custom.pdp_*` をLiquidで参照する動的連動を再導入（JSON動的ソース依存なし）
+  - `DONE` `custom.pdp_*` をLiquidで参照する動的連動を更新（JSON動的ソース依存なし）
+    - Description: `product.description`
+    - Product Details: `custom.pdp_product_details`
+    - Delivery & Shipping: `custom.pdp_delivery_shipping`
+    - Returns: `custom.pdp_returns`
+    - Duties & Taxes: `custom.pdp_duties_taxes`
+    - Note: `custom.pdp_note`
+  - `DONE` 空欄アコーディオン項目は非表示化
   - `IN_PROGRESS` 管理画面でメタフィールド定義後の実データ投入
 
 ### FR-11 計測
@@ -109,6 +117,7 @@
 - `DONE` Aboutページで`page.about`テンプレート反映を実確認
 - `DONE` `sections/main-collection.liquid` / `sections/product-information.liquid` から独自市場ガードを削除
 - `DONE` `blocks/_accordion-row.liquid` にPDPメタフィールド連動ロジックを追加
+- `DONE` `blocks/_accordion-row.liquid` を6項目仕様へ更新（Description + 5メタフィールド）
 - `DONE` `rughaus.pdp.*` 翻訳キー参照の構造を全ロケールで正規化
 - `DONE` PDPメディア表示をバリアントグループ連動へ更新（代表画像を起点に後続画像を同グループ表示）
 - `DONE` バリアント切替体感を改善（レスポンスキャッシュ + hover/focus先読み + ギャラリー切替アニメーション）
@@ -121,10 +130,11 @@
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）
-  - `custom.pdp_materials` (multi_line_text_field)
-  - `custom.pdp_care` (multi_line_text_field)
-  - `custom.pdp_size_guide` (multi_line_text_field)
-  - `custom.pdp_shipping_returns` (multi_line_text_field)
+  - `DONE` `custom.pdp_product_details` (multi_line_text_field)
+  - `DONE` `custom.pdp_delivery_shipping` (single_line_text_field + choices)
+  - `DONE` `custom.pdp_returns` (single_line_text_field + choices)
+  - `DONE` `custom.pdp_duties_taxes` (single_line_text_field + choices)
+  - `DONE` `custom.pdp_note` (multi_line_text_field)
 - `TODO` Shopify Payments有効化（通貨最終検証に必要）
 - `TODO` Markets/Catalogで市場別公開設定を最終化
 - `TODO` 新ストア最小スモークテスト実施
@@ -137,6 +147,6 @@
 - `CODEX_SHOPIFY_AI_TOOLKIT_RUNBOOK.md` の運用更新を継続
 
 2. User
-- Productメタフィールド4定義を作成し、テスト商品へ入力
+- Productメタフィールド5定義を作成し、テスト商品へ入力
 - Shopify Payments有効化後に多通貨表示/決済を再確認
 - Markets/Catalog公開制御と最小スモークテスト結果を共有

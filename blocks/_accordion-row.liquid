@@ -2,89 +2,125 @@
 {% assign block_settings = block.settings %}
 {% liquid
   assign pdp_row_content = blank
+  assign pdp_row_managed = false
+  assign pdp_row_is_richtext = false
 
   if request.page_type == 'product' and closest.product != blank
     assign heading_value = block_settings.heading | strip
-    assign materials_heading = 'rughaus.pdp.accordion.materials' | t
-    assign care_heading = 'rughaus.pdp.accordion.care' | t
-    assign size_guide_heading = 'rughaus.pdp.accordion.size_guide' | t
-    assign shipping_returns_heading = 'rughaus.pdp.accordion.shipping_returns' | t
+    assign description_heading = 'Description'
+    assign product_details_heading = 'Product Details'
+    assign delivery_shipping_heading = 'Delivery & Shipping'
+    assign returns_heading = 'Returns'
+    assign duties_taxes_heading = 'Duties & Taxes'
+    assign note_heading = 'Note'
 
-    if heading_value == 't:rughaus.pdp.accordion.materials' or heading_value == materials_heading
-      assign pdp_row_content = closest.product.metafields.custom.pdp_materials.value
+    if heading_value == description_heading
+      assign pdp_row_managed = true
+      assign pdp_row_is_richtext = true
+      assign pdp_row_content = closest.product.description
+    elsif heading_value == product_details_heading
+      assign pdp_row_managed = true
+      assign pdp_row_content = closest.product.metafields.custom.pdp_product_details.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_product_details
+      endif
+      # Backward compatibility for existing data.
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_materials.value
+      endif
       if pdp_row_content == blank
         assign pdp_row_content = closest.product.metafields.custom.pdp_materials
       endif
+    elsif heading_value == delivery_shipping_heading
+      assign pdp_row_managed = true
+      assign pdp_row_content = closest.product.metafields.custom.pdp_delivery_shipping.value
       if pdp_row_content == blank
-        assign pdp_row_content = 'rughaus.pdp.defaults.materials' | t
+        assign pdp_row_content = closest.product.metafields.custom.pdp_delivery_shipping
       endif
-    elsif heading_value == 't:rughaus.pdp.accordion.care' or heading_value == care_heading
-      assign pdp_row_content = closest.product.metafields.custom.pdp_care.value
+      # Backward compatibility for existing data.
       if pdp_row_content == blank
-        assign pdp_row_content = closest.product.metafields.custom.pdp_care
+        assign pdp_row_content = closest.product.metafields.custom.pdp_shipping_returns.value
       endif
-      if pdp_row_content == blank
-        assign pdp_row_content = 'rughaus.pdp.defaults.care' | t
-      endif
-    elsif heading_value == 't:rughaus.pdp.accordion.size_guide' or heading_value == size_guide_heading
-      assign pdp_row_content = closest.product.metafields.custom.pdp_size_guide.value
-      if pdp_row_content == blank
-        assign pdp_row_content = closest.product.metafields.custom.pdp_size_guide
-      endif
-      if pdp_row_content == blank
-        assign pdp_row_content = 'rughaus.pdp.defaults.size_guide' | t
-      endif
-    elsif heading_value == 't:rughaus.pdp.accordion.shipping_returns' or heading_value == shipping_returns_heading
-      assign pdp_row_content = closest.product.metafields.custom.pdp_shipping_returns.value
       if pdp_row_content == blank
         assign pdp_row_content = closest.product.metafields.custom.pdp_shipping_returns
       endif
+    elsif heading_value == returns_heading
+      assign pdp_row_managed = true
+      assign pdp_row_content = closest.product.metafields.custom.pdp_returns.value
       if pdp_row_content == blank
-        assign pdp_row_content = 'rughaus.pdp.defaults.shipping_returns' | t
+        assign pdp_row_content = closest.product.metafields.custom.pdp_returns
+      endif
+    elsif heading_value == duties_taxes_heading
+      assign pdp_row_managed = true
+      assign pdp_row_content = closest.product.metafields.custom.pdp_duties_taxes.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_duties_taxes
+      endif
+    elsif heading_value == note_heading
+      assign pdp_row_managed = true
+      assign pdp_row_content = closest.product.metafields.custom.pdp_note.value
+      if pdp_row_content == blank
+        assign pdp_row_content = closest.product.metafields.custom.pdp_note
       endif
     endif
   endif
 %}
 
-{% capture accordion_row_children %}
-  <details
-    class="details"
-    data-testid="accordion-details"
-    {% if block_settings.open_by_default %}
-      open
-    {% endif %}
-    {{ block.shopify_attributes }}
-  >
-    <summary class="details__header">
-      {% render 'icon-or-image',
-        icon: block_settings.icon,
-        image_upload: block_settings.image_upload,
-        width: block_settings.width,
-        class_name: 'details__icon'
-      %}
-      {{ block_settings.heading }}
-      <span class="svg-wrapper icon-caret icon-animated">
-        {{- 'icon-caret.svg' | inline_asset_content -}}
-      </span>
-      <span class="svg-wrapper icon-plus">
-        {{- 'icon-plus.svg' | inline_asset_content -}}
-      </span>
-    </summary>
-
-    <div class="details-content">
-      {% if pdp_row_content != blank %}
-        <div class="rte">{{ pdp_row_content | escape | newline_to_br }}</div>
-      {% else %}
-        {% content_for 'blocks' %}
-      {% endif %}
-    </div>
-  </details>
-{% endcapture %}
-{% render 'accordion-custom-component',
-  children: accordion_row_children,
-  open_by_default_on_desktop: block_settings.open_by_default,
-  open_by_default_on_mobile: block_settings.open_by_default
+{% liquid
+  assign should_render_row = true
+  if pdp_row_managed
+    assign pdp_row_content_check = pdp_row_content | strip_html | strip
+    if pdp_row_content_check == blank
+      assign should_render_row = false
+    endif
+  endif
 %}
+
+{% if should_render_row %}
+  {% capture accordion_row_children %}
+    <details
+      class="details"
+      data-testid="accordion-details"
+      {% if block_settings.open_by_default %}
+        open
+      {% endif %}
+      {{ block.shopify_attributes }}
+    >
+      <summary class="details__header">
+        {% render 'icon-or-image',
+          icon: block_settings.icon,
+          image_upload: block_settings.image_upload,
+          width: block_settings.width,
+          class_name: 'details__icon'
+        %}
+        {{ block_settings.heading }}
+        <span class="svg-wrapper icon-caret icon-animated">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+        <span class="svg-wrapper icon-plus">
+          {{- 'icon-plus.svg' | inline_asset_content -}}
+        </span>
+      </summary>
+
+      <div class="details-content">
+        {% if pdp_row_content != blank %}
+          {% if pdp_row_is_richtext %}
+            <div class="rte">{{ pdp_row_content }}</div>
+          {% else %}
+            <div class="rte">{{ pdp_row_content | escape | newline_to_br }}</div>
+          {% endif %}
+        {% else %}
+          {% content_for 'blocks' %}
+        {% endif %}
+      </div>
+    </details>
+  {% endcapture %}
+  {% render 'accordion-custom-component',
+    children: accordion_row_children,
+    open_by_default_on_desktop: block_settings.open_by_default,
+    open_by_default_on_mobile: block_settings.open_by_default
+  %}
+{% endif %}
 
 {% stylesheet %}
   .details__icon {

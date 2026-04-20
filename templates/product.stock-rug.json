@@ -285,20 +285,20 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "accordion_row_materials": {
+                "accordion_row_description": {
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "t:rughaus.pdp.accordion.materials",
+                    "heading": "Description",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
                   },
                   "blocks": {
-                    "text_materials": {
+                    "text_description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Detailed materials information is available on request.</p>",
+                        "text": "<p></p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -322,23 +322,23 @@
                     }
                   },
                   "block_order": [
-                    "text_materials"
+                    "text_description"
                   ]
                 },
-                "accordion_row_care": {
+                "accordion_row_product_details": {
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "t:rughaus.pdp.accordion.care",
+                    "heading": "Product Details",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
                   },
                   "blocks": {
-                    "text_care": {
+                    "text_product_details": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Care instructions are available on request.</p>",
+                        "text": "<p></p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -362,23 +362,23 @@
                     }
                   },
                   "block_order": [
-                    "text_care"
+                    "text_product_details"
                   ]
                 },
-                "accordion_row_size_guide": {
+                "accordion_row_delivery_shipping": {
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "t:rughaus.pdp.accordion.size_guide",
+                    "heading": "Delivery & Shipping",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
                   },
                   "blocks": {
-                    "text_size_guide": {
+                    "text_delivery_shipping": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Please contact us for a detailed size guide.</p>",
+                        "text": "<p></p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -402,23 +402,23 @@
                     }
                   },
                   "block_order": [
-                    "text_size_guide"
+                    "text_delivery_shipping"
                   ]
                 },
-                "accordion_row_shipping_returns": {
+                "accordion_row_returns": {
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "t:rughaus.pdp.accordion.shipping_returns",
+                    "heading": "Returns",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
                   },
                   "blocks": {
-                    "text_shipping_returns": {
+                    "text_returns": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Custom rugs are made to order. Shipping details and return policy are provided before purchase.</p>",
+                        "text": "<p></p>",
                         "width": "100%",
                         "max_width": "none",
                         "alignment": "left",
@@ -442,15 +442,97 @@
                     }
                   },
                   "block_order": [
-                    "text_shipping_returns"
+                    "text_returns"
+                  ]
+                },
+                "accordion_row_duties_taxes": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Duties & Taxes",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 16
+                  },
+                  "blocks": {
+                    "text_duties_taxes": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p></p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-primary--family)",
+                        "font_size": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_duties_taxes"
+                  ]
+                },
+                "accordion_row_note": {
+                  "type": "_accordion-row",
+                  "name": "t:names.accordion_row",
+                  "settings": {
+                    "heading": "Note",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 16
+                  },
+                  "blocks": {
+                    "text_note": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p></p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-primary--family)",
+                        "font_size": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_note"
                   ]
                 }
               },
               "block_order": [
-                "accordion_row_materials",
-                "accordion_row_care",
-                "accordion_row_size_guide",
-                "accordion_row_shipping_returns"
+                "accordion_row_description",
+                "accordion_row_product_details",
+                "accordion_row_delivery_shipping",
+                "accordion_row_returns",
+                "accordion_row_duties_taxes",
+                "accordion_row_note"
               ]
             }
           },
