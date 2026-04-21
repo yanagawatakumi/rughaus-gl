@@ -14,19 +14,14 @@ class RecentlyViewedProductsSection extends HTMLElement {
   connectedCallback() {
     if (this.dataset.initialized === 'true') return;
     this.dataset.initialized = 'true';
-
-    // Delay work until section is close to viewport for better page speed.
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          observer.disconnect();
-          this.loadProducts();
-        }
-      },
-      { rootMargin: '300px 0px' }
-    );
-
-    observer.observe(this);
+    // This section can start as hidden, so IntersectionObserver may never fire.
+    // Load once on idle to keep it reliable on both preview and production.
+    const run = () => this.loadProducts();
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(run, { timeout: 500 });
+    } else {
+      window.setTimeout(run, 0);
+    }
   }
 
   async loadProducts() {
