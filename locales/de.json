@@ -342,24 +342,30 @@
   },
   "rughaus": {
     "market_access": {
-      "unavailable_title": "This page is not available in your market.",
-      "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "unavailable_title": "Diese Seite ist in Ihrem Markt nicht verfügbar.",
+      "unavailable_body": "Bitte ändern Sie Ihr Land oder stöbern Sie weiter in verfügbaren Teppichen.",
+      "browse_all_rugs": "Alle Teppiche ansehen"
     },
     "pdp": {
-      "sample_cta": "Request a sample",
-      "consultation_cta": "Book a consultation",
+      "sample_cta": "Muster anfordern",
+      "consultation_cta": "Beratung buchen",
       "accordion": {
-        "materials": "Materials",
-        "care": "Care",
-        "size_guide": "Size guide",
-        "shipping_returns": "Shipping & returns"
+        "materials": "Materialien",
+        "care": "Pflege",
+        "size_guide": "Größenleitfaden",
+        "shipping_returns": "Versand & Rücksendung",
+        "description": "Beschreibung",
+        "product_details": "Produktdetails",
+        "delivery_shipping": "Lieferung & Versand",
+        "returns": "Rücksendungen",
+        "duties_taxes": "Zölle & Steuern",
+        "note": "Hinweis"
       },
       "defaults": {
-        "materials": "Detailed materials information is available on request.",
-        "care": "Care instructions are available on request.",
-        "size_guide": "Please contact us for a detailed size guide.",
-        "shipping_returns": "Custom rugs are made to order. Shipping details and return policy are provided before purchase."
+        "materials": "Detaillierte Informationen zu Materialien sind auf Anfrage verfügbar.",
+        "care": "Pflegehinweise sind auf Anfrage verfügbar.",
+        "size_guide": "Bitte kontaktieren Sie uns für einen detaillierten Größenleitfaden.",
+        "shipping_returns": "Maßgefertigte Teppiche werden auf Bestellung produziert. Versanddetails und Rückgaberichtlinien teilen wir vor dem Kauf mit."
       }
     }
   }

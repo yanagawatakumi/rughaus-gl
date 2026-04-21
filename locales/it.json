@@ -349,24 +349,30 @@
   },
   "rughaus": {
     "market_access": {
-      "unavailable_title": "This page is not available in your market.",
-      "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "unavailable_title": "Questa pagina non è disponibile nel tuo mercato.",
+      "unavailable_body": "Cambia paese o continua a esplorare i tappeti disponibili.",
+      "browse_all_rugs": "Sfoglia tutti i tappeti"
     },
     "pdp": {
-      "sample_cta": "Request a sample",
-      "consultation_cta": "Book a consultation",
+      "sample_cta": "Richiedi un campione",
+      "consultation_cta": "Prenota una consulenza",
       "accordion": {
-        "materials": "Materials",
-        "care": "Care",
-        "size_guide": "Size guide",
-        "shipping_returns": "Shipping & returns"
+        "materials": "Materiali",
+        "care": "Cura",
+        "size_guide": "Guida alle misure",
+        "shipping_returns": "Spedizione e resi",
+        "description": "Descrizione",
+        "product_details": "Dettagli prodotto",
+        "delivery_shipping": "Consegna e spedizione",
+        "returns": "Resi",
+        "duties_taxes": "Dazi e tasse",
+        "note": "Nota"
       },
       "defaults": {
-        "materials": "Detailed materials information is available on request.",
-        "care": "Care instructions are available on request.",
-        "size_guide": "Please contact us for a detailed size guide.",
-        "shipping_returns": "Custom rugs are made to order. Shipping details and return policy are provided before purchase."
+        "materials": "Informazioni dettagliate sui materiali disponibili su richiesta.",
+        "care": "Le istruzioni per la cura sono disponibili su richiesta.",
+        "size_guide": "Contattaci per una guida alle misure dettagliata.",
+        "shipping_returns": "I tappeti su misura sono realizzati su ordinazione. I dettagli di spedizione e la politica di reso vengono forniti prima dell'acquisto."
       }
     }
   }

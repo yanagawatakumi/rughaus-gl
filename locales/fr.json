@@ -349,24 +349,30 @@
   },
   "rughaus": {
     "market_access": {
-      "unavailable_title": "This page is not available in your market.",
-      "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "unavailable_title": "Cette page n'est pas disponible dans votre marché.",
+      "unavailable_body": "Veuillez changer de pays ou continuer à parcourir les tapis disponibles.",
+      "browse_all_rugs": "Voir tous les tapis"
     },
     "pdp": {
-      "sample_cta": "Request a sample",
-      "consultation_cta": "Book a consultation",
+      "sample_cta": "Demander un échantillon",
+      "consultation_cta": "Réserver une consultation",
       "accordion": {
-        "materials": "Materials",
-        "care": "Care",
-        "size_guide": "Size guide",
-        "shipping_returns": "Shipping & returns"
+        "materials": "Matériaux",
+        "care": "Entretien",
+        "size_guide": "Guide des tailles",
+        "shipping_returns": "Livraison et retours",
+        "description": "Description",
+        "product_details": "Détails du produit",
+        "delivery_shipping": "Livraison & expédition",
+        "returns": "Retours",
+        "duties_taxes": "Droits & taxes",
+        "note": "Remarque"
       },
       "defaults": {
-        "materials": "Detailed materials information is available on request.",
-        "care": "Care instructions are available on request.",
-        "size_guide": "Please contact us for a detailed size guide.",
-        "shipping_returns": "Custom rugs are made to order. Shipping details and return policy are provided before purchase."
+        "materials": "Les informations détaillées sur les matériaux sont disponibles sur demande.",
+        "care": "Les instructions d'entretien sont disponibles sur demande.",
+        "size_guide": "Veuillez nous contacter pour un guide des tailles détaillé.",
+        "shipping_returns": "Les tapis sur mesure sont fabriqués à la commande. Les détails de livraison et la politique de retour sont fournis avant l'achat."
       }
     }
   }

@@ -4,21 +4,49 @@
   assign pdp_row_content = blank
   assign pdp_row_managed = false
   assign pdp_row_is_richtext = false
+  assign heading_value = block_settings.heading | strip
+  assign heading_display = heading_value
+  assign heading_prefix = heading_value | slice: 0, 2
+
+  if heading_value != blank and heading_prefix == 't:'
+    assign heading_translation_key = heading_value | remove_first: 't:'
+    assign heading_display = heading_translation_key | t
+  endif
 
   if request.page_type == 'product' and closest.product != blank
-    assign heading_value = block_settings.heading | strip
-    assign description_heading = 'Description'
-    assign product_details_heading = 'Product Details'
-    assign delivery_shipping_heading = 'Delivery & Shipping'
-    assign returns_heading = 'Returns'
-    assign duties_taxes_heading = 'Duties & Taxes'
-    assign note_heading = 'Note'
+    assign description_key = 'rughaus.pdp.accordion.description'
+    assign product_details_key = 'rughaus.pdp.accordion.product_details'
+    assign delivery_shipping_key = 'rughaus.pdp.accordion.delivery_shipping'
+    assign returns_key = 'rughaus.pdp.accordion.returns'
+    assign duties_taxes_key = 'rughaus.pdp.accordion.duties_taxes'
+    assign note_key = 'rughaus.pdp.accordion.note'
 
-    if heading_value == description_heading
+    assign description_token = 't:' | append: description_key
+    assign product_details_token = 't:' | append: product_details_key
+    assign delivery_shipping_token = 't:' | append: delivery_shipping_key
+    assign returns_token = 't:' | append: returns_key
+    assign duties_taxes_token = 't:' | append: duties_taxes_key
+    assign note_token = 't:' | append: note_key
+
+    assign description_heading_translated = description_key | t
+    assign product_details_heading_translated = product_details_key | t
+    assign delivery_shipping_heading_translated = delivery_shipping_key | t
+    assign returns_heading_translated = returns_key | t
+    assign duties_taxes_heading_translated = duties_taxes_key | t
+    assign note_heading_translated = note_key | t
+
+    assign description_heading_legacy = 'Description'
+    assign product_details_heading_legacy = 'Product Details'
+    assign delivery_shipping_heading_legacy = 'Delivery & Shipping'
+    assign returns_heading_legacy = 'Returns'
+    assign duties_taxes_heading_legacy = 'Duties & Taxes'
+    assign note_heading_legacy = 'Note'
+
+    if heading_value == description_token or heading_display == description_heading_translated or heading_value == description_heading_translated or heading_value == description_heading_legacy
       assign pdp_row_managed = true
       assign pdp_row_is_richtext = true
       assign pdp_row_content = closest.product.description
-    elsif heading_value == product_details_heading
+    elsif heading_value == product_details_token or heading_display == product_details_heading_translated or heading_value == product_details_heading_translated or heading_value == product_details_heading_legacy
       assign pdp_row_managed = true
       assign pdp_row_content = closest.product.metafields.custom.pdp_product_details.value
       if pdp_row_content == blank
@@ -31,7 +59,7 @@
       if pdp_row_content == blank
         assign pdp_row_content = closest.product.metafields.custom.pdp_materials
       endif
-    elsif heading_value == delivery_shipping_heading
+    elsif heading_value == delivery_shipping_token or heading_display == delivery_shipping_heading_translated or heading_value == delivery_shipping_heading_translated or heading_value == delivery_shipping_heading_legacy
       assign pdp_row_managed = true
       assign pdp_row_content = closest.product.metafields.custom.pdp_delivery_shipping.value
       if pdp_row_content == blank
@@ -44,19 +72,19 @@
       if pdp_row_content == blank
         assign pdp_row_content = closest.product.metafields.custom.pdp_shipping_returns
       endif
-    elsif heading_value == returns_heading
+    elsif heading_value == returns_token or heading_display == returns_heading_translated or heading_value == returns_heading_translated or heading_value == returns_heading_legacy
       assign pdp_row_managed = true
       assign pdp_row_content = closest.product.metafields.custom.pdp_returns.value
       if pdp_row_content == blank
         assign pdp_row_content = closest.product.metafields.custom.pdp_returns
       endif
-    elsif heading_value == duties_taxes_heading
+    elsif heading_value == duties_taxes_token or heading_display == duties_taxes_heading_translated or heading_value == duties_taxes_heading_translated or heading_value == duties_taxes_heading_legacy
       assign pdp_row_managed = true
       assign pdp_row_content = closest.product.metafields.custom.pdp_duties_taxes.value
       if pdp_row_content == blank
         assign pdp_row_content = closest.product.metafields.custom.pdp_duties_taxes
       endif
-    elsif heading_value == note_heading
+    elsif heading_value == note_token or heading_display == note_heading_translated or heading_value == note_heading_translated or heading_value == note_heading_legacy
       assign pdp_row_managed = true
       assign pdp_row_content = closest.product.metafields.custom.pdp_note.value
       if pdp_row_content == blank
@@ -93,7 +121,7 @@
           width: block_settings.width,
           class_name: 'details__icon'
         %}
-        {{ block_settings.heading }}
+        {{ heading_display }}
         <span class="svg-wrapper icon-caret icon-animated">
           {{- 'icon-caret.svg' | inline_asset_content -}}
         </span>

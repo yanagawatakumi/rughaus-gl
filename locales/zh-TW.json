@@ -342,24 +342,30 @@
   },
   "rughaus": {
     "market_access": {
-      "unavailable_title": "This page is not available in your market.",
-      "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "unavailable_title": "此頁面在您所在的市場不可用。",
+      "unavailable_body": "請切換國家/地區，或繼續瀏覽可購買的地毯。",
+      "browse_all_rugs": "瀏覽所有地毯"
     },
     "pdp": {
-      "sample_cta": "Request a sample",
-      "consultation_cta": "Book a consultation",
+      "sample_cta": "索取樣品",
+      "consultation_cta": "預約諮詢",
       "accordion": {
-        "materials": "Materials",
-        "care": "Care",
-        "size_guide": "Size guide",
-        "shipping_returns": "Shipping & returns"
+        "materials": "材質",
+        "care": "保養",
+        "size_guide": "尺寸指南",
+        "shipping_returns": "配送與退貨",
+        "description": "商品描述",
+        "product_details": "產品詳情",
+        "delivery_shipping": "配送與運送",
+        "returns": "退貨",
+        "duties_taxes": "關稅與稅金",
+        "note": "備註"
       },
       "defaults": {
-        "materials": "Detailed materials information is available on request.",
-        "care": "Care instructions are available on request.",
-        "size_guide": "Please contact us for a detailed size guide.",
-        "shipping_returns": "Custom rugs are made to order. Shipping details and return policy are provided before purchase."
+        "materials": "更詳細的材質資訊可於提出需求後提供。",
+        "care": "保養說明可於提出需求後提供。",
+        "size_guide": "如需詳細尺寸指南，請聯絡我們。",
+        "shipping_returns": "訂製地毯為接單製作。運送細節與退貨政策將於購買前提供。"
       }
     }
   }

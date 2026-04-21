@@ -367,7 +367,13 @@
         "materials": "Materials",
         "care": "Care",
         "size_guide": "Size guide",
-        "shipping_returns": "Shipping & returns"
+        "shipping_returns": "Shipping & returns",
+        "description": "Description",
+        "product_details": "Product details",
+        "delivery_shipping": "Delivery & shipping",
+        "returns": "Returns",
+        "duties_taxes": "Duties & taxes",
+        "note": "Note"
       },
       "defaults": {
         "materials": "Detailed materials information is available on request.",

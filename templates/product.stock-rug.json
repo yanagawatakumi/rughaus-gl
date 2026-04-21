@@ -289,7 +289,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "Description",
+                    "heading": "t:rughaus.pdp.accordion.description",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
@@ -329,7 +329,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "Product Details",
+                    "heading": "t:rughaus.pdp.accordion.product_details",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
@@ -369,7 +369,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "Delivery & Shipping",
+                    "heading": "t:rughaus.pdp.accordion.delivery_shipping",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
@@ -409,7 +409,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "Returns",
+                    "heading": "t:rughaus.pdp.accordion.returns",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
@@ -449,7 +449,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "Duties & Taxes",
+                    "heading": "t:rughaus.pdp.accordion.duties_taxes",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
@@ -489,7 +489,7 @@
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
                   "settings": {
-                    "heading": "Note",
+                    "heading": "t:rughaus.pdp.accordion.note",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 16
