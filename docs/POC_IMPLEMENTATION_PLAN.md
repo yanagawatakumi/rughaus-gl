@@ -1,6 +1,6 @@
 # RUGHAUS GL PoC 実装タスク分解（v0.3）
 
-最終更新日: 2026-04-09
+最終更新日: 2026-04-21
 対象: フェーズ1（国内ストア内の別テーマPoC）
 
 ## 1. 目的
@@ -21,7 +21,8 @@
   - Shopify Marketsで US / HK / IT を有効化
   - 各Marketに通貨を割り当てる
   - ローンチ対応言語（EN / DE / FR / IT / ES / ZH-TW / KO）を有効化
-  - Translate & Adapt導入
+  - Translate & Adapt導入（標準翻訳）
+  - T Lab - AI Language Translate導入（多言語拡張）
   - 自動判定/リダイレクト設定を有効化（不一致時はユーザー手動変更を優先）
 - テーマタスク
   - ヘッダー/フッターで language/country selector 表示位置を確定
@@ -104,8 +105,10 @@
 ### FR-07: 翻訳品質保証（未翻訳ゼロ）
 - 管理画面タスク
   - Translate & Adaptを基準に翻訳投入
+  - 標準翻訳で不足する言語/文言は T Lab - AI Language Translate で補完
   - 不足箇所は翻訳カバレッジの高いアプリのみ採用
 - 品質タスク
+  - 自動翻訳結果をそのまま公開せず、運用側でレビューして確定する
   - 一覧/詳細/カート/チェックアウト導線/エラー表示/通知表示を全件確認
   - ローンチ対応言語で未翻訳ゼロになるまで修正
 
@@ -213,6 +216,7 @@
 - Matrixify
 - B2B BSS（卸売用）
 - Live Product Options（サイズオーダー）
+- T Lab - AI Language Translate（翻訳拡張）
 
 ## 8. 現時点の技術懸念（優先順）
 - C-01（高）: FR-04の実課金連動
