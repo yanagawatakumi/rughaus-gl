@@ -40,6 +40,7 @@ export default class VariantPicker extends Component {
   #radios = [];
 
   #resizeObserver = new ResizeNotifier(() => this.updateVariantPickerCss());
+  #swatchExpandedState = new Map();
 
   connectedCallback() {
     super.connectedCallback();
@@ -127,6 +128,29 @@ export default class VariantPicker extends Component {
         history.replaceState({}, '', url.toString());
       });
     }
+  }
+
+  /**
+   * Toggle expanded/collapsed state for color swatches on PDP.
+   * @param {Event} event
+   */
+  toggleSwatchesExpand(event) {
+    event?.preventDefault();
+
+    const toggleButton = event?.target instanceof Element ? event.target.closest('.variant-option__swatches-toggle') : null;
+    if (!(toggleButton instanceof HTMLButtonElement)) return;
+
+    const fieldset = toggleButton.closest('.variant-option--swatches-collapsible');
+    if (!(fieldset instanceof HTMLFieldSetElement)) return;
+
+    const isExpanded = fieldset.dataset.expanded === 'true';
+    const nextExpanded = !isExpanded;
+
+    fieldset.dataset.expanded = nextExpanded ? 'true' : 'false';
+    this.#swatchExpandedState.set(fieldset.dataset.fieldsetIndex || '', nextExpanded);
+    toggleButton.textContent = nextExpanded
+      ? toggleButton.dataset.labelExpanded || 'Hide'
+      : toggleButton.dataset.labelCollapsed || `+${toggleButton.dataset.overflowCount || 0}`;
   }
 
   /**
@@ -491,6 +515,8 @@ export default class VariantPicker extends Component {
       this.dataset.productUrl = newProductUrl;
     }
 
+    this.#captureSwatchExpandedState();
+
     morph(this, newVariantPickerSource, {
       ...MORPH_OPTIONS,
       getNodeKey: (node) => {
@@ -499,9 +525,42 @@ export default class VariantPicker extends Component {
         return key;
       },
     });
+
+    this.#restoreSwatchExpandedState();
     this.updateVariantPickerCss();
 
     return newProduct;
+  }
+
+  #captureSwatchExpandedState() {
+    this.#swatchExpandedState.clear();
+
+    const fieldsets = this.querySelectorAll('.variant-option--swatches-collapsible');
+    fieldsets.forEach((fieldset) => {
+      if (!(fieldset instanceof HTMLFieldSetElement)) return;
+      const key = fieldset.dataset.fieldsetIndex || '';
+      const isExpanded = fieldset.dataset.expanded === 'true';
+      this.#swatchExpandedState.set(key, isExpanded);
+    });
+  }
+
+  #restoreSwatchExpandedState() {
+    if (!this.#swatchExpandedState.size) return;
+
+    const fieldsets = this.querySelectorAll('.variant-option--swatches-collapsible');
+    fieldsets.forEach((fieldset) => {
+      if (!(fieldset instanceof HTMLFieldSetElement)) return;
+      const key = fieldset.dataset.fieldsetIndex || '';
+      const shouldExpand = this.#swatchExpandedState.get(key) === true;
+      fieldset.dataset.expanded = shouldExpand ? 'true' : 'false';
+
+      const toggleButton = fieldset.querySelector('.variant-option__swatches-toggle');
+      if (toggleButton instanceof HTMLButtonElement) {
+        toggleButton.textContent = shouldExpand
+          ? toggleButton.dataset.labelExpanded || 'Hide'
+          : toggleButton.dataset.labelCollapsed || `+${toggleButton.dataset.overflowCount || 0}`;
+      }
+    });
   }
 
   updateVariantPickerCss() {
