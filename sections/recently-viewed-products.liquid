@@ -21,14 +21,14 @@
 >
   <div class="section-background color-{{ section.settings.color_scheme }}"></div>
   <section
-    class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} recently-viewed-products spacing-style"
+    class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} section-resource-list recently-viewed-products spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
   >
-    <header class="recently-viewed-products__header">
+    <div class="section-resource-list__content">
       <h2 class="recently-viewed-products__title {{ section.settings.heading_size }}">
         {{ heading_text }}
       </h2>
-    </header>
+    </div>
 
     <ul
       class="recently-viewed-products__grid list-unstyled"
@@ -39,9 +39,17 @@
 </recently-viewed-products-section>
 
 {% stylesheet %}
+  recently-viewed-products-section {
+    display: block;
+    width: 100%;
+  }
+
   .recently-viewed-products {
-    display: grid;
-    gap: var(--gap-xl);
+    row-gap: var(--gap-xl);
+  }
+
+  .recently-viewed-products .section-resource-list__content {
+    align-items: flex-start;
   }
 
   .recently-viewed-products__title {
