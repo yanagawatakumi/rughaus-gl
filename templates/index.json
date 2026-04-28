@@ -120,7 +120,7 @@
         "background_color": "#eeece7",
         "text_color": "#212121",
         "featured_source": "collection",
-        "featured_collection": "all-rugs",
+        "featured_collection": "custom-rugs",
         "featured_limit": 20,
         "padding-block-start": 40,
         "padding-block-end": 40
