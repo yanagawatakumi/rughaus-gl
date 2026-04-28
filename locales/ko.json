@@ -346,6 +346,10 @@
       "unavailable_body": "국가를 변경하거나 구매 가능한 러그를 계속 둘러보세요.",
       "browse_all_rugs": "모든 러그 보기"
     },
+    "centered_gallery": {
+      "lead_time_label": "리드 타임:",
+      "price_label": "가격:"
+    },
     "pdp": {
       "sample_cta": "샘플 요청",
       "consultation_cta": "상담 예약",

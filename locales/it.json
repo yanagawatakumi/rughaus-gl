@@ -353,6 +353,10 @@
       "unavailable_body": "Cambia paese o continua a esplorare i tappeti disponibili.",
       "browse_all_rugs": "Sfoglia tutti i tappeti"
     },
+    "centered_gallery": {
+      "lead_time_label": "Tempi di consegna:",
+      "price_label": "Prezzo:"
+    },
     "pdp": {
       "sample_cta": "Richiedi un campione",
       "consultation_cta": "Prenota una consulenza",

@@ -353,6 +353,10 @@
       "unavailable_body": "Veuillez changer de pays ou continuer à parcourir les tapis disponibles.",
       "browse_all_rugs": "Voir tous les tapis"
     },
+    "centered_gallery": {
+      "lead_time_label": "Délai :",
+      "price_label": "Prix :"
+    },
     "pdp": {
       "sample_cta": "Demander un échantillon",
       "consultation_cta": "Réserver une consultation",

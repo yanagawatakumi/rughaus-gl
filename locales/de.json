@@ -346,6 +346,10 @@
       "unavailable_body": "Bitte ändern Sie Ihr Land oder stöbern Sie weiter in verfügbaren Teppichen.",
       "browse_all_rugs": "Alle Teppiche ansehen"
     },
+    "centered_gallery": {
+      "lead_time_label": "Lieferzeit:",
+      "price_label": "Preis:"
+    },
     "pdp": {
       "sample_cta": "Muster anfordern",
       "consultation_cta": "Beratung buchen",

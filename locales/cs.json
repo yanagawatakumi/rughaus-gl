@@ -360,6 +360,10 @@
       "unavailable_body": "Please change your country or continue to browse available rugs.",
       "browse_all_rugs": "Browse all rugs"
     },
+    "centered_gallery": {
+      "lead_time_label": "Lead time:",
+      "price_label": "Price:"
+    },
     "pdp": {
       "sample_cta": "Request a sample",
       "consultation_cta": "Book a consultation",

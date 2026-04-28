@@ -41,7 +41,8 @@
               assign product_link = block.settings.link
               assign card_title = block.settings.title
               assign card_image = block.settings.image
-              assign price_text = 25000 | money
+              assign lead_time_text = blank
+              assign price_per_m2_text = blank
 
               if product != blank
                 if product_link == blank
@@ -56,7 +57,12 @@
                   assign card_image = product.featured_media
                 endif
 
-                assign price_text = product.price | money
+                assign lead_time_text = product.metafields.custom.pdp_delivery_shipping.value | strip
+
+                capture card_price_per_area
+                  render 'rug-price-per-area', product: product, metaobject_type: section.settings.fx_metaobject_type
+                endcapture
+                assign price_per_m2_text = card_price_per_area | strip
               endif
             %}
             <div class="nk-centered-gallery__slide" {{ block.shopify_attributes }}>
@@ -87,7 +93,16 @@
                   <div class="nk-centered-gallery__meta">
                     <p class="nk-centered-gallery__product-title">{{ card_title | default: 'Sample Rug' }}</p>
                     {% unless block.settings.hide_price %}
-                      <p class="nk-centered-gallery__product-price">{{ price_text }}</p>
+                      {% if lead_time_text != blank %}
+                        <p class="nk-centered-gallery__product-info">
+                          {{ 'rughaus.centered_gallery.lead_time_label' | t }} {{ lead_time_text }}
+                        </p>
+                      {% endif %}
+                      {% if price_per_m2_text != blank %}
+                        <p class="nk-centered-gallery__product-info">
+                          {{ 'rughaus.centered_gallery.price_label' | t }} {{ price_per_m2_text }}
+                        </p>
+                      {% endif %}
                     {% endunless %}
                   </div>
                 </a>
@@ -97,6 +112,13 @@
         {% endif %}
       {% elsif featured_collection != blank and featured_collection.products_count > 0 %}
         {% for product in featured_collection.products limit: section.settings.featured_limit %}
+          {% liquid
+            assign lead_time_text = product.metafields.custom.pdp_delivery_shipping.value | strip
+            capture card_price_per_area
+              render 'rug-price-per-area', product: product, metaobject_type: section.settings.fx_metaobject_type
+            endcapture
+            assign price_per_m2_text = card_price_per_area | strip
+          %}
           <div class="nk-centered-gallery__slide">
             <article class="nk-centered-gallery__card">
               <a class="nk-centered-gallery__product-link" href="{{ product.url }}">
@@ -124,7 +146,16 @@
                 </div>
                 <div class="nk-centered-gallery__meta">
                   <p class="nk-centered-gallery__product-title">{{ product.title }}</p>
-                  <p class="nk-centered-gallery__product-price">{{ product.price | money }}</p>
+                  {% if lead_time_text != blank %}
+                    <p class="nk-centered-gallery__product-info">
+                      {{ 'rughaus.centered_gallery.lead_time_label' | t }} {{ lead_time_text }}
+                    </p>
+                  {% endif %}
+                  {% if price_per_m2_text != blank %}
+                    <p class="nk-centered-gallery__product-info">
+                      {{ 'rughaus.centered_gallery.price_label' | t }} {{ price_per_m2_text }}
+                    </p>
+                  {% endif %}
                 </div>
               </a>
             </article>
@@ -288,14 +319,14 @@
   }
 
   .nk-centered-gallery__product-title,
-  .nk-centered-gallery__product-price {
+  .nk-centered-gallery__product-info {
     margin: 0;
     font-size: 0.92rem;
     line-height: 1.25;
     overflow-wrap: anywhere;
   }
 
-  .nk-centered-gallery__product-price {
+  .nk-centered-gallery__product-info {
     opacity: 0.82;
   }
 
@@ -353,7 +384,7 @@
         {
           "type": "checkbox",
           "id": "hide_price",
-          "label": "Hide price",
+          "label": "Hide product info",
           "default": false
         }
       ]
@@ -456,6 +487,12 @@
       "max": 20,
       "step": 1,
       "default": 20
+    },
+    {
+      "type": "text",
+      "id": "fx_metaobject_type",
+      "label": "FX metaobject type",
+      "default": "app--341303132161--rughaus_fx_rate"
     },
     {
       "type": "header",

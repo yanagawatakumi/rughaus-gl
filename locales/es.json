@@ -353,6 +353,10 @@
       "unavailable_body": "Cambia de país o sigue explorando alfombras disponibles.",
       "browse_all_rugs": "Ver todas las alfombras"
     },
+    "centered_gallery": {
+      "lead_time_label": "Plazo de entrega:",
+      "price_label": "Precio:"
+    },
     "pdp": {
       "sample_cta": "Solicitar una muestra",
       "consultation_cta": "Reservar una consulta",

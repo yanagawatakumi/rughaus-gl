@@ -1,0 +1,97 @@
+{%- doc -%}
+  Formats custom rug area price by market for display cards.
+
+  @param {product} product - Product resource containing `custom.price_per_m2` (USD per m2)
+  @param {string} [metaobject_type] - Optional metaobject type key for FX fallback entries
+
+  @example
+  {% render 'rug-price-per-area', product: product %}
+{%- enddoc -%}
+
+{%- liquid
+  assign product_resource = product
+  assign usd_per_m2 = blank
+  if product_resource != blank
+    assign usd_per_m2 = product_resource.metafields.custom.price_per_m2.value
+  endif
+
+  assign display_text = blank
+
+  if usd_per_m2 != blank
+    assign country_iso = localization.country.iso_code | upcase
+    assign currency_iso = localization.country.currency.iso_code | upcase
+    assign fx_metaobject_type = metaobject_type | default: 'app--341303132161--rughaus_fx_rate'
+
+    assign display_unit = 'm²'
+    assign converted_per_unit = usd_per_m2 | plus: 0
+    assign conversion_available = true
+
+    if country_iso == 'US'
+      assign display_unit = 'ft²'
+      assign converted_per_unit = converted_per_unit | divided_by: 10.7639
+      assign currency_iso = 'USD'
+    else
+      assign fx_rate = blank
+
+      assign auto_fx_rate = localization.country.currency.rate
+      if auto_fx_rate != blank
+        assign auto_fx_rate_number = auto_fx_rate | plus: 0
+        if auto_fx_rate_number > 0
+          assign fx_rate = auto_fx_rate_number
+        endif
+      endif
+
+      if fx_rate == blank and currency_iso != 'USD'
+        assign fx_definition = metaobjects.market_fx_rate
+        if fx_definition == blank and fx_metaobject_type != blank
+          assign fx_definition = metaobjects[fx_metaobject_type]
+        endif
+        if fx_definition != blank
+          for fx_entry in fx_definition.values
+            assign code = fx_entry.currency_code.value | upcase | strip
+            if code == currency_iso
+              assign enabled = fx_entry.enabled.value
+              if enabled == blank or enabled
+                assign configured_rate = fx_entry.usd_rate.value
+                if configured_rate != blank
+                  assign configured_rate_number = configured_rate | plus: 0
+                  if configured_rate_number > 0
+                    assign fx_rate = configured_rate_number
+                  endif
+                endif
+              endif
+              break
+            endif
+          endfor
+        endif
+      endif
+
+      if currency_iso == 'USD'
+        assign fx_rate = 1
+      endif
+
+      if fx_rate != blank
+        assign converted_per_unit = converted_per_unit | times: fx_rate
+      else
+        assign conversion_available = false
+      endif
+    endif
+
+    if conversion_available
+      assign converted_per_unit = converted_per_unit | round: 1
+      assign converted_minor_units = converted_per_unit | times: 100 | round
+
+      capture formatted_money
+        if settings.currency_code_enabled_product_cards
+          echo converted_minor_units | money_with_currency
+        else
+          echo converted_minor_units | money
+        endif
+      endcapture
+
+      assign display_text = formatted_money | strip | append: ' / ' | append: display_unit
+    endif
+  endif
+-%}
+
+{{- display_text -}}

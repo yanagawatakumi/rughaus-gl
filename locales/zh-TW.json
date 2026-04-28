@@ -346,6 +346,10 @@
       "unavailable_body": "請切換國家/地區，或繼續瀏覽可購買的地毯。",
       "browse_all_rugs": "瀏覽所有地毯"
     },
+    "centered_gallery": {
+      "lead_time_label": "交期：",
+      "price_label": "價格："
+    },
     "pdp": {
       "sample_cta": "索取樣品",
       "consultation_cta": "預約諮詢",
