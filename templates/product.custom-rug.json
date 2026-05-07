@@ -205,36 +205,6 @@
               },
               "block_order": []
             },
-            "cta_sample_rughaus": {
-              "type": "button",
-              "name": "Sample CTA",
-              "settings": {
-                "label": "t:rughaus.pdp.sample_cta",
-                "link": "/pages/support-faq",
-                "open_in_new_tab": false,
-                "style_class": "button-secondary",
-                "width": "custom",
-                "custom_width": 100,
-                "width_mobile": "custom",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            },
-            "cta_consultation_rughaus": {
-              "type": "button",
-              "name": "Consultation CTA",
-              "settings": {
-                "label": "t:rughaus.pdp.consultation_cta",
-                "link": "/pages/trade",
-                "open_in_new_tab": false,
-                "style_class": "button-secondary",
-                "width": "custom",
-                "custom_width": 100,
-                "width_mobile": "custom",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            },
             "product_description_rughaus": {
               "type": "product-description",
               "name": "Product description",
@@ -280,46 +250,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "accordion_row_description": {
-                  "type": "_accordion-row",
-                  "name": "t:names.accordion_row",
-                  "settings": {
-                    "heading": "t:rughaus.pdp.accordion.description",
-                    "open_by_default": false,
-                    "icon": "none",
-                    "width": 16
-                  },
-                  "blocks": {
-                    "text_description": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p></p>",
-                        "width": "100%",
-                        "max_width": "none",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-primary--family)",
-                        "font_size": "",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "text_description"
-                  ]
-                },
                 "accordion_row_product_details": {
                   "type": "_accordion-row",
                   "name": "t:names.accordion_row",
@@ -522,7 +452,6 @@
                 }
               },
               "block_order": [
-                "accordion_row_description",
                 "accordion_row_product_details",
                 "accordion_row_delivery_shipping",
                 "accordion_row_returns",
@@ -535,8 +464,6 @@
             "group_icgrde",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "cta_sample_rughaus",
-            "cta_consultation_rughaus",
             "product_description_rughaus",
             "accordion_pdp_details"
           ]
