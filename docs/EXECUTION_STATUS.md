@@ -14,7 +14,7 @@
 - 別Shopifyストアへの接続・再セットアップフェーズに移行
 - Codex 開発環境へ Shopify AI Toolkit（MCP + skills + CLI更新）を反映済み
 - NK Centered Gallery の単価表示を `custom.price_per_m2` 正本 + スニペット責務分離へ更新済み
-- 国別表示ロジック（US=ft²、非US=m²、小数1桁、FXフォールバック）をPhase 1で実装済み
+- 国別表示ロジック（USD固定 + US=ft² / 非US=m²、小数1桁）をPhase 1で実装済み
 
 ## 2. ステータス凡例
 - `DONE`: 完了
@@ -36,6 +36,7 @@
   - `DONE` `snippets/rug-price-per-area.liquid` を追加し、価格変換ロジックをセクションから分離
   - `DONE` `sections/home-nk-centered-gallery.liquid` に国別単位・金額表示を適用（Phase 1対象）
   - `DONE` `rughaus_fx_rate`（app-owned metaobject）定義と初期レート投入
+  - `DONE` テーマ表示ロジックはUSD固定へ変更（為替換算は不使用）
 - `IN_PROGRESS` Markets/Catalog公開設定の再構成
 - `BLOCKED` Shopify Payments有効化待ち（多通貨最終検証）
 - `NOTE` 2026-04-13 ユーザー完了報告ベース。最終スモークテストは未完了。
@@ -136,8 +137,7 @@
 - `DONE` NK Centered Gallery の単価表示を `custom.price_per_m2` 参照に統一
 - `DONE` 単価表示ロジックを `snippets/rug-price-per-area.liquid` へ分離
 - `DONE` 単位ロジック（US=ft² / 非US=m²）と小数1桁丸めを実装
-- `DONE` 為替ロジックにフォールバック（`metaobjects.market_fx_rate` / `metaobjects['app--341303132161--rughaus_fx_rate']`）を実装
-- `DONE` `NK Centered Gallery` に `FX metaobject type` 設定を追加（別ストア移行時のapp ID差分に対応）
+- `DONE` 単価表示をUSD固定へ変更（為替換算ロジックを削除）
 
 ## 5. 依存タスク（ユーザー側）
 - `TODO` Productメタフィールド定義（必須）

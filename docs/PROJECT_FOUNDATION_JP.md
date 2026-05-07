@@ -212,13 +212,13 @@
   - A（Phase 1）:
     - 商品メタフィールド `custom.price_per_m2`（`number_decimal`）を正本として利用する
     - 納期は既存の `custom.pdp_delivery_shipping` を正本として継続利用する
-    - 表示はテーマ側で市場に応じて通貨/単位をローカライズする（段階導入は `NK Centered Gallery` から開始）
+    - 表示はテーマ側で市場に応じて単位のみローカライズする（段階導入は `NK Centered Gallery` から開始）
       - 内部基準単位は m2
+      - 価格表記は全市場で USD 固定とする
       - US表示時は `ft2` のみ表示し、`USD/m2` から換算（`1 m2 = 10.7639 ft2`）
-      - 非US表示時は `通貨/m2` 表示とする
+      - 非US表示時は `USD/m2` 表示とする
     - 丸めは小数1桁（四捨五入）とする
-    - 為替は「Shopify自動FX経路を優先し、取得不能時は `rughaus_fx_rate`（app-owned metaobject）へフォールバック」する
-    - app-owned typeはストア/アプリ環境ごとに変化しうるため、Theme Editor設定（`FX metaobject type`）で差し替え可能にする
+    - 為替換算は行わない（USD固定）
   - B（将来移行）:
     - 商品はティア選択（例: A/B/C）のみを保持し、価格表は metaobject へ分離する
     - 商品メタフィールド `custom.price_tier` と価格表metaobject参照へ置換する

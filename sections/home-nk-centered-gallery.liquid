@@ -60,7 +60,7 @@
                 assign lead_time_text = product.metafields.custom.pdp_delivery_shipping.value | strip
 
                 capture card_price_per_area
-                  render 'rug-price-per-area', product: product, metaobject_type: section.settings.fx_metaobject_type
+                  render 'rug-price-per-area', product: product
                 endcapture
                 assign price_per_m2_text = card_price_per_area | strip
               endif
@@ -115,7 +115,7 @@
           {% liquid
             assign lead_time_text = product.metafields.custom.pdp_delivery_shipping.value | strip
             capture card_price_per_area
-              render 'rug-price-per-area', product: product, metaobject_type: section.settings.fx_metaobject_type
+              render 'rug-price-per-area', product: product
             endcapture
             assign price_per_m2_text = card_price_per_area | strip
           %}
@@ -487,12 +487,6 @@
       "max": 20,
       "step": 1,
       "default": 20
-    },
-    {
-      "type": "text",
-      "id": "fx_metaobject_type",
-      "label": "FX metaobject type",
-      "default": "app--341303132161--rughaus_fx_rate"
     },
     {
       "type": "header",
