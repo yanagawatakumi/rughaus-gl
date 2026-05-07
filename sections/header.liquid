@@ -1043,6 +1043,25 @@
     background-color: transparent;
   }
 
+  dropdown-localization-component[data-localization-loading='true'] .dropdown-localization__button {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+  }
+
+  dropdown-localization-component[data-localization-loading='true'] .dropdown-localization__button::after {
+    content: '';
+    inline-size: 14px;
+    block-size: 14px;
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 999px;
+    display: inline-block;
+    margin-inline-start: 8px;
+    vertical-align: -2px;
+    animation: localization-spinner 0.8s linear infinite;
+  }
+
   dropdown-localization-component .country-filter {
     position: relative;
     padding: 8px;
@@ -1112,6 +1131,12 @@
   .dropdown-localization:not(dropdown-localization-component) .language-selector {
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
+  }
+
+  @keyframes localization-spinner {
+    to {
+      transform: rotate(360deg);
+    }
   }
 {% endstylesheet %}
 

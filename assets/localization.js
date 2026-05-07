@@ -19,6 +19,8 @@ import { isClickedOutside, normalizeString, onAnimationEnd } from '@theme/utilit
  * @extends {Component<FormRefs>}
  */
 class LocalizationFormComponent extends Component {
+  #submitResetTimeoutId = null;
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -36,6 +38,11 @@ class LocalizationFormComponent extends Component {
     this.refs.search && this.refs.search.removeEventListener('keydown', this.#onSearchKeyDown);
     this.refs.countryList && this.refs.countryList.removeEventListener('keydown', this.#onContainerKeyDown);
     this.refs.countryList && this.refs.countryList.removeEventListener('scroll', this.#onCountryListScroll);
+
+    if (this.#submitResetTimeoutId) {
+      clearTimeout(this.#submitResetTimeoutId);
+      this.#submitResetTimeoutId = null;
+    }
   }
 
   /**
@@ -64,7 +71,8 @@ class LocalizationFormComponent extends Component {
 
         if (focusedItem) {
           countryInput.value = focusedItem.dataset.value ?? '';
-          form.submit();
+          this.#syncLanguageWithCountry(countryInput.value);
+          this.#submitLocalization(form, { closeSelector: true });
         }
         break;
       }
@@ -96,8 +104,136 @@ class LocalizationFormComponent extends Component {
     const { countryInput, form } = this.refs;
 
     countryInput.value = countryName;
-    form?.submit();
+    this.#syncLanguageWithCountry(countryName);
+    this.#submitLocalization(form, { closeSelector: true });
   };
+
+  /**
+   * Submits localization form with immediate visual feedback.
+   *
+   * @param {HTMLFormElement | undefined} form - The form element.
+   * @param {{ closeSelector?: boolean }} options - Submit options.
+   */
+  #submitLocalization(form, { closeSelector = false } = {}) {
+    if (!form || this.dataset.localizationLoading === 'true') return;
+
+    this.#setLoadingState(true);
+
+    if (closeSelector) {
+      this.#closeSelectorUI();
+    }
+
+    requestAnimationFrame(() => {
+      form.submit();
+    });
+
+    // Fallback: if navigation is blocked for any reason, recover interaction.
+    this.#submitResetTimeoutId = window.setTimeout(() => {
+      this.#setLoadingState(false);
+      this.#submitResetTimeoutId = null;
+    }, 7000);
+  }
+
+  /**
+   * Shows or hides loading state for localization controls.
+   *
+   * @param {boolean} isLoading - Whether loading state should be enabled.
+   */
+  #setLoadingState(isLoading) {
+    const { form } = this.refs;
+    const state = String(isLoading);
+    const dropdownRoot = this.closest('dropdown-localization-component');
+    const drawerRoot = this.closest('drawer-localization-component');
+
+    this.dataset.localizationLoading = state;
+
+    if (dropdownRoot) {
+      dropdownRoot.dataset.localizationLoading = state;
+    }
+
+    if (drawerRoot) {
+      drawerRoot.dataset.localizationLoading = state;
+    }
+
+    if (form) {
+      form.toggleAttribute('aria-busy', isLoading);
+    }
+  }
+
+  /**
+   * Closes dropdown/drawer UI immediately.
+   */
+  #closeSelectorUI() {
+    const dropdownRoot = this.closest('dropdown-localization-component');
+    const drawerRoot = this.closest('drawer-localization-component');
+
+    dropdownRoot?.hidePanel?.();
+
+    if (drawerRoot) {
+      const details = drawerRoot.querySelector('details[open]');
+      if (details instanceof HTMLDetailsElement) {
+        details.open = false;
+      }
+    }
+  }
+
+  /**
+   * Syncs language selection with selected country.
+   *
+   * @param {string} countryCode - The selected country ISO code.
+   */
+  #syncLanguageWithCountry(countryCode) {
+    const { languageInput } = this.refs;
+
+    if (!languageInput || !countryCode) return;
+
+    const options = Array.from(languageInput.options).map((option) => option.value);
+    if (options.length === 0) return;
+
+    const upperCountryCode = countryCode.toUpperCase();
+    const lowerCountryCode = countryCode.toLowerCase();
+
+    const preferredLanguageMap = {
+      US: ['en'],
+      GB: ['en'],
+      AU: ['en'],
+      CA: ['en', 'fr'],
+      IT: ['it'],
+      DE: ['de'],
+      FR: ['fr'],
+      ES: ['es'],
+      KR: ['ko'],
+      TW: ['zh-TW', 'zh-Hant', 'zh'],
+      HK: ['zh-TW', 'zh-HK', 'zh-Hant', 'en'],
+      JP: ['ja'],
+    };
+
+    const normalize = (value) => value.toLowerCase();
+    const hasLanguage = (candidate) => options.some((option) => normalize(option) === normalize(candidate));
+    const findLanguage = (candidate) => options.find((option) => normalize(option) === normalize(candidate));
+
+    let nextLanguage = null;
+    const preferredLanguages = preferredLanguageMap[upperCountryCode] ?? [];
+
+    for (const candidate of preferredLanguages) {
+      if (hasLanguage(candidate)) {
+        nextLanguage = findLanguage(candidate) ?? null;
+        break;
+      }
+    }
+
+    if (!nextLanguage) {
+      const matchedByPrefix = options.find((option) => normalize(option).startsWith(lowerCountryCode));
+      if (matchedByPrefix) {
+        nextLanguage = matchedByPrefix;
+      }
+    }
+
+    if (!nextLanguage) return;
+
+    languageInput.value = nextLanguage;
+    this.resizeLanguageInput();
+  }
 
   /**
    * Changes the language of the localization form.
@@ -111,7 +247,7 @@ class LocalizationFormComponent extends Component {
     if (value) {
       languageInput.value = value;
       this.resizeLanguageInput();
-      form.submit();
+      this.#submitLocalization(form);
     }
   }
 
