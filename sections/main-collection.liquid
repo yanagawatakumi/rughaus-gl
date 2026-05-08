@@ -75,6 +75,16 @@
   </div>
 </results-list>
 
+{% stylesheet %}
+  .product-grid-container .quick-add,
+  .product-grid-container .quick-add__button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:names.collection_container",
