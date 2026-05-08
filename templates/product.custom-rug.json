@@ -205,6 +205,18 @@
               },
               "block_order": []
             },
+            "custom_liquid_pdp_benefits": {
+              "type": "custom-liquid",
+              "name": "Rughaus PDP benefits",
+              "settings": {
+                "custom_liquid": "{% render 'rughaus-pdp-benefits' %}",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "product_description_rughaus": {
               "type": "product-description",
               "name": "Product description",
@@ -464,6 +476,7 @@
             "group_icgrde",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "custom_liquid_pdp_benefits",
             "product_description_rughaus",
             "accordion_pdp_details"
           ]
