@@ -133,11 +133,37 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "text_uDm8fG": {
+          "type": "text",
+          "settings": {
+            "text": "<p><a href=\"/pages/support-faq\">Support / FAQ</a></p><p><a href=\"/policies/privacy-policy\">Privacy Policy</a></p><p><a href=\"/policies/privacy-policy#cookies\">Cookie Policy</a></p><p><a href=\"#cookie-settings\">Cookie Settings</a></p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "paragraph",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "group_H6VpwJ",
-        "email_signup_crihX7"
+        "email_signup_crihX7",
+        "text_uDm8fG"
       ],
       "name": "t:names.footer",
       "settings": {

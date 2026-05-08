@@ -106,6 +106,12 @@
             </div>
           {%- endif -%}
 
+          {% comment %}
+            Live Product Options insertion point.
+            See app docs: product options render into the first matching `data-live-options` marker.
+          {% endcomment %}
+          <div data-live-options="{{ product.id }}"></div>
+
           {% content_for 'block', type: 'quantity', id: 'quantity' %}
 
           {%- if has_quantity_rules -%}
