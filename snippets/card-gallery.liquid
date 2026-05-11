@@ -9,7 +9,8 @@
 {%- enddoc -%}
 
 {% liquid
-  assign product = closest.product
+  assign product = closest.product | default: closest.variant.product
+  assign resolved_card_variant = rughaus_card_variant | default: card_variant | default: closest.variant | default: product.selected_or_first_available_variant
   assign block_settings = block.settings
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
 
@@ -91,8 +92,13 @@
       # Sort media so product.featured_media.preview_image comes first as that is the most relevant image to display
       # product.featured_media updates based on search context and filters applied
 
-      assign other_media = product.media | reject: 'src', product.featured_media
-      assign media_list_to_show = product.featured_media | concat: other_media
+      assign card_featured_media = resolved_card_variant.featured_media | default: product.featured_media
+      if card_featured_media != blank
+        assign other_media = product.media | reject: 'src', card_featured_media
+        assign media_list_to_show = card_featured_media | concat: other_media
+      else
+        assign media_list_to_show = product.media
+      endif
 
       if product.media.size > 2 and generic_media_size > 0
         assign show_arrows = true
@@ -160,7 +166,7 @@
     <a
       class="contents"
       ref="cardGalleryLink"
-      href="{{ product.selected_or_first_available_variant.url }}"
+      href="{{ resolved_card_variant.url }}"
       aria-label="{{- product.title -}}"
     >
       {% render 'slideshow',
@@ -177,7 +183,7 @@
       <a
         class="contents"
         ref="productTitleLink"
-        href="{{ product.selected_or_first_available_variant.url }}"
+        href="{{ resolved_card_variant.url }}"
         aria-hidden="true"
       >
         <span class="title-text">{{- product.title -}}</span>

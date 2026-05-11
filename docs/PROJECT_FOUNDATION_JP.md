@@ -225,6 +225,12 @@
   - 実装制約:
     - 画面側は価格取得をスニペット経由に統一し、A→Bの切替をデータ源差し替えのみで完了できる構造にする
     - 表示価格ロジックと、LPO/B2Bによる実課金ロジックの整合確認をリリースゲートに含める
+- D-25: コレクションのカラー展開表示（Phase 1.5）
+  - コレクション一覧ではカラースウォッチを表示しない
+  - `custom.collection_featured_variants`（product metafield / variant reference list）で指定した順に、同一商品の色違いを別カードとして連続表示する
+  - テンプレートごとに `enable_variant_expansion` をON/OFFできる
+  - `custom-rugs` は先行導入、`all-rugs` / `stock-rugs` はOFF初期値で運用開始する
+  - 展開カードのリンク先は対象variant URLとし、カード文言は商品名のみとする
 
 ## 10. 実装前の残確認（最小）
 - なし（2026-04-13時点で確定済み）
