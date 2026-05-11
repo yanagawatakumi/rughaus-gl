@@ -16,6 +16,7 @@
 - `GITHUB_SHOPIFY_WORKFLOW.md`: GitHub連携と日次運用の手順
 - `EXECUTION_STATUS.md`: 実装進捗、残タスク、依存関係の最新状態
 - `CODEX_SHOPIFY_AI_TOOLKIT_RUNBOOK.md`: Codex + Shopify AI Toolkit の導入状態と運用手順
+- `PARALLEL_DEVELOPMENT_BASELINE.md`: 並行開発（multi-agent）向けのブランチ/Worktree/PR運用基準
 
 ## 更新ルール（推奨）
 - 要件が変わったら、まず `PROJECT_FOUNDATION_JP.md` を更新する
