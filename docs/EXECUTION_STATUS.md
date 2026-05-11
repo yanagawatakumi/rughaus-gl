@@ -1,6 +1,6 @@
 # 実行ステータス（常時更新）
 
-最終更新日: 2026-04-28  
+最終更新日: 2026-05-11  
 対象ブランチ: `develop`  
 運用ルール: 進捗に変化があったら本ファイルを更新する
 
@@ -15,6 +15,8 @@
 - Codex 開発環境へ Shopify AI Toolkit（MCP + skills + CLI更新）を反映済み
 - NK Centered Gallery の単価表示を `custom.price_per_m2` 正本 + スニペット責務分離へ更新済み
 - 国別表示ロジック（USD固定 + US=ft² / 非US=m²、小数1桁）をPhase 1で実装済み
+- コレクションのカラー展開表示（variant expansion）を実装中（custom-rugs先行）
+- 並行開発ベースライン（worktree分離 + PR必須 + Theme Check）をリポジトリへ実装済み
 
 ## 2. ステータス凡例
 - `DONE`: 完了
@@ -75,6 +77,16 @@
   - `DONE` TRENDING RUGS をTheme Editor運用可能に改修（Collection自動 / Manual blocks 切替）
   - `TODO` 管理画面で最終画像差し替えとトーン調整
 
+### Collection: カラー展開表示（Phase 1.5）
+- `IN_PROGRESS` `main-collection` に variant expansion モードを追加
+  - `DONE` セクション設定追加（`enable_variant_expansion`, `hide_color_swatches`）
+  - `DONE` コレクションページでスウォッチ常時非表示化
+  - `DONE` `custom.collection_featured_variants` 指定順でカード展開するループを追加
+  - `DONE` カード描画で `closest.variant` を受け取る経路を追加（リンク/画像/価格）
+  - `DONE` テンプレート初期設定（custom-rugs=ON, all-rugs/stock-rugs=OFF）
+  - `TODO` 管理画面で `custom.collection_featured_variants` 定義と実データ投入
+  - `TODO` ストア上で表示・遷移の最終スモークテスト
+
 ### FR-01 / FR-02 多言語・多通貨
 - `IN_PROGRESS` Markets / 言語設定
   - US/HK/IT + 言語有効化は着手済み
@@ -111,6 +123,8 @@
   - `store` 系は `xfxfwd-8p.myshopify.com` を使用
   - 表示/テーマ側は `rughaus-gl.myshopify.com` を使用
 - `DONE` GitHub + Shopify連携運用を確立
+- `DONE` 並行開発向けのPRテンプレート / CODEOWNERS / Theme Check workflow を追加
+- `DONE` 並行開発運用手順 `PARALLEL_DEVELOPMENT_BASELINE.md` を追加
 - `DONE` GitHub統合テーマ同期エラーを解消
   - JSON内の動的ソース制約へ対応
 - `DONE` PDP画像をPCで縦1列表示に変更

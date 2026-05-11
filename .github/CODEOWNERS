@@ -1,0 +1,4 @@
+# Integrator-owned high-conflict files
+/templates/index.json @yanagawatakumi
+/config/settings_data.json @yanagawatakumi
+/locales/* @yanagawatakumi

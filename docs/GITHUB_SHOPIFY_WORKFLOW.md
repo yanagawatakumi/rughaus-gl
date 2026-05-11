@@ -1,6 +1,6 @@
 # GitHub + Shopify 連携ワークフロー
 
-最終更新日: 2026-04-13
+最終更新日: 2026-05-11
 対象: `rughaus-jp-horizon` テーマ
 
 ## 0. 事前前提（Codex + Shopify CLI）
@@ -11,7 +11,8 @@
 ## 1. ブランチ運用
 - `main`: 本番テーマ用
 - `develop`: 検証テーマ用
-- `feature/*`: 開発作業用
+- `codex/*`: エージェント開発作業用（PR前提）
+- `sync/*`: Shopify同期コミット取り込み用
 
 ## 2. 初回セットアップ（ローカル）
 ```bash
@@ -33,18 +34,20 @@ git remote set-url origin <GITHUB_REPO_URL>
 3. `develop` を接続して検証テーマを作成
 4. （必要になったら）`main` を本番テーマへ接続
 
-## 4. 日々の開発フロー
+## 4. 日々の開発フロー（並行開発）
 ```bash
-git checkout develop
-git checkout -b feature/<task-name>
+git fetch origin
+git worktree add ../rughaus-jp-horizon-<agent> -b codex/<task>-<agent> origin/develop
+cd ../rughaus-jp-horizon-<agent>
 # 変更
 git add .
 git commit -m "feat: <summary>"
-git push -u origin feature/<task-name>
+git push -u origin codex/<task>-<agent>
 ```
 
-- PR: `feature/* -> develop`
+- PR: `codex/* -> develop`
 - 検証OK後: `develop -> main` をPR
+- `develop` への直接pushは禁止（PR必須）
 
 ## 5. ローカルプレビュー（任意）
 ```bash
@@ -66,3 +69,13 @@ shopify store execute --store xfxfwd-8p.myshopify.com --query "query { shop { na
 
 ## 8. 同期ズレ時
 - Shopifyテーマカードの `Actions > Reset to last commit` を実行
+
+## 9. Shopify同期コミットの取り込み
+- Shopify起因更新は `sync/shopify-YYYYMMDD` ブランチで受ける
+- `sync/* -> develop` をPRで取り込む（通常PRと同列レビュー）
+- `sync/*` 取り込み中は Integrator が `develop` のマージ順を一元管理する
+
+## 10. マージ前ゲート（最小）
+- 必須: `shopify theme check --path . --fail-level error --output json`
+- PRテンプレートに結果貼付
+- GitHub Actions の `Theme Check` を Required check に設定
