@@ -1,0 +1,380 @@
+{% liquid
+  assign featured_product = section.settings.featured_product
+  assign featured_product_url = section.settings.fallback_link
+
+  if featured_product != blank
+    assign featured_product_url = featured_product.url
+  endif
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--page-width color-{{ section.settings.color_scheme }} home-nk-featured-product-section spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div
+    class="home-nk-featured-product home-nk-featured-product--{{ section.settings.desktop_layout }}"
+    aria-label="Featured rug"
+  >
+    {% if section.settings.heading != blank %}
+      <div class="home-nk-featured-product__heading-mobile-wrap">
+        <div class="home-nk-featured-product__heading rte">{{ section.settings.heading }}</div>
+      </div>
+    {% endif %}
+
+    <div class="home-nk-featured-product__content">
+      {% if section.settings.heading != blank %}
+        <div class="home-nk-featured-product__heading home-nk-featured-product__heading--desktop rte">
+          {{ section.settings.heading }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="home-nk-featured-product__description rte">{{ section.settings.description }}</div>
+      {% endif %}
+
+      {% if section.settings.link_label != blank and featured_product_url != blank %}
+        <a class="home-nk-featured-product__link text-link" href="{{ featured_product_url }}">
+          {{ section.settings.link_label }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="home-nk-featured-product__primary-media">
+      {% if section.settings.primary_image != blank %}
+        {{
+          section.settings.primary_image
+          | image_url: width: 2200
+          | image_tag:
+            loading: 'lazy',
+            widths: '700, 1000, 1300, 1600, 1900, 2200',
+            sizes: '(min-width: 1200px) 40vw, (min-width: 990px) 45vw, 100vw',
+            class: 'home-nk-featured-product__primary-image'
+        }}
+      {% else %}
+        <img
+          src="{{ 'home-nk-story.jpg' | asset_url }}"
+          alt="Featured rug lifestyle image"
+          class="home-nk-featured-product__primary-image"
+          loading="lazy"
+          width="1200"
+          height="900"
+        >
+      {% endif %}
+    </div>
+
+    <article class="home-nk-featured-product__card">
+      <a class="home-nk-featured-product__card-link" href="{{ featured_product_url | default: '#' }}">
+        <div class="home-nk-featured-product__secondary-media">
+          {% if section.settings.secondary_image != blank %}
+            {{
+              section.settings.secondary_image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400, 1600',
+                sizes: '(min-width: 1200px) 24vw, (min-width: 990px) 28vw, 100vw',
+                class: 'home-nk-featured-product__secondary-image'
+            }}
+          {% elsif featured_product != blank and featured_product.featured_media != blank %}
+            {{
+              featured_product.featured_media
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400, 1600',
+                sizes: '(min-width: 1200px) 24vw, (min-width: 990px) 28vw, 100vw',
+                class: 'home-nk-featured-product__secondary-image'
+            }}
+          {% else %}
+            <img
+              src="{{ 'home-nk-category-all.jpg' | asset_url }}"
+              alt="Featured rug image"
+              class="home-nk-featured-product__secondary-image"
+              loading="lazy"
+              width="900"
+              height="1125"
+            >
+          {% endif %}
+        </div>
+
+        <div class="home-nk-featured-product__card-body">
+          {% if featured_product != blank %}
+            <h3 class="home-nk-featured-product__product-title">{{ featured_product.title }}</h3>
+            <p class="home-nk-featured-product__price">{{ section.settings.price_prefix }} {{ featured_product.price_min | money }}</p>
+          {% else %}
+            <h3 class="home-nk-featured-product__product-title">{{ section.settings.placeholder_product_title }}</h3>
+            <p class="home-nk-featured-product__price">{{ section.settings.price_prefix }} {{ 99500 | money }}</p>
+          {% endif %}
+        </div>
+      </a>
+    </article>
+  </div>
+</section>
+
+{% stylesheet %}
+  .home-nk-featured-product-section {
+    display: grid;
+  }
+
+  .home-nk-featured-product {
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    align-items: start;
+  }
+
+  .home-nk-featured-product__content {
+    order: 4;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .home-nk-featured-product__heading-mobile-wrap {
+    order: 1;
+    min-width: 0;
+  }
+
+  .home-nk-featured-product__heading {
+    margin: 0;
+    max-width: 12ch;
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+    font-size: clamp(1.9rem, 4vw, 3.45rem);
+    line-height: 0.93;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .home-nk-featured-product__heading p {
+    margin: 0;
+    font: inherit;
+  }
+
+  .home-nk-featured-product__heading--desktop {
+    display: none;
+  }
+
+  .home-nk-featured-product__description {
+    max-width: 28ch;
+    font-size: clamp(1rem, 1.5vw, 1.35rem);
+    line-height: 1.45;
+  }
+
+  .home-nk-featured-product__link {
+    width: fit-content;
+    color: inherit;
+    text-decoration-thickness: 0.05em;
+    text-underline-offset: 0.15em;
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .home-nk-featured-product__primary-media,
+  .home-nk-featured-product__secondary-media {
+    background: rgb(var(--color-foreground-rgb) / 0.05);
+    overflow: hidden;
+  }
+
+  .home-nk-featured-product__primary-media {
+    order: 2;
+    aspect-ratio: 4 / 5;
+  }
+
+  .home-nk-featured-product__secondary-media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .home-nk-featured-product__primary-image,
+  .home-nk-featured-product__secondary-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .home-nk-featured-product__card-link {
+    display: grid;
+    gap: 0.7rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-nk-featured-product__card {
+    order: 3;
+  }
+
+  .home-nk-featured-product__card-body {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .home-nk-featured-product__product-title,
+  .home-nk-featured-product__price {
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .home-nk-featured-product__product-title {
+    font-size: 1.18rem;
+    letter-spacing: -0.01em;
+  }
+
+  .home-nk-featured-product__price {
+    font-size: 1.08rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .home-nk-featured-product {
+      grid-template-columns: minmax(0, 2.9fr) minmax(0, 4.5fr) minmax(0, 4.5fr);
+      gap: 0.8rem;
+    }
+
+    .home-nk-featured-product__heading-mobile-wrap {
+      display: none;
+    }
+
+    .home-nk-featured-product__heading--desktop {
+      display: block;
+    }
+
+    .home-nk-featured-product__content,
+    .home-nk-featured-product__card,
+    .home-nk-featured-product__primary-media {
+      order: initial;
+    }
+
+    .home-nk-featured-product--reversed {
+      grid-template-columns: minmax(0, 4.5fr) minmax(0, 4.5fr) minmax(0, 2.9fr);
+    }
+
+    .home-nk-featured-product--reversed .home-nk-featured-product__content {
+      order: 3;
+    }
+
+    .home-nk-featured-product--reversed .home-nk-featured-product__primary-media {
+      order: 2;
+    }
+
+    .home-nk-featured-product--reversed .home-nk-featured-product__card {
+      order: 1;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "NK Featured Product",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Text / Lifestyle image / Product image"
+        },
+        {
+          "value": "reversed",
+          "label": "Product image / Lifestyle image / Text"
+        }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>NOW, AND<br/>FOREVER<br/>A CLASSIC</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>The Grand collection embodies elevated minimalism, designed to bring a hotel-like feel to your home.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "SHOP NOW ->"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Featured product"
+    },
+    {
+      "type": "url",
+      "id": "fallback_link",
+      "label": "Fallback link",
+      "info": "Used when no featured product is selected."
+    },
+    {
+      "type": "text",
+      "id": "price_prefix",
+      "label": "Price prefix",
+      "default": "From"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_product_title",
+      "label": "Placeholder product title",
+      "default": "Featured rug"
+    },
+    {
+      "type": "image_picker",
+      "id": "primary_image",
+      "label": "Primary image"
+    },
+    {
+      "type": "image_picker",
+      "id": "secondary_image",
+      "label": "Secondary image"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "NK Featured Product"
+    }
+  ]
+}
+{% endschema %}

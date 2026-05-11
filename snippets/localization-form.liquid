@@ -132,11 +132,30 @@
               {%- for country in popular_countries -%}
                 {% liquid
                   assign aliases = ''
+                  assign country_display_name = country.name
                   case country.iso_code
                     when 'US'
                       assign aliases = aliases_us
+                      assign country_display_name = 'United States'
                     when 'GB'
                       assign aliases = aliases_uk
+                      assign country_display_name = 'United Kingdom'
+                    when 'HK'
+                      assign country_display_name = '香港'
+                    when 'IT'
+                      assign country_display_name = 'Italia'
+                    when 'JP'
+                      assign country_display_name = '日本'
+                    when 'KR'
+                      assign country_display_name = '대한민국'
+                    when 'TW'
+                      assign country_display_name = '台灣'
+                    when 'FR'
+                      assign country_display_name = 'France'
+                    when 'DE'
+                      assign country_display_name = 'Deutschland'
+                    when 'ES'
+                      assign country_display_name = 'España'
                   endcase
                 %}
                 <li
@@ -149,7 +168,7 @@
                     data-aliases="{{ aliases }}"
                   {% endif %}
                   id="{{ country.name }}"
-                  aria-label="{{ country.name }}"
+                  aria-label="{{ country_display_name }}"
                   role="option"
                   tabindex="-1"
                   ref="countryListItems[]"
@@ -158,7 +177,7 @@
                   <span class="svg-wrapper icon-checkmark">
                     {{- 'icon-checkmark.svg' | inline_asset_content -}}
                   </span>
-                  <span class="country">{{- country.name }}</span>
+                  <span class="country">{{- country_display_name }}</span>
                   <span
                     class="localization-form__currency"
                     {% unless show_currencies %}
@@ -187,11 +206,30 @@
             {%- for country in localization.available_countries -%}
               {% liquid
                 assign aliases = ''
+                assign country_display_name = country.name
                 case country.iso_code
                   when 'US'
                     assign aliases = aliases_us
+                    assign country_display_name = 'United States'
                   when 'GB'
                     assign aliases = aliases_uk
+                    assign country_display_name = 'United Kingdom'
+                  when 'HK'
+                    assign country_display_name = '香港'
+                  when 'IT'
+                    assign country_display_name = 'Italia'
+                  when 'JP'
+                    assign country_display_name = '日本'
+                  when 'KR'
+                    assign country_display_name = '대한민국'
+                  when 'TW'
+                    assign country_display_name = '台灣'
+                  when 'FR'
+                    assign country_display_name = 'France'
+                  when 'DE'
+                    assign country_display_name = 'Deutschland'
+                  when 'ES'
+                    assign country_display_name = 'España'
                 endcase
               %}
               <li
@@ -204,7 +242,7 @@
                   data-aliases="{{ aliases }}"
                 {% endif %}
                 id="{{ country.name }}"
-                aria-label="{{ country.name }}"
+                aria-label="{{ country_display_name }}"
                 role="option"
                 tabindex="-1"
                 ref="countryListItems[]"
@@ -213,7 +251,7 @@
                 <span class="svg-wrapper icon-checkmark">
                   {{- 'icon-checkmark.svg' | inline_asset_content -}}
                 </span>
-                <span class="country">{{- country.name }}</span>
+                <span class="country">{{- country_display_name }}</span>
                 <span
                   class="localization-form__currency"
                   {% unless show_currencies %}
@@ -264,7 +302,7 @@
                 selected
               {% endif %}
             >
-              {{ language.endonym_name | capitalize }}
+              {{ language.endonym_name }}
             </option>
           {%- endfor -%}
         </select>

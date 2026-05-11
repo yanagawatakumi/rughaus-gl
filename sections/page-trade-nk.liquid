@@ -1,0 +1,496 @@
+{% liquid
+  assign benefit_blocks = section.blocks | where: 'type', 'benefit'
+  assign project_blocks = section.blocks | where: 'type', 'project'
+  assign quote_blocks = section.blocks | where: 'type', 'quote'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--page-width color-{{ section.settings.color_scheme }} trade-nk spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <header class="trade-nk__hero">
+    {% if section.settings.eyebrow != blank %}
+      <p class="trade-nk__eyebrow">{{ section.settings.eyebrow }}</p>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h1 class="trade-nk__title">{{ section.settings.heading }}</h1>
+    {% endif %}
+
+    {% if section.settings.lead != blank %}
+      <div class="trade-nk__lead rte">{{ section.settings.lead }}</div>
+    {% endif %}
+
+    <div class="trade-nk__hero-actions">
+      {% if section.settings.apply_label != blank and section.settings.apply_link != blank %}
+        <a
+          class="button"
+          href="{{ section.settings.apply_link }}"
+        >
+          {{ section.settings.apply_label }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.contact_label != blank and section.settings.contact_link != blank %}
+        <a
+          class="button button-secondary"
+          href="{{ section.settings.contact_link }}"
+        >
+          {{ section.settings.contact_label }}
+        </a>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if benefit_blocks.size > 0 %}
+    <div class="trade-nk__benefits">
+      {% for block in benefit_blocks %}
+        <article
+          class="trade-nk__benefit"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.heading != blank %}
+            <h2 class="trade-nk__benefit-title">{{ block.settings.heading }}</h2>
+          {% endif %}
+          {% if block.settings.text != blank %}
+            <div class="trade-nk__benefit-text rte">{{ block.settings.text }}</div>
+          {% endif %}
+          {% if block.settings.link_label != blank and block.settings.link != blank %}
+            <a
+              class="trade-nk__benefit-link text-link"
+              href="{{ block.settings.link }}"
+            >
+              {{ block.settings.link_label }}
+            </a>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if project_blocks.size > 0 %}
+    <div class="trade-nk__projects">
+      {% for block in project_blocks %}
+        <figure
+          class="trade-nk__project"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 1800
+              | image_tag:
+                loading: 'lazy',
+                widths: '600, 900, 1200, 1600, 1800',
+                sizes: '(min-width: 990px) 33vw, 100vw',
+                class: 'trade-nk__project-image'
+            }}
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'trade-nk__project-image trade-nk__project-image--placeholder' }}
+          {% endif %}
+
+          {% if block.settings.caption != blank %}
+            <figcaption class="trade-nk__project-caption">{{ block.settings.caption }}</figcaption>
+          {% endif %}
+        </figure>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if quote_blocks.size > 0 %}
+    <div class="trade-nk__quotes">
+      {% for block in quote_blocks %}
+        <blockquote
+          class="trade-nk__quote"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.quote != blank %}
+            <div class="trade-nk__quote-text rte">{{ block.settings.quote }}</div>
+          {% endif %}
+          {% if block.settings.author != blank %}
+            <cite class="trade-nk__quote-author">{{ block.settings.author }}</cite>
+          {% endif %}
+        </blockquote>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="trade-nk__footer">
+    {% if section.settings.footer_heading != blank %}
+      <h2 class="trade-nk__footer-title">{{ section.settings.footer_heading }}</h2>
+    {% endif %}
+    {% if section.settings.footer_text != blank %}
+      <div class="trade-nk__footer-text rte">{{ section.settings.footer_text }}</div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .trade-nk {
+    gap: clamp(2rem, 4vw, 4rem) 0;
+  }
+
+  .trade-nk__hero,
+  .trade-nk__footer {
+    grid-column: 2;
+    max-width: 64rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .trade-nk__eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .trade-nk__title {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .trade-nk__lead {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.55;
+  }
+
+  .trade-nk__hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .trade-nk__benefits {
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .trade-nk__benefit {
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+    padding-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .trade-nk__benefit-title {
+    margin: 0;
+    font-size: clamp(1.15rem, 2vw, 1.6rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .trade-nk__benefit-link {
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .trade-nk__projects {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--page-margin);
+  }
+
+  .trade-nk__project {
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .trade-nk__project-image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  .trade-nk__project-image--placeholder {
+    padding: 2rem;
+  }
+
+  .trade-nk__project-caption {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    opacity: 0.75;
+  }
+
+  .trade-nk__quotes {
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .trade-nk__quote {
+    margin: 0;
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+    padding-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .trade-nk__quote-text {
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+  }
+
+  .trade-nk__quote-author {
+    font-style: normal;
+    opacity: 0.75;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .trade-nk__footer-title {
+    margin: 0;
+    font-size: clamp(1.35rem, 2vw, 2rem);
+    text-transform: uppercase;
+  }
+
+  @media screen and (min-width: 990px) {
+    .trade-nk__benefits {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .trade-nk__projects {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .trade-nk__quotes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "NK Trade Page",
+  "class": "section-wrapper",
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "project",
+      "name": "Project",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Trade"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to Rughaus Trade"
+    },
+    {
+      "type": "richtext",
+      "id": "lead",
+      "label": "Lead text",
+      "default": "<p>Architects, interior designers, and procurement teams can apply for dedicated pricing, project support, and custom production guidance.</p>"
+    },
+    {
+      "type": "text",
+      "id": "apply_label",
+      "label": "Apply button label",
+      "default": "Apply here"
+    },
+    {
+      "type": "url",
+      "id": "apply_link",
+      "label": "Apply button link"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Contact button label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact button link"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "footer_heading",
+      "label": "Footer heading",
+      "default": "Dedicated account managers"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Footer text",
+      "default": "<p>Need help with your application or an active project? Contact our team and we will get back to you within 24 hours.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "NK Trade Page",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "heading": "Designer & trade discounts",
+            "text": "<p>Approved members receive pricing support designed for project-based purchasing.</p>",
+            "link_label": "Apply now",
+            "link": "/pages/trade"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "heading": "Designer & trade projects",
+            "text": "<p>From custom sizing to logistics planning, we support residential and hospitality rollouts.</p>",
+            "link_label": "Contact us",
+            "link": "/pages/support-faq"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "heading": "Dedicated account managers",
+            "text": "<p>Work directly with a specialist for timelines, samples, and order coordination.</p>",
+            "link_label": "Get support",
+            "link": "/pages/support-faq"
+          }
+        },
+        {
+          "type": "project",
+          "settings": {
+            "caption": "Project showcase image 1"
+          }
+        },
+        {
+          "type": "project",
+          "settings": {
+            "caption": "Project showcase image 2"
+          }
+        },
+        {
+          "type": "project",
+          "settings": {
+            "caption": "Project showcase image 3"
+          }
+        },
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "<p>\"The custom rug looked incredible in the final install. Great support from start to finish.\"</p>",
+            "author": "Design studio"
+          }
+        },
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "<p>\"Reliable communication, fast sampling, and strong quality. We keep specifying Rughaus.\"</p>",
+            "author": "Interior designer"
+          }
+        },
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "<p>\"A practical trade partner for both standard and custom rugs across multiple projects.\"</p>",
+            "author": "Procurement team"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

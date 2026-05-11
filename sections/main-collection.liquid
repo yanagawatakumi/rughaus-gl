@@ -1,32 +1,4 @@
 
-{% liquid
-  assign market_access_denied = false
-  assign raw_allowed_country_codes = collection.metafields.custom.available_country_codes.value
-  if raw_allowed_country_codes == blank
-    assign raw_allowed_country_codes = collection.metafields.custom.available_country_codes
-  endif
-  if raw_allowed_country_codes == blank
-    assign raw_allowed_country_codes = collection.metafields.rughaus.available_country_codes.value
-  endif
-  if raw_allowed_country_codes == blank
-    assign raw_allowed_country_codes = collection.metafields.rughaus.available_country_codes
-  endif
-
-  if raw_allowed_country_codes != blank
-    assign allowed_country_codes = raw_allowed_country_codes | upcase | replace: ' ', '' | split: ','
-    assign current_country_code = localization.country.iso_code | upcase
-    assign market_access_denied = true
-
-    for allowed_country_code in allowed_country_codes
-      if allowed_country_code == current_country_code
-        assign market_access_denied = false
-        break
-      endif
-    endfor
-  endif
-%}
-
-
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
@@ -47,54 +19,151 @@
       { once: true }
     );
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const variantCards = document.querySelectorAll('.product-grid__item[data-variant-id][data-variant-url]');
+
+    variantCards.forEach((card) => {
+      const variantUrl = card.dataset.variantUrl;
+      const variantImageUrl = card.dataset.variantImageUrl;
+
+      if (variantUrl) {
+        card.querySelectorAll('a[href*="/products/"]').forEach((link) => {
+          link.setAttribute('href', variantUrl);
+        });
+      }
+
+      if (variantImageUrl) {
+        card.querySelectorAll('img').forEach((img) => {
+          img.setAttribute('src', variantImageUrl);
+          img.removeAttribute('srcset');
+          img.removeAttribute('data-srcset');
+          img.removeAttribute('data-sizes');
+        });
+      }
+    });
+  });
 {% endjavascript %}
 
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
-{% if market_access_denied %}
-  {% liquid
-    assign fallback_collection = collections['all-rugs']
-    assign browse_url = fallback_collection.url | default: routes.root_url
-  %}
-  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-  <section
-    class="section color-{{ section.settings.color_scheme }}"
-    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<results-list
+  class="section product-grid-container color-{{ section.settings.color_scheme }}"
+  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+  section-id="{{ section.id }}"
+  infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+>
+  {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
+
+  <div
+    class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
   >
-    <div class="page-width section-content-wrapper spacing-style">
-      <h2>{{ 'rughaus.market_access.unavailable_title' | t }}</h2>
-      <p>{{ 'rughaus.market_access.unavailable_body' | t }}</p>
-      <a href="{{ browse_url }}" class="button">{{ 'rughaus.market_access.browse_all_rugs' | t }}</a>
-    </div>
-  </section>
-{% else %}
-  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-  <results-list
-    class="section product-grid-container color-{{ section.settings.color_scheme }}"
-    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
-    section-id="{{ section.id }}"
-    infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
-  >
-    {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
+    {% content_for 'block',
+      type: 'filters',
+      id: 'filters',
+      results: collection,
+      results_size: collection.products_count
+    %}
 
-    <div
-      class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
-    >
-      {% content_for 'block',
-        type: 'filters',
-        id: 'filters',
-        results: collection,
-        results_size: collection.products_count
-      %}
+    {% assign products_per_page = 24 %}
 
-      {% assign products_per_page = 24 %}
+    {% if section.settings.enable_infinite_scroll == false %}
+      {% assign products_per_page = section.settings.products_per_page %}
+    {% endif %}
 
-      {% if section.settings.enable_infinite_scroll == false %}
-        {% assign products_per_page = section.settings.products_per_page %}
-      {% endif %}
+    {% paginate collection.products by products_per_page %}
+      {% capture children %}
+        {% liquid
+          assign variant_expansion_enabled = section.settings.enable_variant_expansion
+          if template.name == 'collection' and template.suffix == 'custom-rugs'
+            assign variant_expansion_enabled = true
+          endif
 
-      {% paginate collection.products by products_per_page %}
-        {% capture children %}
-          {% for product in collection.products %}
+          assign hide_collection_swatches = false
+          if variant_expansion_enabled and section.settings.hide_color_swatches
+            assign hide_collection_swatches = true
+          endif
+        %}
+        {% for product in collection.products %}
+          {% liquid
+            assign featured_variants = blank
+            if variant_expansion_enabled and product.metafields.custom.collection_featured_variants != blank
+              capture featured_variants_raw
+                echo product.metafields.custom.collection_featured_variants
+              endcapture
+              assign featured_variants_raw = featured_variants_raw | strip
+              if featured_variants_raw contains 'gid://shopify/ProductVariant/'
+                assign featured_variants_raw = featured_variants_raw | remove: '[' | remove: ']' | remove: '"' | remove: '&quot;' | remove: '&#34;'
+                assign featured_variants = featured_variants_raw | split: ','
+              else
+                assign featured_variants = product.metafields.custom.collection_featured_variants.value
+                if featured_variants == blank
+                  assign featured_variants = product.metafields.custom.collection_featured_variants.references
+                endif
+              endif
+            endif
+          %}
+
+          {% if variant_expansion_enabled and featured_variants != blank and featured_variants.size > 0 %}
+            {% assign rendered_variant_cards = false %}
+            {% for featured_variant_entry in featured_variants %}
+              {% liquid
+                assign featured_variant = blank
+
+                if featured_variant_entry.id != blank
+                  assign featured_variant = featured_variant_entry
+                else
+                  assign featured_variant_gid = featured_variant_entry | strip
+                  if featured_variant_gid contains 'gid://shopify/ProductVariant/'
+                    assign featured_variant_id = featured_variant_gid | split: '/' | last | plus: 0
+                    assign featured_variant = product.variants | where: 'id', featured_variant_id | first
+                  endif
+                endif
+              %}
+              {% if featured_variant != blank %}
+                {% assign rendered_variant_cards = true %}
+                {% assign rughaus_card_variant = featured_variant %}
+                <li
+                  id="{{ section.id }}-{{ product.id }}-{{ featured_variant.id }}"
+                  class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                  data-page="{{ paginate.current_page }}"
+                  data-product-id="{{ product.id }}"
+                  data-variant-id="{{ featured_variant.id }}"
+                  data-variant-url="{{ product.url }}?variant={{ featured_variant.id }}"
+                  data-variant-image-url="{{ featured_variant.featured_media | default: product.featured_media | image_url: width: 1100 }}"
+                  ref="cards[]"
+                >
+                  {% # theme-check-disable %}
+                  {% content_for 'block',
+                    type: '_product-card',
+                    id: 'product-card',
+                    closest.product: product
+                  %}
+                  {% # theme-check-enable %}
+                </li>
+                {% assign rughaus_card_variant = blank %}
+              {% endif %}
+            {% endfor %}
+            {% unless rendered_variant_cards %}
+              {% assign rughaus_card_variant = blank %}
+              <li
+                id="{{ section.id }}-{{ product.id }}"
+                class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                data-page="{{ paginate.current_page }}"
+                data-product-id="{{ product.id }}"
+                ref="cards[]"
+              >
+                {% # theme-check-disable %}
+                {% content_for 'block',
+                  type: '_product-card',
+                  id: 'product-card',
+                  closest.product: product
+                %}
+                {% # theme-check-enable %}
+              </li>
+            {% endunless %}
+          {% else %}
+            {% assign rughaus_card_variant = blank %}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
@@ -103,23 +172,37 @@
               ref="cards[]"
             >
               {% # theme-check-disable %}
-              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+              {% content_for 'block',
+                type: '_product-card',
+                id: 'product-card',
+                closest.product: product
+              %}
               {% # theme-check-enable %}
             </li>
-          {% endfor %}
-        {% endcapture %}
+          {% endif %}
+        {% endfor %}
+      {% endcapture %}
 
-        {% render 'product-grid',
-          section: section,
-          children: children,
-          products: collection.products,
-          paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
-        %}
-      {% endpaginate %}
-    </div>
-  </results-list>
-{% endif %}
+      {% render 'product-grid',
+        section: section,
+        children: children,
+        products: collection.products,
+        paginate: paginate,
+        enable_infinite_scroll: section.settings.enable_infinite_scroll
+      %}
+    {% endpaginate %}
+  </div>
+</results-list>
+
+{% stylesheet %}
+  .product-grid-container .quick-add,
+  .product-grid-container .quick-add__button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -189,6 +272,22 @@
       "type": "checkbox",
       "id": "enable_infinite_scroll",
       "label": "t:settings.auto_load_products",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Variant expansion"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_variant_expansion",
+      "label": "Enable variant expansion cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_color_swatches",
+      "label": "Hide color swatches when variant expansion is enabled",
       "default": true
     },
     {

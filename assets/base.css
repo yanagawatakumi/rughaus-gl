@@ -367,23 +367,17 @@ p:empty {
    full-width background image even if the section content is constrained by the page width. Do not try
    to rewrite this to max-width: --page-width; margin: 0 auto;, it doesn't work. */
 .section {
-  --full-page-grid-central-column-width: min(
-    var(--page-width) - var(--page-margin) * 2,
-    calc(100% - var(--page-margin) * 2)
-  );
-  --full-page-grid-margin: minmax(var(--page-margin), 1fr);
+  --full-page-grid-central-column-width: calc(100% - var(--page-margin) * 2);
+  --full-page-grid-margin: var(--page-margin);
   --full-page-grid-with-margins: var(--full-page-grid-margin) var(--full-page-grid-central-column-width)
     var(--full-page-grid-margin);
 
   /* Utility variable gives the grid's first column width. Provides an offset width for components like carousels */
-  --util-page-margin-offset: max(
-    var(--page-margin),
-    calc((100% - min(var(--page-content-width), 100% - var(--page-margin) * 2)) / 2)
-  );
+  --util-page-margin-offset: var(--page-margin);
 
   /* Offset for full-width sections to account for the page margin,
   used for Marquee — note that --util-page-margin-offset doesn't work here */
-  --full-page-margin-inline-offset: calc(((100vw - var(--full-page-grid-central-column-width)) / 2) * -1);
+  --full-page-margin-inline-offset: calc(var(--page-margin) * -1);
 
   width: 100%;
 
@@ -559,17 +553,6 @@ p:empty {
     gap: 0;
     grid-template-columns: var(--margin-4xl) repeat(var(--centered-column-number), minmax(0, 1fr)) var(--margin-4xl);
     grid-template-areas: 'column-0 column-1 column-2 column-3 column-4 column-5 column-6 column-7 column-8 column-9 column-10 column-11 column-12 column-13';
-  }
-}
-
-@media screen and (min-width: 1400px) {
-  .grid {
-    grid-template-columns:
-      1fr repeat(
-        var(--centered-column-number),
-        minmax(0, calc((var(--page-width) - var(--page-margin) * 2) / var(--centered-column-number)))
-      )
-      1fr;
   }
 }
 
@@ -1437,9 +1420,24 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   display: none;
 }
 
-.link {
+.link,
+.text-link,
+a[class*='__text-link'],
+a[class*='__benefit-link'] {
   display: inline-block;
   text-align: center;
+  text-decoration-line: underline;
+  text-decoration-color: currentcolor;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.125em;
+}
+
+.link:hover,
+.text-link:hover,
+a[class*='__text-link']:hover,
+a[class*='__benefit-link']:hover {
+  color: var(--color-primary-hover);
+  text-decoration-color: currentcolor;
 }
 
 shopify-accelerated-checkout,
@@ -3262,11 +3260,7 @@ fly-to-cart.fly-to-cart--sticky {
     --facets-vertical-col-width: 6;
 
     grid-template-columns:
-      1fr repeat(
-        var(--centered-column-number),
-        minmax(0, calc((var(--page-width) - var(--page-margin) * 2) / var(--centered-column-number)))
-      )
-      1fr;
+      var(--page-margin) repeat(var(--centered-column-number), minmax(0, 1fr)) var(--page-margin);
   }
 
   @media screen and (min-width: 990px) {
@@ -3279,11 +3273,7 @@ fly-to-cart.fly-to-cart--sticky {
   @media screen and (min-width: 750px) {
     grid-column: 1 / -1;
     grid-template-columns:
-      minmax(var(--page-margin), 1fr) repeat(
-        var(--centered-column-number),
-        minmax(0, calc((var(--page-width) - var(--page-margin) * 2) / var(--centered-column-number)))
-      )
-      minmax(var(--page-margin), 1fr);
+      var(--page-margin) repeat(var(--centered-column-number), minmax(0, 1fr)) var(--page-margin);
   }
 }
 

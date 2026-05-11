@@ -349,9 +349,35 @@
   },
   "rughaus": {
     "market_access": {
-      "unavailable_title": "This page is not available in your market.",
-      "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "unavailable_title": "Esta página no está disponible en tu mercado.",
+      "unavailable_body": "Cambia de país o sigue explorando alfombras disponibles.",
+      "browse_all_rugs": "Ver todas las alfombras"
+    },
+    "centered_gallery": {
+      "lead_time_label": "Plazo de entrega:",
+      "price_label": "Precio:"
+    },
+    "pdp": {
+      "sample_cta": "Solicitar una muestra",
+      "consultation_cta": "Reservar una consulta",
+      "accordion": {
+        "materials": "Materiales",
+        "care": "Cuidado",
+        "size_guide": "Guía de tallas",
+        "shipping_returns": "Envío y devoluciones",
+        "description": "Descripción",
+        "product_details": "Detalles del producto",
+        "delivery_shipping": "Entrega y envío",
+        "returns": "Devoluciones",
+        "duties_taxes": "Aranceles e impuestos",
+        "note": "Nota"
+      },
+      "defaults": {
+        "materials": "La información detallada sobre materiales está disponible bajo solicitud.",
+        "care": "Las instrucciones de cuidado están disponibles bajo solicitud.",
+        "size_guide": "Contáctanos para obtener una guía de tallas detallada.",
+        "shipping_returns": "Las alfombras personalizadas se fabrican bajo pedido. Los detalles de envío y la política de devoluciones se proporcionan antes de la compra."
+      }
     }
   }
 }

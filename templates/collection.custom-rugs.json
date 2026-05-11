@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "section": {
       "type": "section",
@@ -95,6 +96,49 @@
         "gradient_direction": "to top",
         "padding-block-start": 48,
         "padding-block-end": 48
+      }
+    },
+    "collection_children_links_gY4VNW": {
+      "type": "collection-children-links",
+      "blocks": {
+        "child_collection_card_pBdMFT": {
+          "type": "child_collection_card",
+          "settings": {
+            "child_collection": "custom-wool-rugs-test-コピー",
+            "unit_price_text": "Measure to order at $200/m²",
+            "lead_time_text": "Delivered in 3 weeks"
+          }
+        },
+        "child_collection_card_ctN3X8": {
+          "type": "child_collection_card",
+          "settings": {
+            "child_collection": "custom-wool-rugs-test",
+            "unit_price_text": "Measure to order at $200/m²",
+            "lead_time_text": "Delivered in 3 weeks"
+          }
+        },
+        "child_collection_card_3K6zfb": {
+          "type": "child_collection_card",
+          "settings": {
+            "child_collection": "custom-wool-rugs-test-コピー",
+            "unit_price_text": "Measure to order at $200/m²",
+            "lead_time_text": "Delivered in 3 weeks"
+          }
+        }
+      },
+      "block_order": [
+        "child_collection_card_pBdMFT",
+        "child_collection_card_ctN3X8",
+        "child_collection_card_3K6zfb"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "parent_collection": "custom-rugs",
+        "card_gap": 16,
+        "card_min_width": 330,
+        "padding-block-start": 0,
+        "padding-block-end": 24
       }
     },
     "main": {
@@ -201,12 +245,26 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "swatches_8nKq2A": {
+              "type": "swatches",
+              "settings": {
+                "product_swatches_alignment": "flex-start",
+                "product_swatches_alignment_mobile": "flex-start",
+                "hide_padding": false,
+                "product_swatches_padding_top": 4,
+                "product_swatches_padding_bottom": 0,
+                "product_swatches_padding_left": 0,
+                "product_swatches_padding_right": 0
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "card-gallery",
             "product_title_4nY4eT",
-            "price_EzJzMm"
+            "price_EzJzMm",
+            "swatches_8nKq2A"
           ]
         }
       },
@@ -214,6 +272,10 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
+        "enable_infinite_scroll": true,
+        "enable_variant_expansion": true,
+        "hide_color_swatches": true,
+        "products_per_page": 24,
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
@@ -228,6 +290,7 @@
   },
   "order": [
     "section",
+    "collection_children_links_gY4VNW",
     "main"
   ]
 }

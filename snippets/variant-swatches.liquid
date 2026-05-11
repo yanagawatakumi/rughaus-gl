@@ -94,11 +94,16 @@
       - the swatch content, optionally based on theme settings.
     {% endcomment %}
     {%- for product_option in product_resource.options_with_values -%}
-      {%- liquid
+    {%- liquid
         assign swatch_count = product_option.values | map: 'swatch' | compact | size
+        assign option_name_downcase = product_option.name | strip | downcase
+        assign is_color_option = false
+        if option_name_downcase contains 'color' or option_name_downcase contains 'colour'
+          assign is_color_option = true
+        endif
       -%}
 
-      {% if swatch_count == 0 %}
+      {% if swatch_count == 0 and is_color_option == false %}
         {% continue %}
       {% endif %}
 
@@ -124,6 +129,7 @@
               endcomment
 
               assign featured_media = product_option_value.variant.featured_media
+              assign fallback_variant_with_media = nil
               assign child_product = nil
 
               if featured_media == blank
@@ -133,16 +139,20 @@
 
                 if child_product
                   assign featured_media = child_product.featured_media
-                elsif product_option_value.variant == blank
+                endif
+
+                if featured_media == blank
                   for variant in product_resource.variants
-                    if variant.available and variant[swatch_option_key] == product_option_value.name and variant.featured_media
+                    if variant[swatch_option_key] == product_option_value.name and variant.featured_media
                       assign featured_media = variant.featured_media
-                      assign first_available_variant = variant
+                      assign fallback_variant_with_media = variant
                       break
                     endif
                   endfor
                 endif
               endif
+
+              assign swatch_variant_id = fallback_variant_with_media.id | default: product_option_value.variant.id
             %}
 
             <li class="variant-option__swatch">
@@ -165,12 +175,14 @@
                   {% if allow_preselection and product_option_value.selected %}
                     checked
                   {% endif %}
-                  data-variant-id="{{ first_available_variant.id | default: product_option_value.variant.id }}"
-                  data-first-available-or-first-variant-id="{{ first_available_variant.id | default: product_option_value.variant.id }}"
+                  data-variant-id="{{ swatch_variant_id }}"
+                  data-first-available-or-first-variant-id="{{ swatch_variant_id }}"
                 >
                 {% render 'swatch',
                   swatch: product_option_value.swatch,
                   variant_image: featured_media,
+                  force_variant_image: true,
+                  label: product_option_value.name
                 %}
                 {% render 'strikethrough-variant', product_option: product_option_value %}
               </label>

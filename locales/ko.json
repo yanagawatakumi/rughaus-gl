@@ -342,9 +342,35 @@
   },
   "rughaus": {
     "market_access": {
-      "unavailable_title": "This page is not available in your market.",
-      "unavailable_body": "Please change your country or continue to browse available rugs.",
-      "browse_all_rugs": "Browse all rugs"
+      "unavailable_title": "이 페이지는 현재 고객님의 시장에서 이용할 수 없습니다.",
+      "unavailable_body": "국가를 변경하거나 구매 가능한 러그를 계속 둘러보세요.",
+      "browse_all_rugs": "모든 러그 보기"
+    },
+    "centered_gallery": {
+      "lead_time_label": "리드 타임:",
+      "price_label": "가격:"
+    },
+    "pdp": {
+      "sample_cta": "샘플 요청",
+      "consultation_cta": "상담 예약",
+      "accordion": {
+        "materials": "소재",
+        "care": "관리 방법",
+        "size_guide": "사이즈 가이드",
+        "shipping_returns": "배송 및 반품",
+        "description": "상품 설명",
+        "product_details": "제품 상세",
+        "delivery_shipping": "배송 안내",
+        "returns": "반품",
+        "duties_taxes": "관세 및 세금",
+        "note": "참고 사항"
+      },
+      "defaults": {
+        "materials": "자세한 소재 정보는 요청 시 제공됩니다.",
+        "care": "관리 방법은 요청 시 안내해 드립니다.",
+        "size_guide": "자세한 사이즈 가이드는 문의해 주세요.",
+        "shipping_returns": "맞춤 제작 러그는 주문 후 제작됩니다. 배송 정보와 반품 정책은 구매 전에 안내됩니다."
+      }
     }
   }
 }

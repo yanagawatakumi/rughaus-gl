@@ -1386,6 +1386,23 @@
     pointer-events: none;
   }
 
+  .menu-drawer__localization[data-localization-loading='true'] .drawer-localization__button {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .menu-drawer__localization[data-localization-loading='true'] .drawer-localization__button--label::after {
+    content: '';
+    inline-size: 14px;
+    block-size: 14px;
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 999px;
+    display: inline-block;
+    margin-inline-start: 8px;
+    animation: localization-spinner 0.8s linear infinite;
+  }
+
   .drawer-localization .localization-wrapper {
     width: 100%;
   }
@@ -1409,5 +1426,11 @@
 
   .drawer-localization .language-selector .svg-wrapper.icon-caret svg {
     transform: none;
+  }
+
+  @keyframes localization-spinner {
+    to {
+      transform: rotate(360deg);
+    }
   }
 {% endstylesheet %}

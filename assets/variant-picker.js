@@ -5,6 +5,13 @@ import { OverflowList } from '@theme/overflow-list';
 import { yieldToMainThread, getViewParameterValue, ResizeNotifier } from '@theme/utilities';
 
 /**
+ * Cache section-rendering responses keyed by full request URL.
+ * Reused across all variant pickers on the page.
+ * @type {Map<string, string>}
+ */
+const variantSectionResponseCache = new Map();
+
+/**
  * @typedef {object} VariantPickerRefs
  * @property {HTMLFieldSetElement[]} fieldsets - The fieldset elements.
  * @property {HTMLElement} [overflowList] - The overflow list element.
@@ -23,6 +30,9 @@ export default class VariantPicker extends Component {
   /** @type {AbortController | undefined} */
   #abortController;
 
+  /** @type {Set<string>} */
+  #prefetchInFlight = new Set();
+
   /** @type {number[][]} */
   #checkedIndices = [];
 
@@ -30,6 +40,7 @@ export default class VariantPicker extends Component {
   #radios = [];
 
   #resizeObserver = new ResizeNotifier(() => this.updateVariantPickerCss());
+  #swatchExpandedState = new Map();
 
   connectedCallback() {
     super.connectedCallback();
@@ -46,11 +57,15 @@ export default class VariantPicker extends Component {
     });
 
     this.addEventListener('change', this.variantChanged.bind(this));
+    this.addEventListener('pointerenter', this.#prefetchOnIntent, true);
+    this.addEventListener('focusin', this.#prefetchOnIntent, true);
     this.#resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('pointerenter', this.#prefetchOnIntent, true);
+    this.removeEventListener('focusin', this.#prefetchOnIntent, true);
     this.#resizeObserver.disconnect();
   }
 
@@ -113,6 +128,29 @@ export default class VariantPicker extends Component {
         history.replaceState({}, '', url.toString());
       });
     }
+  }
+
+  /**
+   * Toggle expanded/collapsed state for color swatches on PDP.
+   * @param {Event} event
+   */
+  toggleSwatchesExpand(event) {
+    event?.preventDefault();
+
+    const toggleButton = event?.target instanceof Element ? event.target.closest('.variant-option__swatches-toggle') : null;
+    if (!(toggleButton instanceof HTMLButtonElement)) return;
+
+    const fieldset = toggleButton.closest('.variant-option--swatches-collapsible');
+    if (!(fieldset instanceof HTMLFieldSetElement)) return;
+
+    const isExpanded = fieldset.dataset.expanded === 'true';
+    const nextExpanded = !isExpanded;
+
+    fieldset.dataset.expanded = nextExpanded ? 'true' : 'false';
+    this.#swatchExpandedState.set(fieldset.dataset.fieldsetIndex || '', nextExpanded);
+    toggleButton.textContent = nextExpanded
+      ? toggleButton.dataset.labelExpanded || 'Hide'
+      : toggleButton.dataset.labelCollapsed || `+${toggleButton.dataset.overflowCount || 0}`;
   }
 
   /**
@@ -306,6 +344,13 @@ export default class VariantPicker extends Component {
    * @param {string} [morphElementSelector] - The selector of the element to be morphed. By default, only the variant picker is morphed.
    */
   fetchUpdatedSection(requestUrl, morphElementSelector) {
+    const cachedResponse = variantSectionResponseCache.get(requestUrl);
+    if (cachedResponse) {
+      this.#pendingRequestUrl = undefined;
+      this.#applyUpdatedSection(cachedResponse, morphElementSelector);
+      return;
+    }
+
     // We use this to abort the previous fetch request if it's still pending.
     this.#abortController?.abort();
     this.#abortController = new AbortController();
@@ -313,45 +358,8 @@ export default class VariantPicker extends Component {
     fetch(requestUrl, { signal: this.#abortController.signal })
       .then((response) => response.text())
       .then((responseText) => {
-        this.#pendingRequestUrl = undefined;
-        const html = new DOMParser().parseFromString(responseText, 'text/html');
-        // Defer is only useful for the initial rendering of the page. Remove it here.
-        html.querySelector('overflow-list[defer]')?.removeAttribute('defer');
-
-        const textContent = html.querySelector(`variant-picker script[type="application/json"]`)?.textContent;
-        if (!textContent) return;
-
-        let newProduct;
-
-        if (morphElementSelector === 'main') {
-          this.updateMain(html);
-        } else if (morphElementSelector) {
-          this.updateElement(html, morphElementSelector);
-        } else {
-          const { overflowList } = this.refs;
-          const wasSwatchesExpanded =
-            overflowList instanceof OverflowList && overflowList.getAttribute('disabled') === 'true';
-
-          newProduct = this.updateVariantPicker(html);
-
-          if (wasSwatchesExpanded) {
-            const overflowListAfterMorph = overflowList;
-            if (overflowListAfterMorph instanceof OverflowList) {
-              overflowListAfterMorph.showAll();
-            }
-          }
-        }
-
-        // Dispatch for all paths so product-form-component can reset #variantChangeInProgress
-        if (this.selectedOptionId) {
-          this.dispatchEvent(
-            new VariantUpdateEvent(JSON.parse(textContent), this.selectedOptionId, {
-              html,
-              productId: this.dataset.productId ?? '',
-              newProduct,
-            })
-          );
-        }
+        variantSectionResponseCache.set(requestUrl, responseText);
+        this.#applyUpdatedSection(responseText, morphElementSelector);
       })
       .catch((error) => {
         if (error.name === 'AbortError') {
@@ -360,6 +368,117 @@ export default class VariantPicker extends Component {
           console.error(error);
         }
       });
+  }
+
+  /**
+   * Applies section response content and dispatches variant:update.
+   * @param {string} responseText
+   * @param {string} [morphElementSelector]
+   */
+  #applyUpdatedSection(responseText, morphElementSelector) {
+    this.#pendingRequestUrl = undefined;
+    const html = new DOMParser().parseFromString(responseText, 'text/html');
+    // Defer is only useful for the initial rendering of the page. Remove it here.
+    html.querySelector('overflow-list[defer]')?.removeAttribute('defer');
+
+    const textContent = html.querySelector(`variant-picker script[type="application/json"]`)?.textContent;
+    if (!textContent) return;
+
+    let newProduct;
+
+    if (morphElementSelector === 'main') {
+      this.updateMain(html);
+    } else if (morphElementSelector) {
+      this.updateElement(html, morphElementSelector);
+    } else {
+      const { overflowList } = this.refs;
+      const wasSwatchesExpanded = overflowList instanceof OverflowList && overflowList.getAttribute('disabled') === 'true';
+
+      newProduct = this.updateVariantPicker(html);
+
+      if (wasSwatchesExpanded) {
+        const overflowListAfterMorph = overflowList;
+        if (overflowListAfterMorph instanceof OverflowList) {
+          overflowListAfterMorph.showAll();
+        }
+      }
+    }
+
+    // Dispatch for all paths so product-form-component can reset #variantChangeInProgress
+    if (this.selectedOptionId) {
+      this.dispatchEvent(
+        new VariantUpdateEvent(JSON.parse(textContent), this.selectedOptionId, {
+          html,
+          productId: this.dataset.productId ?? '',
+          newProduct,
+        })
+      );
+    }
+  }
+
+  /**
+   * Prefetch likely next variant section on hover/focus intent.
+   * @param {Event} event
+   */
+  #prefetchOnIntent = (event) => {
+    const optionElement = this.#resolveOptionElementFromEvent(event);
+    if (!optionElement) return;
+
+    const requestUrl = this.#buildPrefetchRequestUrl(optionElement);
+    if (!requestUrl) return;
+    if (variantSectionResponseCache.has(requestUrl) || this.#prefetchInFlight.has(requestUrl)) return;
+
+    this.#prefetchInFlight.add(requestUrl);
+    fetch(requestUrl)
+      .then((response) => response.text())
+      .then((responseText) => {
+        variantSectionResponseCache.set(requestUrl, responseText);
+      })
+      .catch(() => {
+        // Ignore prefetch errors; normal fetch path will still handle updates.
+      })
+      .finally(() => {
+        this.#prefetchInFlight.delete(requestUrl);
+      });
+  };
+
+  /**
+   * @param {Event} event
+   * @returns {HTMLElement | null}
+   */
+  #resolveOptionElementFromEvent(event) {
+    const target = event.target;
+    if (!(target instanceof Element)) return null;
+
+    if (target instanceof HTMLInputElement && target.dataset.optionValueId) return target;
+    if (target instanceof HTMLOptionElement && target.dataset.optionValueId) return target;
+
+    const closestInput = target.closest('label')?.querySelector('input[data-option-value-id]');
+    if (closestInput instanceof HTMLInputElement) return closestInput;
+
+    return null;
+  }
+
+  /**
+   * Build a request URL for prefetch using current selections with one-option override.
+   * @param {HTMLElement} optionElement
+   * @returns {string | null}
+   */
+  #buildPrefetchRequestUrl(optionElement) {
+    const optionValueId = optionElement.dataset.optionValueId;
+    if (!optionValueId) return null;
+
+    const selectedOptionValues = [...this.selectedOptionsValues];
+    const inputId = optionElement.dataset.inputId;
+    const optionPosition = Number.parseInt(inputId?.split('-')[0] || '', 10);
+
+    if (!Number.isNaN(optionPosition) && optionPosition > 0) {
+      selectedOptionValues[optionPosition - 1] = optionValueId;
+    }
+
+    if (!selectedOptionValues.length) return null;
+
+    return this.buildRequestUrl(optionElement, 'product-card', selectedOptionValues);
   }
 
   /**
@@ -396,6 +515,8 @@ export default class VariantPicker extends Component {
       this.dataset.productUrl = newProductUrl;
     }
 
+    this.#captureSwatchExpandedState();
+
     morph(this, newVariantPickerSource, {
       ...MORPH_OPTIONS,
       getNodeKey: (node) => {
@@ -404,9 +525,42 @@ export default class VariantPicker extends Component {
         return key;
       },
     });
+
+    this.#restoreSwatchExpandedState();
     this.updateVariantPickerCss();
 
     return newProduct;
+  }
+
+  #captureSwatchExpandedState() {
+    this.#swatchExpandedState.clear();
+
+    const fieldsets = this.querySelectorAll('.variant-option--swatches-collapsible');
+    fieldsets.forEach((fieldset) => {
+      if (!(fieldset instanceof HTMLFieldSetElement)) return;
+      const key = fieldset.dataset.fieldsetIndex || '';
+      const isExpanded = fieldset.dataset.expanded === 'true';
+      this.#swatchExpandedState.set(key, isExpanded);
+    });
+  }
+
+  #restoreSwatchExpandedState() {
+    if (!this.#swatchExpandedState.size) return;
+
+    const fieldsets = this.querySelectorAll('.variant-option--swatches-collapsible');
+    fieldsets.forEach((fieldset) => {
+      if (!(fieldset instanceof HTMLFieldSetElement)) return;
+      const key = fieldset.dataset.fieldsetIndex || '';
+      const shouldExpand = this.#swatchExpandedState.get(key) === true;
+      fieldset.dataset.expanded = shouldExpand ? 'true' : 'false';
+
+      const toggleButton = fieldset.querySelector('.variant-option__swatches-toggle');
+      if (toggleButton instanceof HTMLButtonElement) {
+        toggleButton.textContent = shouldExpand
+          ? toggleButton.dataset.labelExpanded || 'Hide'
+          : toggleButton.dataset.labelCollapsed || `+${toggleButton.dataset.overflowCount || 0}`;
+      }
+    });
   }
 
   updateVariantPickerCss() {

@@ -2,8 +2,61 @@
 
 {%- liquid
   assign block_settings = block.settings
-  assign product_resource = closest.product
-  assign selected_variant = product_resource.selected_or_first_available_variant
+  assign product_resource = closest.product | default: closest.variant.product
+  assign selected_variant = rughaus_card_variant | default: card_variant | default: closest.variant | default: product_resource.selected_or_first_available_variant
+
+  assign is_collection_template = false
+  if template.name == 'collection'
+    assign is_collection_template = true
+  endif
+
+  assign is_stock_rugs_collection_template = false
+  if template.name == 'collection' and template.suffix == 'stock-rugs'
+    assign is_stock_rugs_collection_template = true
+  endif
+
+  assign is_custom_rug_product = false
+  assign product_type_downcase = product_resource.type | downcase
+  if product_resource.template_suffix == 'custom-rug'
+    assign is_custom_rug_product = true
+  elsif product_resource.type != blank and product_type_downcase == 'custom rug'
+    assign is_custom_rug_product = true
+  endif
+
+  assign lead_time_text = blank
+  if product_resource.metafields.custom.pdp_delivery_shipping != blank
+    assign lead_time_text = product_resource.metafields.custom.pdp_delivery_shipping.value | strip
+  endif
+
+  capture card_price_per_area
+    render 'rug-price-per-area', product: product_resource
+  endcapture
+  assign price_per_area_text = card_price_per_area | strip
+
+  assign show_custom_rug_collection_meta = false
+  if is_collection_template and is_custom_rug_product
+    if lead_time_text != blank or price_per_area_text != blank
+      assign show_custom_rug_collection_meta = true
+    endif
+  endif
+
+  assign show_stock_rugs_from_price = false
+  assign stock_rugs_from_price_text = blank
+  if is_stock_rugs_collection_template and show_custom_rug_collection_meta == false and product_resource.price_varies
+    assign use_currency = false
+    if settings.currency_code_enabled_product_cards
+      assign use_currency = true
+    endif
+
+    if use_currency
+      assign stock_rugs_min_price = product_resource.price_min | money_with_currency
+    else
+      assign stock_rugs_min_price = product_resource.price_min | money
+    endif
+
+    assign stock_rugs_from_price_text = 'content.price_from' | t: price: stock_rugs_min_price
+    assign show_stock_rugs_from_price = true
+  endif
 -%}
 
 {% liquid
@@ -47,11 +100,33 @@
   "
   {{ block.shopify_attributes }}
 >
-  {% render 'price',
-    show_unit_price: true,
-    product_resource: product_resource,
-    show_sale_price_first: block_settings.show_sale_price_first
-  %}
+  {% if show_custom_rug_collection_meta %}
+    {% if price_per_area_text != blank %}
+      <div class="price__regular">
+        <span class="price">
+          {{ price_per_area_text }}
+        </span>
+      </div>
+    {% endif %}
+    {% if lead_time_text != blank %}
+      <div class="price__regular">
+        <span class="price">
+          {{ lead_time_text }}
+        </span>
+      </div>
+    {% endif %}
+  {% elsif show_stock_rugs_from_price %}
+    <div class="price__regular">
+      <span class="price">{{ stock_rugs_from_price_text }}</span>
+    </div>
+  {% else %}
+    {% render 'price',
+      show_unit_price: true,
+      product_resource: product_resource,
+      selected_variant_override: selected_variant,
+      show_sale_price_first: block_settings.show_sale_price_first
+    %}
+  {% endif %}
 
   {% if block_settings.show_tax_info %}
     <div class="tax-note">

@@ -1,0 +1,174 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} page-content-hero spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="page-content-hero__inner page-content-hero__inner--{{ section.settings.content_alignment }}">
+    {% if section.settings.eyebrow != blank %}
+      <p class="page-content-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h1 class="page-content-hero__heading">{{ section.settings.heading }}</h1>
+    {% endif %}
+
+    {% if section.settings.text != blank %}
+      <div class="page-content-hero__text rte">{{ section.settings.text }}</div>
+    {% endif %}
+
+    {% if section.settings.primary_label != blank and section.settings.primary_link != blank %}
+      <div class="page-content-hero__actions">
+        <a class="button" href="{{ section.settings.primary_link }}">{{ section.settings.primary_label }}</a>
+
+        {% if section.settings.secondary_label != blank and section.settings.secondary_link != blank %}
+          <a class="button button-secondary" href="{{ section.settings.secondary_link }}">
+            {{ section.settings.secondary_label }}
+          </a>
+        {% endif %}
+      </div>
+    {% elsif section.settings.secondary_label != blank and section.settings.secondary_link != blank %}
+      <div class="page-content-hero__actions">
+        <a class="button button-secondary" href="{{ section.settings.secondary_link }}">
+          {{ section.settings.secondary_label }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .page-content-hero__inner {
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+    max-width: 72rem;
+  }
+
+  .page-content-hero__inner--center {
+    margin-inline: auto;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .page-content-hero__eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.72;
+  }
+
+  .page-content-hero__heading {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  .page-content-hero__text {
+    max-width: 56ch;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.55;
+  }
+
+  .page-content-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page Content Hero",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [{ "name": "Page Content Hero" }]
+}
+{% endschema %}

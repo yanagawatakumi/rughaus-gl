@@ -267,9 +267,25 @@
     type="module"
     fetchpriority="low"
   ></script>
+  <script
+    src="{{ 'product-details-sticky-balance.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
   <script type="module">
     import { RecentlyViewed } from '@theme/recently-viewed-products';
-    RecentlyViewed.addProduct('{{ product.id }}');
+    const productId = '{{ product.id }}';
+    const liquidHandle = '{{ product.handle }}';
+    let resolvedHandle = liquidHandle;
+
+    if (!resolvedHandle && window.location.pathname.includes('/products/')) {
+      const pathHandle = window.location.pathname.split('/products/')[1]?.split('/')[0];
+      if (pathHandle) {
+        resolvedHandle = decodeURIComponent(pathHandle);
+      }
+    }
+
+    RecentlyViewed.addProduct(productId, resolvedHandle);
   </script>
 {% endif %}
 

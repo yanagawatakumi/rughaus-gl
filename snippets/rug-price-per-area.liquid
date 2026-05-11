@@ -1,0 +1,50 @@
+{%- doc -%}
+  Formats custom rug area price by market for display cards.
+
+  @param {product} product - Product resource containing `custom.price_per_m2` (USD per m2)
+
+  @example
+  {% render 'rug-price-per-area', product: product %}
+{%- enddoc -%}
+
+{%- liquid
+  assign product_resource = product
+  assign usd_per_m2 = blank
+  if product_resource != blank
+    assign usd_per_m2 = product_resource.metafields.custom.price_per_m2.value
+  endif
+
+  assign display_text = blank
+
+  if usd_per_m2 != blank
+    assign country_iso = localization.country.iso_code | upcase
+
+    assign display_unit = 'm²'
+    assign converted_per_unit = usd_per_m2 | plus: 0
+
+    if country_iso == 'US'
+      assign display_unit = 'ft²'
+      assign converted_per_unit = converted_per_unit | divided_by: 10.7639
+    endif
+
+    assign rounded_value = converted_per_unit | round: 1
+    assign rounded_text = rounded_value | append: ''
+    assign decimal_text = '0'
+
+    if rounded_text contains '.'
+      assign number_parts = rounded_text | split: '.'
+      assign whole_text = number_parts[0]
+      assign decimal_text = number_parts[1]
+      if decimal_text == blank
+        assign decimal_text = '0'
+      endif
+    else
+      assign whole_text = rounded_text
+    endif
+
+    assign usd_text = '$' | append: whole_text | append: '.' | append: decimal_text
+    assign display_text = usd_text | append: ' / ' | append: display_unit
+  endif
+-%}
+
+{{- display_text -}}

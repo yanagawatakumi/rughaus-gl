@@ -1,0 +1,291 @@
+{% liquid
+  assign has_any_blocks = section.blocks.size
+  assign has_visible_blocks = false
+  for block in section.blocks
+    if block.settings.child_collection != blank
+      assign has_visible_blocks = true
+      break
+    endif
+  endfor
+%}
+
+{% if has_visible_blocks or has_any_blocks > 0 or request.design_mode %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div
+    class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+    style="
+      {% render 'spacing-style', settings: section.settings %}
+      {% if has_visible_blocks == false %}
+        --padding-block-start: 0px;
+        --padding-block-end: 0px;
+      {% endif %}
+      --collection-children-card-gap: {{ section.settings.card_gap }}px;
+      --collection-children-card-min-width: {{ section.settings.card_min_width }}px;
+    "
+  >
+    <div class="collection-children-links__track">
+      {% for block in section.blocks %}
+        {% assign child_collection = block.settings.child_collection %}
+        {% if child_collection == blank and request.design_mode == false %}
+          {% continue %}
+        {% endif %}
+        {% assign child_collection_image = blank %}
+        {% if child_collection != blank %}
+          {% assign child_collection_image = child_collection.featured_image | default: child_collection.image %}
+        {% endif %}
+
+        <article
+          class="collection-children-links__card{% if child_collection_image != blank %} collection-children-links__card--with-image{% endif %}"
+          {% if child_collection_image != blank %}
+            style="--collection-children-card-bg-image: url('{{ child_collection_image | image_url: width: 1200 }}');"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
+          {% if child_collection != blank %}
+            <a
+              href="{{ child_collection.url }}"
+              class="collection-children-links__card-link"
+              aria-label="{{ child_collection.title | escape }}"
+            >
+              <span class="visually-hidden">{{ child_collection.title }}</span>
+            </a>
+          {% endif %}
+
+          <h3 class="collection-children-links__title h5">
+            {{ child_collection.title | default: 'Select a collection' }}
+          </h3>
+
+          {% if block.settings.unit_price_text != blank %}
+            <p class="collection-children-links__meta paragraph">
+              {{ block.settings.unit_price_text }}
+            </p>
+          {% endif %}
+
+          {% if block.settings.lead_time_text != blank %}
+            <p class="collection-children-links__meta paragraph">
+              {{ block.settings.lead_time_text }}
+            </p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% if section.settings.parent_collection != blank and collection != blank %}
+  <script>
+    (() => {
+      const sectionEl = document.getElementById('shopify-section-{{ section.id }}');
+      if (!sectionEl) return;
+
+      const headingRoot = sectionEl.previousElementSibling;
+      if (!headingRoot) return;
+
+      const titleEl = headingRoot.querySelector('h1');
+      if (!titleEl) return;
+
+      const parentTitle = {{ section.settings.parent_collection.title | json }};
+      const parentUrl = {{ section.settings.parent_collection.url | json }};
+      const currentTitle = {{ collection.title | json }};
+
+      const isParentCollection = {{ section.settings.parent_collection.id | json }} === {{ collection.id | json }};
+      if (isParentCollection) return;
+
+      titleEl.innerHTML = `<a class="collection-hierarchy-title__parent-link" href="${parentUrl}">${parentTitle}</a><br>/<span>${currentTitle}</span>`;
+      titleEl.classList.add('collection-hierarchy-title');
+    })();
+  </script>
+{% endif %}
+
+{% stylesheet %}
+  .collection-children-links__track {
+    display: flex;
+    gap: var(--collection-children-card-gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .collection-children-links__card {
+    position: relative;
+    flex: 0 0 min(90vw, var(--collection-children-card-min-width));
+    max-width: min(90vw, var(--collection-children-card-min-width));
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-30-60));
+    padding: var(--padding-lg);
+    background-image: var(--collection-children-card-bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .collection-children-links__card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 20%);
+    z-index: 1;
+    display: none;
+  }
+
+  .collection-children-links__card--with-image::before {
+    display: block;
+  }
+
+  .collection-children-links__card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  .collection-children-links__title,
+  .collection-children-links__meta {
+    margin: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .collection-children-links__card--with-image .collection-children-links__title,
+  .collection-children-links__card--with-image .collection-children-links__meta {
+    color: rgb(255 255 255);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  }
+
+  .collection-children-links__meta + .collection-children-links__meta {
+    margin-block-start: var(--padding-3xs);
+  }
+
+  .collection-children-links__title + .collection-children-links__meta {
+    margin-block-start: var(--padding-sm);
+  }
+
+  .collection-hierarchy-title__parent-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    text-decoration-thickness: 1px;
+  }
+
+  .collection-hierarchy-title span {
+    display: inline-block;
+    margin-block-start: 0.1em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection child links",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "collection",
+      "id": "parent_collection",
+      "label": "Parent collection",
+      "info": "Used to render the collection page title as Parent / Child."
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "t:settings.horizontal_gap",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_min_width",
+      "label": "Card width",
+      "min": 220,
+      "max": 640,
+      "step": 10,
+      "unit": "px",
+      "default": 420
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "child_collection_card",
+      "name": "Child collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "child_collection",
+          "label": "Child collection"
+        },
+        {
+          "type": "text",
+          "id": "unit_price_text",
+          "label": "Unit price text",
+          "default": "Measure to order at $200/sqm"
+        },
+        {
+          "type": "text",
+          "id": "lead_time_text",
+          "label": "Lead time text",
+          "default": "Delivered in 3 weeks"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection child links",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
