@@ -13,7 +13,8 @@
 {% if decorative_image %}
   {% assign alt = '' %}
 {% else %}
-  {% assign alt = closest.collection.title | default: closest.product.title %}
+  {% capture default_product_title %}{% render 'rughaus-product-title', product: closest.product %}{% endcapture %}
+  {% assign alt = closest.collection.title | default: default_product_title | strip %}
 {% endif %}
 
 {% liquid

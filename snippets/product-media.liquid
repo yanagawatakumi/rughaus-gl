@@ -99,7 +99,7 @@
           type="button"
           data-shopify-xr
           data-shopify-model3d-id="{{ media.id }}"
-          data-shopify-title="{{ selected_product.title | escape }}"
+          data-shopify-title="{% render 'rughaus-product-title', product: selected_product %}"
           data-shopify-xr-hidden
         >
           <svg

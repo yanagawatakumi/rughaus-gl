@@ -51,7 +51,8 @@
         <div
           class="sticky-add-to-cart__image"
         >
-          {% assign image_alt = image_to_show.alt | default: product.title | escape %}
+          {% capture sticky_product_title %}{% render 'rughaus-product-title', product: product %}{% endcapture %}
+          {% assign image_alt = image_to_show.alt | default: sticky_product_title | escape %}
           {{
             image_to_show
             | image_url: width: 120
@@ -89,7 +90,7 @@
           class="sticky-add-to-cart__title"
           data-testid="sticky-product-title"
         >
-          {{ product.title | escape }}
+          {% render 'rughaus-product-title', product: product %}
         </p>
         <div
           class="sticky-add-to-cart__variant"

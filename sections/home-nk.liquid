@@ -180,7 +180,10 @@
                 endif
 
                 if card_title == blank
-                  assign card_title = product.title
+                  capture card_title_resolved
+                    render 'rughaus-product-title', product: product
+                  endcapture
+                  assign card_title = card_title_resolved | strip
                 endif
 
                 if card_image == blank and product.featured_media != blank
@@ -315,7 +318,7 @@
                   {% endif %}
                 </div>
 
-                <h3 class="home-nk__product-title">{{ product.title }}</h3>
+                <h3 class="home-nk__product-title">{% render 'rughaus-product-title', product: product %}</h3>
                 <p class="home-nk__product-price">{{ product.price | money }}</p>
               </a>
             </article>

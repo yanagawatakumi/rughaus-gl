@@ -4,7 +4,15 @@
   assign hotspot_product = closest.product
 
   assign placeholder_product_title = 'placeholders.product_title' | t
-  assign hotspot_product_title = hotspot_product.title | default: placeholder_product_title
+  capture hotspot_product_title
+    render 'rughaus-product-title', product: hotspot_product, fallback: placeholder_product_title
+  endcapture
+  assign hotspot_product_title = hotspot_product_title | strip
+
+  capture block_product_title
+    render 'rughaus-product-title', product: block.settings.product, fallback: placeholder_product_title
+  endcapture
+  assign block_product_title = block_product_title | strip
 %}
 
 <product-hotspot-component
@@ -16,7 +24,7 @@
     --hotspot-bullseye: {{ section.settings.bullseye_color }};
   "
   data-product-url="{{ block.settings.product.url }}"
-  data-product-title="{{ block.settings.product.title | escape }}"
+  data-product-title="{{ block_product_title | escape }}"
   data-id="{{ block.id }}"
   {{ block.shopify_attributes }}
 >
@@ -36,7 +44,7 @@
       <a
         href="{{ hotspot_product.url }}"
         class="hotspot-dialog__link"
-        aria-label="{{ hotspot_product.title | escape }}"
+        aria-label="{{ hotspot_product_title | escape }}"
         ref="productLink"
       >
       </a>

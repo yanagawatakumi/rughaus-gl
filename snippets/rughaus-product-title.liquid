@@ -1,0 +1,36 @@
+{%- doc -%}
+  Returns a product title with English-first override.
+
+  Priority:
+  1) custom.product_title_en
+  2) custom.title_en
+  3) custom.english_title
+  4) product.title (fallback)
+
+  @param {object} [product] - Product object
+  @param {string} [fallback] - Optional fallback text
+{%- enddoc -%}
+
+{%- liquid
+  assign target_product = product | default: closest.product | default: closest.variant.product
+  assign resolved_title = blank
+
+  if target_product != blank
+    assign resolved_title = target_product.metafields.custom.product_title_en.value | strip
+    if resolved_title == blank
+      assign resolved_title = target_product.metafields.custom.title_en.value | strip
+    endif
+    if resolved_title == blank
+      assign resolved_title = target_product.metafields.custom.english_title.value | strip
+    endif
+    if resolved_title == blank
+      assign resolved_title = target_product.title
+    endif
+  endif
+
+  if resolved_title == blank
+    assign resolved_title = fallback
+  endif
+
+  echo resolved_title
+-%}

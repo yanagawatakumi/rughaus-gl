@@ -31,7 +31,7 @@
 <quick-add-component
   class="quick-add color-{{ color_scheme }} "
   ref="quickAdd"
-  data-product-title="{{ product.title }}"
+  data-product-title="{% render 'rughaus-product-title', product: product %}"
   data-quick-add-button="{{ quick_add_button }}"
   data-product-options-count="{{ product.options.size }}"
 >

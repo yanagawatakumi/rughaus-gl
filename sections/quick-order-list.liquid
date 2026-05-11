@@ -129,7 +129,10 @@
 
                   assign variant_display_name = variant.title
                   if product.variants_count == 1
-                    assign variant_display_name = product.title
+                    capture single_variant_product_title
+                      render 'rughaus-product-title', product: product
+                    endcapture
+                    assign variant_display_name = single_variant_product_title | strip
                   endif
 
                   assign remove_button_aria_label = 'accessibility.remove_item' | t: title: variant.title | escape

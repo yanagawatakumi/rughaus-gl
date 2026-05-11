@@ -50,7 +50,10 @@
                 endif
 
                 if card_title == blank
-                  assign card_title = product.title
+                  capture card_title_resolved
+                    render 'rughaus-product-title', product: product
+                  endcapture
+                  assign card_title = card_title_resolved | strip
                 endif
 
                 if card_image == blank and product.featured_media != blank
@@ -145,7 +148,7 @@
                   {% endif %}
                 </div>
                 <div class="nk-centered-gallery__meta">
-                  <p class="nk-centered-gallery__product-title">{{ product.title }}</p>
+                  <p class="nk-centered-gallery__product-title">{% render 'rughaus-product-title', product: product %}</p>
                   {% if lead_time_text != blank %}
                     <p class="nk-centered-gallery__product-info">
                       {{ 'rughaus.centered_gallery.lead_time_label' | t }} {{ lead_time_text }}

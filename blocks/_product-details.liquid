@@ -20,7 +20,7 @@
         href="{{ closest.product.selected_or_first_available_variant.url }}"
         class="link"
       >
-        {{- closest.product.title }}
+        {%- render 'rughaus-product-title', product: closest.product -%}
       </a>
     </div>
     {% content_for 'blocks' %}
@@ -465,7 +465,7 @@
         "heading_m7KmQQ": {
           "type": "text",
           "settings": {
-            "text": "<h1>{{ closest.product.title }}</h1>",
+            "text": "<h1>{{ closest.product.metafields.custom.product_title_en.value | default: closest.product.metafields.custom.title_en.value | default: closest.product.metafields.custom.english_title.value | default: closest.product.title }}</h1>",
             "type_preset": "h2",
             "alignment": "left"
           }
