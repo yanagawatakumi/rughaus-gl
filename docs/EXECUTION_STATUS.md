@@ -130,6 +130,7 @@
 - `DONE` エージェント依頼テンプレート `AGENT_PROMPT_TEMPLATES.md` を追加
 - `DONE` 単独開発エージェントの再開用テンプレート `AGENT_PARALLEL_ONBOARDING_PROMPT.md` を追加
 - `DONE` `docs/README.md` を並列開発起点の読み順へ再整理
+- `DONE` 1人管理者運用に合わせ、branch protection の Approval必須を廃止（Theme Check必須へ一本化）
 - `DONE` GitHub統合テーマ同期エラーを解消
   - JSON内の動的ソース制約へ対応
 - `DONE` PDP画像をPCで縦1列表示に変更
