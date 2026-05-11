@@ -17,6 +17,7 @@
 - 国別表示ロジック（USD固定 + US=ft² / 非US=m²、小数1桁）をPhase 1で実装済み
 - コレクションのカラー展開表示（variant expansion）を実装中（custom-rugs先行）
 - 並行開発ベースライン（worktree分離 + PR必須 + Theme Check）をリポジトリへ実装済み
+- 並列開発の実行SOPとエージェント依頼テンプレートを追加し、運用ドキュメントの入口を再整理済み
 
 ## 2. ステータス凡例
 - `DONE`: 完了
@@ -125,6 +126,10 @@
 - `DONE` GitHub + Shopify連携運用を確立
 - `DONE` 並行開発向けのPRテンプレート / CODEOWNERS / Theme Check workflow を追加
 - `DONE` 並行開発運用手順 `PARALLEL_DEVELOPMENT_BASELINE.md` を追加
+- `DONE` 並列開発実行SOP `PARALLEL_DEVELOPMENT_SOP.md` を追加
+- `DONE` エージェント依頼テンプレート `AGENT_PROMPT_TEMPLATES.md` を追加
+- `DONE` 単独開発エージェントの再開用テンプレート `AGENT_PARALLEL_ONBOARDING_PROMPT.md` を追加
+- `DONE` `docs/README.md` を並列開発起点の読み順へ再整理
 - `DONE` GitHub統合テーマ同期エラーを解消
   - JSON内の動的ソース制約へ対応
 - `DONE` PDP画像をPCで縦1列表示に変更

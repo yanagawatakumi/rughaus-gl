@@ -7,6 +7,10 @@
 - 複数エージェントが同時に作業しても、差分混在・競合・merge事故を抑えて `develop` へ安全に反映する。
 - Shopify同期コミット（`Update from Shopify ...`）が流入する前提で、取り込み経路を固定する。
 
+## 運用ドキュメントの位置づけ
+- 本書: 並列開発の「方針」と「ガードレール」。
+- 実行手順: `docs/PARALLEL_DEVELOPMENT_SOP.md` を参照（Contributor/Integratorの標準作業手順）。
+
 ## 2. 役割
 - Integrator
   - `develop` へのマージ順を最終判断する。
