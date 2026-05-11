@@ -2,8 +2,8 @@
 
 {%- liquid
   assign block_settings = block.settings
-  assign product_resource = closest.product
-  assign selected_variant = product_resource.selected_or_first_available_variant
+  assign product_resource = closest.product | default: closest.variant.product
+  assign selected_variant = rughaus_card_variant | default: card_variant | default: closest.variant | default: product_resource.selected_or_first_available_variant
 
   assign is_collection_template = false
   if template.name == 'collection'
@@ -123,6 +123,7 @@
     {% render 'price',
       show_unit_price: true,
       product_resource: product_resource,
+      selected_variant_override: selected_variant,
       show_sale_price_first: block_settings.show_sale_price_first
     %}
   {% endif %}

@@ -10,6 +10,7 @@
 {%- enddoc -%}
 
 {% assign block_settings = block.settings %}
+{% assign product = product | default: closest.product | default: closest.variant.product %}
 
 {% style %}
   {% if request.visual_preview_mode %}
@@ -22,6 +23,7 @@
 
 {% liquid
   assign has_quick_add = false
+  assign resolved_card_variant = rughaus_card_variant | default: card_variant | default: closest.variant | default: product.selected_or_first_available_variant
   if settings.quick_add and product.available
     assign has_quick_add = true
   endif
@@ -35,7 +37,7 @@
   assign product_card_gap_value = product_card_gap | default: block_settings.product_card_gap
 
   # Logic to determine which variant URL to use (matching swatch selection logic)
-  assign variant_to_link = product.selected_or_first_available_variant
+  assign variant_to_link = resolved_card_variant
 
   if settings.transition_to_main_product
     assign featured_image = variant_to_link.featured_image

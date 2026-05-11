@@ -19,6 +19,30 @@
       { once: true }
     );
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const variantCards = document.querySelectorAll('.product-grid__item[data-variant-id][data-variant-url]');
+
+    variantCards.forEach((card) => {
+      const variantUrl = card.dataset.variantUrl;
+      const variantImageUrl = card.dataset.variantImageUrl;
+
+      if (variantUrl) {
+        card.querySelectorAll('a[href*="/products/"]').forEach((link) => {
+          link.setAttribute('href', variantUrl);
+        });
+      }
+
+      if (variantImageUrl) {
+        card.querySelectorAll('img').forEach((img) => {
+          img.setAttribute('src', variantImageUrl);
+          img.removeAttribute('srcset');
+          img.removeAttribute('data-srcset');
+          img.removeAttribute('data-sizes');
+        });
+      }
+    });
+  });
 {% endjavascript %}
 
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
@@ -49,18 +73,113 @@
 
     {% paginate collection.products by products_per_page %}
       {% capture children %}
+        {% liquid
+          assign variant_expansion_enabled = section.settings.enable_variant_expansion
+          if template.name == 'collection' and template.suffix == 'custom-rugs'
+            assign variant_expansion_enabled = true
+          endif
+
+          assign hide_collection_swatches = false
+          if variant_expansion_enabled and section.settings.hide_color_swatches
+            assign hide_collection_swatches = true
+          endif
+        %}
         {% for product in collection.products %}
-          <li
-            id="{{ section.id }}-{{ product.id }}"
-            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-            data-page="{{ paginate.current_page }}"
-            data-product-id="{{ product.id }}"
-            ref="cards[]"
-          >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
-          </li>
+          {% liquid
+            assign featured_variants = blank
+            if variant_expansion_enabled and product.metafields.custom.collection_featured_variants != blank
+              capture featured_variants_raw
+                echo product.metafields.custom.collection_featured_variants
+              endcapture
+              assign featured_variants_raw = featured_variants_raw | strip
+              if featured_variants_raw contains 'gid://shopify/ProductVariant/'
+                assign featured_variants_raw = featured_variants_raw | remove: '[' | remove: ']' | remove: '"' | remove: '&quot;' | remove: '&#34;'
+                assign featured_variants = featured_variants_raw | split: ','
+              else
+                assign featured_variants = product.metafields.custom.collection_featured_variants.value
+                if featured_variants == blank
+                  assign featured_variants = product.metafields.custom.collection_featured_variants.references
+                endif
+              endif
+            endif
+          %}
+
+          {% if variant_expansion_enabled and featured_variants != blank and featured_variants.size > 0 %}
+            {% assign rendered_variant_cards = false %}
+            {% for featured_variant_entry in featured_variants %}
+              {% liquid
+                assign featured_variant = blank
+
+                if featured_variant_entry.id != blank
+                  assign featured_variant = featured_variant_entry
+                else
+                  assign featured_variant_gid = featured_variant_entry | strip
+                  if featured_variant_gid contains 'gid://shopify/ProductVariant/'
+                    assign featured_variant_id = featured_variant_gid | split: '/' | last | plus: 0
+                    assign featured_variant = product.variants | where: 'id', featured_variant_id | first
+                  endif
+                endif
+              %}
+              {% if featured_variant != blank %}
+                {% assign rendered_variant_cards = true %}
+                {% assign rughaus_card_variant = featured_variant %}
+                <li
+                  id="{{ section.id }}-{{ product.id }}-{{ featured_variant.id }}"
+                  class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                  data-page="{{ paginate.current_page }}"
+                  data-product-id="{{ product.id }}"
+                  data-variant-id="{{ featured_variant.id }}"
+                  data-variant-url="{{ product.url }}?variant={{ featured_variant.id }}"
+                  data-variant-image-url="{{ featured_variant.featured_media | default: product.featured_media | image_url: width: 1100 }}"
+                  ref="cards[]"
+                >
+                  {% # theme-check-disable %}
+                  {% content_for 'block',
+                    type: '_product-card',
+                    id: 'product-card',
+                    closest.product: product
+                  %}
+                  {% # theme-check-enable %}
+                </li>
+                {% assign rughaus_card_variant = blank %}
+              {% endif %}
+            {% endfor %}
+            {% unless rendered_variant_cards %}
+              {% assign rughaus_card_variant = blank %}
+              <li
+                id="{{ section.id }}-{{ product.id }}"
+                class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                data-page="{{ paginate.current_page }}"
+                data-product-id="{{ product.id }}"
+                ref="cards[]"
+              >
+                {% # theme-check-disable %}
+                {% content_for 'block',
+                  type: '_product-card',
+                  id: 'product-card',
+                  closest.product: product
+                %}
+                {% # theme-check-enable %}
+              </li>
+            {% endunless %}
+          {% else %}
+            {% assign rughaus_card_variant = blank %}
+            <li
+              id="{{ section.id }}-{{ product.id }}"
+              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+              data-page="{{ paginate.current_page }}"
+              data-product-id="{{ product.id }}"
+              ref="cards[]"
+            >
+              {% # theme-check-disable %}
+              {% content_for 'block',
+                type: '_product-card',
+                id: 'product-card',
+                closest.product: product
+              %}
+              {% # theme-check-enable %}
+            </li>
+          {% endif %}
         {% endfor %}
       {% endcapture %}
 
@@ -153,6 +272,22 @@
       "type": "checkbox",
       "id": "enable_infinite_scroll",
       "label": "t:settings.auto_load_products",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Variant expansion"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_variant_expansion",
+      "label": "Enable variant expansion cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_color_swatches",
+      "label": "Hide color swatches when variant expansion is enabled",
       "default": true
     },
     {
