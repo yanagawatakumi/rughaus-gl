@@ -1,0 +1,34 @@
+name: Theme Check
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+  push:
+    branches:
+      - develop
+      - main
+      - 'codex/**'
+      - 'sync/**'
+
+permissions:
+  contents: read
+
+jobs:
+  theme-check:
+    name: Theme Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run theme check (error level)
+        uses: Shopify/theme-check-action@v2
+        with:
+          theme_root: .
+          flags: --fail-level error
+          token: ${{ github.token }}
+          base: ${{ github.base_ref || 'develop' }}
