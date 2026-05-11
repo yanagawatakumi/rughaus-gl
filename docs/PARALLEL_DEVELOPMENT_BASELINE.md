@@ -7,6 +7,10 @@
 - 複数エージェントが同時に作業しても、差分混在・競合・merge事故を抑えて `develop` へ安全に反映する。
 - Shopify同期コミット（`Update from Shopify ...`）が流入する前提で、取り込み経路を固定する。
 
+## 運用ドキュメントの位置づけ
+- 本書: 並列開発の「方針」と「ガードレール」。
+- 実行手順: `docs/PARALLEL_DEVELOPMENT_SOP.md` を参照（Contributor/Integratorの標準作業手順）。
+
 ## 2. 役割
 - Integrator
   - `develop` へのマージ順を最終判断する。
@@ -55,13 +59,17 @@ shopify theme check --path . --fail-level error --output json
 - PRテンプレートで結果貼付を必須化する（`.github/pull_request_template.md`）。
 - GitHub Actions（`.github/workflows/theme-check.yml`）で同等のチェックを自動実行する。
 
-## 6. GitHub設定（管理者作業）
-`develop` ブランチ保護で次を有効化する。
+## 6. GitHub設定（管理者作業 / 1人管理者前提）
+`develop` と `main` の両方で次を設定する。
 1. Require a pull request before merging
-2. Require approvals（最低1）
+2. Require approvals は **無効**（0件）にする
 3. Require status checks to pass before merging（`Theme Check`）
 4. Include administrators
 5. Disallow force pushes / deletion
+
+補足:
+- 管理者が1人の場合、Approval必須にすると自己承認できずマージ不能になる。
+- 品質ゲートは Approval ではなく `Theme Check` を必須化して担保する。
 
 ## 7. 受け入れテスト
 1. 2エージェントが別worktree・別ブランチで同時作業し、`develop` まで反映できる。
