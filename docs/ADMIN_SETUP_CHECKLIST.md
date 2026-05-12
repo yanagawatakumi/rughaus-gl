@@ -76,3 +76,9 @@ shopify theme check --path . --fail-level error --output json
 - 注意:
   - GitHub統合テーマの制約により、JSON動的ソース依存は使わない
   - 上記定義後は、Liquid実装で `custom.pdp_*` の動的連動が有効になる
+
+## 8. 商品名の英語固定（多言語運用時）
+- Product metafield definition（namespace: `custom`）を作成:
+  - `product_title_en` (`single_line_text_field`)
+- すべての商品に英語名を入力する（Bulk Editor推奨）。
+- テーマ実装は `custom.product_title_en` を優先し、未入力時のみ `product.title` を使用する。

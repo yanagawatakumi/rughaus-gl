@@ -100,7 +100,7 @@
 
         <div class="home-nk-featured-product__card-body">
           {% if featured_product != blank %}
-            <h3 class="home-nk-featured-product__product-title">{{ featured_product.title }}</h3>
+            <h3 class="home-nk-featured-product__product-title">{% render 'rughaus-product-title', product: featured_product %}</h3>
             <p class="home-nk-featured-product__price">{{ section.settings.price_prefix }} {{ featured_product.price_min | money }}</p>
           {% else %}
             <h3 class="home-nk-featured-product__product-title">{{ section.settings.placeholder_product_title }}</h3>

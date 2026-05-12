@@ -167,7 +167,7 @@
       class="contents"
       ref="cardGalleryLink"
       href="{{ resolved_card_variant.url }}"
-      aria-label="{{- product.title -}}"
+      aria-label="{% render 'rughaus-product-title', product: product %}"
     >
       {% render 'slideshow',
         ref: 'slideshow',
@@ -186,7 +186,7 @@
         href="{{ resolved_card_variant.url }}"
         aria-hidden="true"
       >
-        <span class="title-text">{{- product.title -}}</span>
+        <span class="title-text">{% render 'rughaus-product-title', product: product %}</span>
       </a>
     </product-title>
   {% elsif product == blank %}
